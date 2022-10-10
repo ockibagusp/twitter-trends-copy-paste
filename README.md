@@ -2,7 +2,7 @@
 ## Browser aja. Copy dan Paste!
 
 Link:
-[ockibagusp.github.io/twitter-trends-copy-paste](https://ockibagusp.github.io/twitter-trends-copy-paste)
+[ockibagusp.github.io/twitter-trends](https://ockibagusp.github.io/twitter-trends)
 
 ### Twitter Trends:
 
