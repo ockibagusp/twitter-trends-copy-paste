@@ -1,9 +1,6 @@
 <script>
 import axios from 'axios'
 
-// PINDAH: test, CORS dan GitHub-Pages
-const PINDAH = [0, 1, 2]
-
 const TAGS = 'Tags: '
 
 // Slots - Vue.js
@@ -28,9 +25,6 @@ export default {
       selectHasil: false,
       selectCopy: false,
       selectTweet: false,
-
-      // pindah: test, CORS dan GitHub Pages
-      pindah: PINDAH[0],
 
       // pilih `semua kotak centang`: true atau false
       selectCheckBoxAll: false,
@@ -67,10 +61,6 @@ export default {
     getdaytrends() {
       this.memuat()
     },
-    // checkbox: pindah
-    pindah() {
-      this.dibuat()
-    }
   },
   methods: {
     // dibuat: dari textarea getdaytrends ini
@@ -88,19 +78,8 @@ export default {
       this.hasil = 'Loading...'
 
       try {
-        // TODO: getdaytrends.com test, CORS dan GitHub-Pages
-        if (this.pindah == PINDAH[0]) {
-          this.getdaytrends = '<td class="main"><a href="/indonesia/bekasi/trend/%23TimnasIndonesia/">#TimnasIndonesia</a><div class="desc"><span class="small text-muted">22.1K tweets</span></div></td>' +
-            '<td class="main"><a href="/indonesia/bekasi/trend/Test%201/">Test 1</a><div class="desc"><span class="small text-muted">Under 10K tweets</span></div></td>' +
-            '<td class="main"><a class="string" href="/indonesia/bekasi/trend/%23Test2/">#Test2</a><div class="desc"><span class="small text-muted">53.9K tweets</span></div></td>' +
-            '<td class="main"><a class="string" href="/indonesia/bekasi/trend/Test%203/">Test 3</a><div class="desc"><span class="small text-muted">54.5K tweets</span></div></td>'
-        } else if (this.pindah == PINDAH[1]) {
-          const res = await axios.get('https://getdaytrends.com/indonesia/bekasi/')
-          this.getdaytrends = res.data
-        } else {
-          const res = await axios.get('/twitter-trends/url')
-          this.getdaytrends = res.data
-        }
+        const res = await axios.get('/twitter-trends/url')
+        this.getdaytrends = res.data
 
         this.selectSubmit = true
 
@@ -353,31 +332,6 @@ export default {
 </script>
 
 <template>
-  <div style="margin-top: -10px; margin-bottom: 5px;">Pindah:</div>
-
-  <input style="margin-top: -10px; margin-bottom: 5px;" type="radio" value=0 v-model="pindah" />
-  <label for="test">Test</label> | 
-
-  <input style="margin-top: -10px; margin-bottom: 5px;" type="radio" value=1 v-model="pindah" />
-  <label for="cors">CORS</label> |
-
-  <input style="margin-top: -10px; margin-bottom: 5px;" type="radio" value=2 v-model="pindah" />
-  <label for="GitHub-Pages">GitHub-Pages</label>
-
-  <p style="margin-top: 0px; margin-bottom: 0px;" v-if="pindah == 0">&gt;&gt;&gt; Test getdaytrends.com</p>
-  <div v-if="pindah == 1">
-    <li>&gt;&gt;&gt; AxiosError: Network Error</li>
-    The CORS Header 'Access-Control-Allow-Origin' is missing.
-    <br>
-    CORS rules are bypassed: 
-    <a href="https://addons.mozilla.org/en-US/firefox/search/?q=cors" target="_blank">Firefox</a> |
-    <a href="https://chrome.google.com/webstore/search/cors?hl=en" target="_blank">Chrome</a>
-  </div>
-  <div v-if="pindah == 2">
-    &gt;&gt;&gt; localhost: bisa | ockibagusp.github.io/twitter-trends: tidak bisa
-  </div>
-
-  <p style="margin-top: -5px; margin-bottom: 5px;">--------------------------------------------------------</p>
   <h2 style="margin-top: -5px; margin-bottom: -5px;">GetDayTrends.com!</h2>
   <p style="margin-top: 0px; margin-bottom: 10px;"> <a href="https://getdaytrends.com/indonesia/bekasi/" target="_blank">getdaytrends.com/indonesia/bekasi/</a> </p>
 
