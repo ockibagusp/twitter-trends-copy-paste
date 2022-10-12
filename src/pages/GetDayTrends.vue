@@ -78,7 +78,7 @@ export default {
       this.hasil = 'Loading...'
 
       try {
-        const res = await axios.get('/twitter-trends/url')
+        const res = await axios.get('https://twitter-trends-heroku.herokuapp.com/url')
         this.getdaytrends = res.data
 
         this.selectSubmit = true
