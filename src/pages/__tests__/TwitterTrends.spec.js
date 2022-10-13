@@ -1,56 +1,51 @@
 import { describe, it, assert, expect, vi } from 'vitest'
 
 import { mount, flushPromises } from '@vue/test-utils'
-import TwitterTrends from '../TwitterTrends.vue'
+import TwitterTrendsAPI from '../TwitterTrendsAPI.vue'
 
 import axios from 'axios'
 
 // test html: https://getdaytrends.com/indonesia/bekasi/
 const mockTwitterTrends = {
-  // data: [
-  //   {
-  //     "name": "#TimnasIndonesia",
-  //     "url": "http://twitter.com/search?q=%23TimnasIndonesia",
-  //     "promoted_content": null,
-  //     "query": "%23TimnasIndonesia",
-  //     "tweet_volume": 221000
-  //   },
-  //   {
-  //     "name": "Test 1",
-  //     "url": "http://twitter.com/search?q=Test 1",
-  //     "promoted_content": null,
-  //     "query": "Test 1",
-  //     "tweet_volume": 9000
-  //   },
-  //   {
-  //     "name": "#Test2",
-  //     "url": "http://twitter.com/search?q=%23Test2",
-  //     "promoted_content": null,
-  //     "query": "%23Test2",
-  //     "tweet_volume": 539000
-  //   },
-  //   {
-  //     "name": "Test 3",
-  //     "url": "http://twitter.com/search?q=Test 3",
-  //     "promoted_content": null,
-  //     "query": "Test 3",
-  //     "tweet_volume": 545000
-  //   },
-  // ]
-  data: '<td class="main"><a href="/indonesia/bekasi/trend/%23TimnasIndonesia/">#TimnasIndonesia</a><div class="desc"><span class="small text-muted">22.1K tweets</span></div></td>' +
-    '<td class="main"><a href="/indonesia/bekasi/trend/Test%201/">Test 1</a><div class="desc"><span class="small text-muted">Under 10K tweets</span></div></td>' +
-    '<td class="main"><a class="string" href="/indonesia/bekasi/trend/%23Test2/">#Test2</a><div class="desc"><span class="small text-muted">53.9K tweets</span></div></td>' +
-    '<td class="main"><a class="string" href="/indonesia/bekasi/trend/Test%203/">Test 3</a><div class="desc"><span class="small text-muted">54.5K tweets</span></div></td>'
-
+  data: [
+    {
+      "name": "#TimnasIndonesia",
+      "url": "http://twitter.com/search?q=%23TimnasIndonesia",
+      "promoted_content": null,
+      "query": "%23TimnasIndonesia",
+      "tweet_volume": 221000
+    },
+    {
+      "name": "Test 1",
+      "url": "http://twitter.com/search?q=Test 1",
+      "promoted_content": null,
+      "query": "Test 1",
+      "tweet_volume": 9000
+    },
+    {
+      "name": "#Test2",
+      "url": "http://twitter.com/search?q=%23Test2",
+      "promoted_content": null,
+      "query": "%23Test2",
+      "tweet_volume": 539000
+    },
+    {
+      "name": "Test 3",
+      "url": "http://twitter.com/search?q=Test 3",
+      "promoted_content": null,
+      "query": "Test 3",
+      "tweet_volume": 545000
+    },
+  ]
 }
 
 // GET
 vi.spyOn(axios, 'get').mockResolvedValueOnce(mockTwitterTrends)
 
-describe('Twitter Trends', async() => {
-  assert.exists(TwitterTrends)
+describe('Twitter Trends API', async() => {
+  assert.exists(TwitterTrendsAPI)
 
-  const wrapper = mount(TwitterTrends, {
+  const wrapper = mount(TwitterTrendsAPI, {
     props: { },
     data() {
       return {
@@ -81,7 +76,7 @@ describe('Twitter Trends', async() => {
   })
 
   expect(axios.get).toHaveBeenCalledTimes(1)
-  expect(axios.get).toHaveBeenCalledWith('/api/trends')
+  expect(axios.get).toHaveBeenCalledWith('https://twitter-trends-heroku.herokuapp.com/api/trends')
 
   // Wait until the DOM updates.
   await flushPromises()
@@ -93,9 +88,9 @@ describe('Twitter Trends', async() => {
   const hasil = wrapper.find('[data-test="hasil"]')
 
   // button: btnCopy 
-  const btnCopy = wrapper.find('[data-test="btnCopy"]')
+  const btnCopy = wrapper.find('[data-test="btn-copy"]')
   // button: btnTweet
-  const btnTweet = wrapper.find('[data-test="btnTweet"]')
+  const btnTweet = wrapper.find('[data-test="btn-tweet"]')
 
   // button: btnCheckBoxAll diaktifkan atau tidak diaktifkan semua kotak centang
   const btnCheckBoxAll = wrapper.find('[data-test="btn-checkbox-all"]') 
@@ -103,11 +98,11 @@ describe('Twitter Trends', async() => {
   // `semua kotak centang` diaktifkan
   const allCheckboxesEnabled = wrapper.find('[data-test="all-checkboxes-enabled"]')
   it('init', async() => {
-    // button: btnSubmit tidak diaktifkan
-    assert.equal(btnSubmit.attributes().disabled, '')
+    // button: btnSubmit diaktifkan
+    assert.isUndefined(btnSubmit.attributes().disabled)
 
     // textarea hasil: test getdaytrends.com
-    assert.equal(hasil.element.value, 'Loading...')
+    assert.equal(hasil.element.value, 'Tags: #TimnasIndonesia, Test 1, #Test2, Test 3')
 
     window.alert = vi.fn()
     window.alert.mockClear()
