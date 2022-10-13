@@ -84,6 +84,9 @@ export default {
         const res = await axios.get('https://twitter-trends-heroku.herokuapp.com/api/trends')
         this.twittertrends = res.data
 
+        // // Testing
+        // this.twittertrends = [{"name":"#Test1","url":"http://twitter.com/search?q=%23Test1","tweet_volume":null},{"name":"#Test2","url":"http://twitter.com/search?q=%23Test2","tweet_volume":null},{"name":"#Test3","url":"http://twitter.com/search?q=%23Test3","tweet_volume":null},{"name":"#Test4","url":"http://twitter.com/search?q=%23Test4","tweet_volume":34487},{"name":"#Test5","url":"http://twitter.com/search?q=%23Test5","tweet_volume":17718},{"name":"Test 6","url":"http://twitter.com/search?q=%22Test+1%22","tweet_volume":23644},{"name":"Test 7","url":"http://twitter.com/search?q=%22Test+7%22","tweet_volume":null},{"name":"Test 8","url":"http://twitter.com/search?q=%22Test+8%22","tweet_volume":null},{"name":"Test 9","url":"http://twitter.com/search?q=%22Test+9%22","tweet_volume":null},{"name":"Test 10","url":"http://twitter.com/search?q=%22Test+10%22","tweet_volume":null},{"name":"Test 11","url":"http://twitter.com/search?q=%22Test+11%22","tweet_volume":null},{"name":"Test 12","url":"http://twitter.com/search?q=%22Test+12%22","tweet_volume":null},{"name":"Test 13","url":"http://twitter.com/search?q=%22Test+13%22","tweet_volume":null},{"name":"Test 14","url":"http://twitter.com/search?q=Test 14","tweet_volume":null},{"name":"Test 15","url":"http://twitter.com/search?q=%22Test+15%22","tweet_volume":null},{"name":"Faults 1","url":"http://twitter.com/search?q=%22Faults+1%22","tweet_volume":null},{"name":"Faults 2","url":"http://twitter.com/search?q=%22Faults+2%22","tweet_volume":null}]
+
         this.selectSubmit = true
 
         // hasil
@@ -104,16 +107,20 @@ export default {
       
       let trends = ''
 
+      let i = 0
       this.twittertrends.forEach((value, index) => {
         this.arraytrends.push({
           name: value.name,
           url: value.url,
           tweet_volume: value.tweet_volume,
-          completed: true
+          completed: (i < 15) ? true: false
         })
 
-        trends += `${value.name}, `
-        this.allCheckboxesEnabled++
+        if (i < 15) {
+          trends += `${value.name}, `
+          this.allCheckboxesEnabled++
+        }
+        i++
       })
 
       // 'Oknum, Motor, ' ke 'Oknum, Motor'
@@ -176,7 +183,7 @@ export default {
         let newArrayTrendsName = ''
         this.allCheckboxesEnabled = 0
 
-        for (let i = 0; i < this.arraytrends.length; i++) {
+        for (let i = 0; i < 15; i++) {
           this.arraytrends[i].completed = true
           newArrayTrendsName += `${this.arraytrends[i].name}, `
           this.allCheckboxesEnabled++
@@ -303,7 +310,7 @@ export default {
   <br>
   
   <h4 v-if="arraytrends.length > 0">Kotak Centang: 
-    <button @click="btnCheckBoxAll()" data-test="btnCheckBoxAll">
+    <button @click="btnCheckBoxAll()" data-test="btn-checkbox-all">
       {{ !isCheckBoxAll ? 'diaktifkan': 'tidak diaktifkan' }}
     </button>    
   </h4>
@@ -316,7 +323,7 @@ export default {
   <div
     v-for="(trends, index) in arraytrends"
     :key="trends.name"
-    data-test="arrayTrends"
+    data-test="array-trends"
     :class="[trends.completed ? 'completed' : '']"
     @change="trendsChanged($event, index)"
   >
@@ -326,7 +333,7 @@ export default {
       data-test="trends-checkbox"
     />
     <a :href="trends.url" target="_blank">{{ trends.name }}</a>
-    <small class="tweet-volume-class">{{ trends.tweet_volume !== 0 ? `(${trends.tweet_volume} tweets)` : '' }}</small>
+    <small class="tweet-volume-class">{{ trends.tweet_volume !== null ? `(${trends.tweet_volume} tweets)` : '' }}</small>
   </div>
 
   <br>
