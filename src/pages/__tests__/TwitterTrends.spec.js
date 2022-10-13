@@ -7,36 +7,7 @@ import axios from 'axios'
 
 // test html: https://getdaytrends.com/indonesia/bekasi/
 const mockTwitterTrends = {
-  data: [
-    {
-      "name": "#TimnasIndonesia",
-      "url": "http://twitter.com/search?q=%23TimnasIndonesia",
-      "promoted_content": null,
-      "query": "%23TimnasIndonesia",
-      "tweet_volume": 221000
-    },
-    {
-      "name": "Test 1",
-      "url": "http://twitter.com/search?q=Test 1",
-      "promoted_content": null,
-      "query": "Test 1",
-      "tweet_volume": 9000
-    },
-    {
-      "name": "#Test2",
-      "url": "http://twitter.com/search?q=%23Test2",
-      "promoted_content": null,
-      "query": "%23Test2",
-      "tweet_volume": 539000
-    },
-    {
-      "name": "Test 3",
-      "url": "http://twitter.com/search?q=Test 3",
-      "promoted_content": null,
-      "query": "Test 3",
-      "tweet_volume": 545000
-    },
-  ]
+  data: [{"name":"#Test1","url":"http://twitter.com/search?q=%23Test1","tweet_volume":null},{"name":"#Test2","url":"http://twitter.com/search?q=%23Test2","tweet_volume":null},{"name":"#Test3","url":"http://twitter.com/search?q=%23Test3","tweet_volume":null},{"name":"#Test4","url":"http://twitter.com/search?q=%23Test4","tweet_volume":34487},{"name":"#Test5","url":"http://twitter.com/search?q=%23Test5","tweet_volume":17718},{"name":"Test 6","url":"http://twitter.com/search?q=%22Test+1%22","tweet_volume":23644},{"name":"Test 7","url":"http://twitter.com/search?q=%22Test+7%22","tweet_volume":null},{"name":"Test 8","url":"http://twitter.com/search?q=%22Test+8%22","tweet_volume":null},{"name":"Test 9","url":"http://twitter.com/search?q=%22Test+9%22","tweet_volume":null},{"name":"Test 10","url":"http://twitter.com/search?q=%22Test+10%22","tweet_volume":null},{"name":"Test 11","url":"http://twitter.com/search?q=%22Test+11%22","tweet_volume":null},{"name":"Test 12","url":"http://twitter.com/search?q=%22Test+12%22","tweet_volume":null},{"name":"Test 13","url":"http://twitter.com/search?q=%22Test+13%22","tweet_volume":null},{"name":"Test 14","url":"http://twitter.com/search?q=Test 14","query":"Toothless","tweet_volume":null},{"name":"Test 15","url":"http://twitter.com/search?q=%22Test+15%22","tweet_volume":null},{"name":"Faults 1","url":"http://twitter.com/search?q=%22Faults+1%22","tweet_volume":null},{"name":"Faults 2","url":"http://twitter.com/search?q=%22Faults+2%22","tweet_volume":null}]
 }
 
 // GET
@@ -50,27 +21,24 @@ describe('Twitter Trends API', async() => {
     data() {
       return {
         arraytrends: [
-          {
-            name: '#TimnasIndonesia',
-            tweet_volume: '22.1K tweets',
-            completed: true
-          },
-          {
-            name: 'Test 1',
-            tweet_volume: 'Under 10K tweets',
-            completed: true
-          },
-          {
-            name: '#Test2',
-            tweet_volume: '53.9K tweets',
-            completed: true
-          },
-          {
-            name: 'Test 3',
-            tweet_volume: '54.5K tweets',
-            completed: true
-          },
-        ],
+          {name:"#Test1",url:"http://twitter.com/search?q=%23Test1",tweet_volume:null, completed:true},
+          {name:"#Test2",url:"http://twitter.com/search?q=%23Test2",tweet_volume:null, completed:true},
+          {name:"#Test3",url:"http://twitter.com/search?q=%23Test3",tweet_volume:null, completed:true},
+          {name:"#Test4",url:"http://twitter.com/search?q=%23Test4",tweet_volume:34487, completed:true},
+          {name:"#Test5",url:"http://twitter.com/search?q=%23Test5",tweet_volume:17718, completed:true},
+          {name:"Test 6",url:"http://twitter.com/search?q=%22Test+1%22",tweet_volume:23644, completed:true},
+          {name:"Test 7",url:"http://twitter.com/search?q=%22Test+7%22",tweet_volume:null, completed:true},
+          {name:"Test 8",url:"http://twitter.com/search?q=%22Test+8%22",tweet_volume:null, completed:true},
+          {name:"Test 9",url:"http://twitter.com/search?q=%22Test+9%22",tweet_volume:null, completed:true},
+          {name:"Test 10",url:"http://twitter.com/search?q=%22Test+10%22",tweet_volume:null, completed:true},
+          {name:"Test 11",url:"http://twitter.com/search?q=%22Test+11%22",tweet_volume:null, completed:true},
+          {name:"Test 12",url:"http://twitter.com/search?q=%22Test+12%22",tweet_volume:null, completed:true},
+          {name:"Test 13",url:"http://twitter.com/search?q=%22Test+13%22",tweet_volume:null, completed:true},
+          {name:"Test 14",url:"http://twitter.com/search?q=Test 14",tweet_volume:null, completed:true},
+          {name:"Test 15",url:"http://twitter.com/search?q=%22Test+15%22",tweet_volume:null, completed:true},
+          {name:"Faults 1",url:"http://twitter.com/search?q=%22Faults+1%22",tweet_volume:null, completed:false},
+          {name:"Faults 2",url:"http://twitter.com/search?q=%22Faults+2%22",tweet_volume:null, completed:false}
+        ]
       }
     }
   })
@@ -97,12 +65,12 @@ describe('Twitter Trends API', async() => {
 
   // `semua kotak centang` diaktifkan
   const allCheckboxesEnabled = wrapper.find('[data-test="all-checkboxes-enabled"]')
-  it('init', async() => {
+  it('init', () => {
     // button: btnSubmit diaktifkan
     assert.isUndefined(btnSubmit.attributes().disabled)
 
     // textarea hasil: test getdaytrends.com
-    assert.equal(hasil.element.value, 'Tags: #TimnasIndonesia, Test 1, #Test2, Test 3')
+    assert.equal(hasil.element.value, 'Tags: #Test1, #Test2, #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15')
 
     window.alert = vi.fn()
     window.alert.mockClear()
@@ -111,20 +79,26 @@ describe('Twitter Trends API', async() => {
     assert.isUndefined(btnCopy.attributes().disabled)
     assert.isUndefined(btnTweet.attributes().disabled)
     
-    assert.equal(btnTweet.text(), 'Tweet is: + 234')
+    assert.equal(btnTweet.text(), 'Tweet is: + 150')
   })  
 
-  // // array dan checkbox untuk trends
-  // const arrayTrends = wrapper.findAll('[data-test="array-trends"]')
-  // const checkboxTrends = wrapper.findAll('[data-test="trends-checkbox"]')
+  // array dan checkbox untuk trends
+  const arrayTrends = wrapper.findAll('[data-test="array-trends"]')
+  const checkboxTrends = wrapper.findAll('[data-test="trends-checkbox"]')
   
-  // it('kotak centang untuk trends di getdaytrends.com: baru', async => {
-  //   for (let i = 0; i < arrayTrends.length; i++) {
-  //     expect(arrayTrends.at(i).classes()).toContain('completed')
-  //   }
-  // })
+  it('kotak centang untuk trends di Twitter Trends API: baru', () => {
+    assert.equal(arrayTrends.length, 17)
+    
+    for (let i = 0; i < 15; i++) {
+      expect(arrayTrends.at(i).classes()).toContain('completed')
+    }
+
+    for (let i = 15; i < arrayTrends.length; i++) {
+      expect(arrayTrends.at(i).classes()).to.deep.equal([])
+    }
+  })
   
-  // it('kotak centang untuk trends di getdaytrends.com: tidak dicentang', async() => {
+  // it('kotak centang untuk trends di Twitter Trends API: tidak dicentang', async() => {
   //   assert.equal(hasil.element.value, 'Tags: #TimnasIndonesia, Test 1, #Test2, Test 3')
   //   assert.equal(btnTweet.text(), 'Tweet is: + 234')
 
