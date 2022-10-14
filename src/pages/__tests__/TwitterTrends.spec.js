@@ -166,59 +166,70 @@ describe('Twitter Trends API', async() => {
 
     assert.equal(hasil.element.value, 'Tidak ada hasil')
     assert.equal(btnTweet.text(), 'Tweet is: + 280')
-    // `semua kotak centang` diaktifkan
+    // `semua kotak centang` tidak diaktifkan
     assert.equal(allCheckboxesEnabled.text(), 'diaktifkan: 0')
   })
   
-  // it('kotak centang untuk trends di getdaytrends.com: dicentang', async() => {
-  //   console.debug('-----')
+  it('kotak centang untuk trends di getdaytrends.com: dicentang', async() => {
+    console.debug('-----')
 
-  //   assert.equal(hasil.element.value, 'Tidak ada hasil')
+    assert.equal(hasil.element.value, 'Tidak ada hasil')
 
-  //   // test cases
-  //   const testCases = [   
-  //     {
-  //       name: 'Test 1',
-  //       index: 1,
-  //       listBool: [false, true, false, false],
-  //       hasil: 'Tags: Test 1',
-  //     },
-  //     {
-  //       name: 'Test 3',
-  //       index: 3,
-  //       listBool: [false, true, false, true],
-  //       hasil: 'Tags: Test 1, Test 3',
-  //     },
-  //     {
-  //       name: '#TimnasIndonesia',
-  //       index: 0,
-  //       listBool: [true, true, false, true],
-  //       hasil: 'Tags: #TimnasIndonesia, Test 1, Test 3',
-  //     },
-  //     {
-  //       name: '#Test2',
-  //       index: 2,
-  //       listBool: [true, true, true, true],
-  //       hasil: 'Tags: #TimnasIndonesia, Test 1, #Test2, Test 3',
-  //     }  
-  //   ]
+    // test cases
+    const testCases = [   
+      {
+        name: '#Test2',
+        index: 1,
+        listBool: [false, true, false, false],
+        hasil: 'Tags: #Test2',
+      },
+      {
+        name: '#Test4',
+        index: 3,
+        listBool: [false, true, false, true],
+        hasil: 'Tags: #Test2, #Test4',
+      },
+      {
+        name: '#Test1',
+        index: 0,
+        listBool: [true, true, false, true],
+        hasil: 'Tags: #Test1, #Test2, #Test4',
+      },
+      {
+        name: '#Test3',
+        index: 2,
+        listBool: [true, true, true, true],
+        hasil: 'Tags: #Test1, #Test2, #Test3, #Test4',
+      }  
+    ]
   
-  //   for (let test of testCases) {
-  //     console.debug('checked ke-', test.name)
-  //     await checkboxTrends.at(test.index).setValue(true)
+    for (let test of testCases) {
+      console.debug('checked ke-', test.name)
+      await checkboxTrends.at(test.index).setValue(true)
       
-  //     for (let i = 0; i < test.listBool.length; i++) {
-  //       if (test.listBool[i]) {
-  //         expect(arrayTrends.at(i).classes()).toContain('completed')
-  //       } else {
-  //         // same: assert.deepEqual(arrayTrends.at(...).classes(), [])
-  //         expect(arrayTrends.at(i).classes()).to.deep.equal([])
-  //       }
-  //     }
+      for (let i = 0; i < test.listBool.length; i++) {
+        if (test.listBool[i]) {
+          expect(arrayTrends.at(i).classes()).toContain('completed')
+        } else {
+          // same: assert.deepEqual(arrayTrends.at(...).classes(), [])
+          expect(arrayTrends.at(i).classes()).to.deep.equal([])
+        }
+      }
 
-  //     assert.equal(hasil.element.value, test.hasil)
-  //   }
-  // })
+      assert.equal(hasil.element.value, test.hasil)
+    }
+
+    console.debug('checked ke-5 sd. ke-15')
+    for (let i = 4; i < 15; i++) {
+      await checkboxTrends.at(i).setValue(true)
+      expect(arrayTrends.at(i).classes()).toContain('completed')
+    }
+
+    assert.equal(hasil.element.value, 'Tags: #Test1, #Test2, #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15')
+    assert.equal(btnTweet.text(), 'Tweet is: + 150')
+    // `semua kotak centang` diaktifkan
+    assert.equal(allCheckboxesEnabled.text(), 'diaktifkan: 15')
+  })
   
   // it('button `semua kotak centang` di array untuk trends: tidak diaktifkan', async() => {
   //   assert.equal(btnCheckBoxAll.text(), 'tidak diaktifkan')
