@@ -319,68 +319,79 @@ describe('Twitter Trends API', async() => {
     assert.equal(allCheckboxesEnabled.text(), 'diaktifkan: 0')
   })
 
-  // it('textarea `hasil` untuk array untuk trends: dicentang', async() => {    
-  //   console.debug('-----')
+  it('textarea `hasil` untuk array untuk trends: dicentang', async() => {    
+    console.debug('-----')
     
-  //   assert.equal(hasil.element.value, 'Tidak ada hasil')
+    assert.equal(hasil.element.value, 'Tidak ada hasil')
 
-  //   // test cases
-  //   const testCases = [   
-  //     {
-  //       name: 'Test 1',
-  //       index: 1,
-  //       listBool: [false, true, false, false],
-  //       hasil: 'Tags: Test 1',
-  //       tweetIs: 'Tweet is: + 268',
-  //       // `semua kotak centang` diaktifkan
-  //       allCheckboxesEnabled: 'diaktifkan: 1'
-  //     },
-  //     {
-  //       name: 'Test 3',
-  //       index: 3,
-  //       listBool: [false, true, false, true],
-  //       hasil: 'Tags: Test 1, Test 3',
-  //       tweetIs: 'Tweet is: + 260',
-  //       allCheckboxesEnabled: 'diaktifkan: 2'
-  //     },
-  //     {
-  //       name: '#TimnasIndonesia',
-  //       index: 0,
-  //       listBool: [true, true, false, true],
-  //       hasil: 'Tags: #TimnasIndonesia, Test 1, Test 3',
-  //       tweetIs: 'Tweet is: + 242',
-  //       allCheckboxesEnabled: 'diaktifkan: 3'
-  //     },
-  //     {
-  //       name: '#Test2',
-  //       index: 2,
-  //       listBool: [true, true, true, true],
-  //       hasil: 'Tags: #TimnasIndonesia, Test 1, #Test2, Test 3',
-  //       tweetIs: 'Tweet is: + 234',
-  //       allCheckboxesEnabled: 'diaktifkan: 4'
-  //     }  
-  //   ]
+    // test cases
+    const testCases = [   
+      {
+        name: '#Test2',
+        index: 1,
+        listBool: [false, true, false, false],
+        hasil: 'Tags: #Test2',
+        tweetIs: 'Tweet is: + 268',
+        // `semua kotak centang` diaktifkan
+        allCheckboxesEnabled: 'diaktifkan: 1'
+      },
+      {
+        name: '#Test4',
+        index: 3,
+        listBool: [false, true, false, true],
+        hasil: 'Tags: #Test2, #Test4',
+        tweetIs: 'Tweet is: + 260',
+        allCheckboxesEnabled: 'diaktifkan: 2'
+      },
+      {
+        name: '#Test1',
+        index: 0,
+        listBool: [true, true, false, true],
+        hasil: 'Tags: #Test1, #Test2, #Test4',
+        tweetIs: 'Tweet is: + 252',
+        allCheckboxesEnabled: 'diaktifkan: 3'
+      },
+      {
+        name: '#Test3',
+        index: 2,
+        listBool: [true, true, true, true],
+        hasil: 'Tags: #Test1, #Test2, #Test3, #Test4',
+        tweetIs: 'Tweet is: + 244',
+        allCheckboxesEnabled: 'diaktifkan: 4'
+      }  
+    ]
 
-  //   for (let test of testCases) {
-  //     console.debug('checked ke-', test.name)
-  //     await checkboxTrends.at(test.index).setValue(true)
+    for (let test of testCases) {
+      console.debug('checked ke-', test.name)
+      await checkboxTrends.at(test.index).setValue(true)
       
-  //     for (let i = 0; i < test.listBool.length; i++) {
-  //       if (test.listBool[i]) {
-  //         expect(arrayTrends.at(i).classes()).toContain('completed')
-  //       } else {
-  //         // same: assert.deepEqual(arrayTrends.at(...).classes(), [])
-  //         expect(arrayTrends.at(i).classes()).to.deep.equal([])
-  //       }
+      for (let i = 0; i < test.listBool.length; i++) {
+        if (test.listBool[i]) {
+          expect(arrayTrends.at(i).classes()).toContain('completed')
+        } else {
+          // same: assert.deepEqual(arrayTrends.at(...).classes(), [])
+          expect(arrayTrends.at(i).classes()).to.deep.equal([])
+        }
 
-  //       assert.equal(btnTweet.text(), test.tweetIs)
-  //     }
+        assert.equal(btnTweet.text(), test.tweetIs)
+      }
 
-  //     assert.equal(hasil.element.value, test.hasil)
-  //     // `semua kotak centang` diaktifkan
-  //     assert.equal(allCheckboxesEnabled.text(), test.allCheckboxesEnabled)
-  //   }
-  // })
+      assert.equal(hasil.element.value, test.hasil)
+      // `semua kotak centang` diaktifkan
+      assert.equal(allCheckboxesEnabled.text(), test.allCheckboxesEnabled)
+    }
+
+    console.debug('checked ke-5 sd. ke-15')
+    for (let i = 4; i < 15; i++) {
+      await checkboxTrends.at(i).setValue(true)
+      expect(arrayTrends.at(i).classes()).toContain('completed')
+    }
+
+    assert.equal(hasil.element.value, 'Tags: #Test1, #Test2, #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15')
+    assert.equal(btnTweet.text(), 'Tweet is: + 150')
+    // `semua kotak centang` diaktifkan
+    assert.equal(allCheckboxesEnabled.text(), 'diaktifkan: 15')
+  })
 
   // it('button `semua kotak centang` di array untuk trends: tidak diaktifkan', async() => {
   //   assert.equal(btnCheckBoxAll.text(), 'tidak diaktifkan')
