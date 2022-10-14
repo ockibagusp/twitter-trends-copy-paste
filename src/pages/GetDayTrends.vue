@@ -78,7 +78,7 @@ export default {
       this.hasil = 'Loading...'
 
       try {
-        const res = await axios.get('https://twitter-trends-heroku.herokuapp.com/url')
+        const res = await axios.get('https://twitter-trends-redirect.herokuapp.com/url')
         this.getdaytrends = res.data
 
         this.selectSubmit = true
@@ -128,7 +128,9 @@ export default {
               .replace(/&#39;/g, "'")
 
             // replace
-            let encodedUrl = unescapeHtml.replaceAll('#', "%23")
+            let encodedUrl = unescapeHtml
+              .replaceAll('#', "%23")
+              .replaceAll(' ', '+')
               // // replace all '%'' to '%25'
               // .replaceAll('%', "%25")
             this.arraytrends[i] = {

@@ -81,7 +81,7 @@ export default {
       this.hasil = 'Loading...'
 
       try {
-        const res = await axios.get('https://twitter-trends-heroku.herokuapp.com/api/trends')
+        const res = await axios.get('https://twitter-trends-redirect.herokuapp.com/api/trends')
         this.twittertrends = res.data
 
         // // Testing
