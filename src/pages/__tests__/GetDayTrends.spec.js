@@ -70,7 +70,7 @@ describe('getdaytrends.com', async() => {
   // }
 
   expect(axios.get).toHaveBeenCalledTimes(1)
-  expect(axios.get).toHaveBeenCalledWith('https://twitter-trends-heroku.herokuapp.com/url')
+  expect(axios.get).toHaveBeenCalledWith('https://twitter-trends-redirect.herokuapp.com/url')
 
   // Wait until the DOM updates.
   await flushPromises()
