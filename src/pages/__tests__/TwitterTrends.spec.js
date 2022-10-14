@@ -231,28 +231,22 @@ describe('Twitter Trends API', async() => {
     assert.equal(allCheckboxesEnabled.text(), 'diaktifkan: 15')
   })
   
-  // it('button `semua kotak centang` di array untuk trends: tidak diaktifkan', async() => {
-  //   assert.equal(btnCheckBoxAll.text(), 'tidak diaktifkan')
+  it('button `semua kotak centang` di array untuk trends: tidak diaktifkan', async() => {
+    assert.equal(btnCheckBoxAll.text(), 'tidak diaktifkan')
 
-  //   let listBool = [true, true, true, true]
-  //   for (let i = 0; i < listBool.length; i++) {
-  //     expect(arrayTrends.at(i).classes()).toContain('completed')
-  //   }
+    await btnCheckBoxAll.trigger('click')
+    assert.equal(btnCheckBoxAll.text(), 'diaktifkan')
+    assert.equal(hasil.element.value, 'Tidak ada hasil')
 
-  //   await btnCheckBoxAll.trigger('click')
-  //   assert.equal(btnCheckBoxAll.text(), 'diaktifkan')
-  //   assert.equal(hasil.element.value, 'Tidak ada hasil')
+    for (let i = 0; i < arrayTrends.length; i++) {
+      // same: assert.deepEqual(arrayTrends.at(...).classes(), [])
+      expect(arrayTrends.at(i).classes()).to.deep.equal([])
+    }
 
-  //   listBool = [false, false, false, false]
-  //   for (let i = 0; i < listBool.length; i++) {
-  //     // same: assert.deepEqual(arrayTrends.at(...).classes(), [])
-  //     expect(arrayTrends.at(i).classes()).to.deep.equal([])
-  //   }
-
-  //   await btnCheckBoxAll.trigger('click')
-  //   assert.equal(btnCheckBoxAll.text(), 'tidak diaktifkan')
-  //   assert.equal(hasil.element.value, 'Tags: #TimnasIndonesia, Test 1, #Test2, Test 3')
-  // })
+    await btnCheckBoxAll.trigger('click')
+    assert.equal(btnCheckBoxAll.text(), 'tidak diaktifkan')
+    assert.equal(hasil.element.value, 'Tags: #Test1, #Test2, #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15')
+  })
 
   // it('textarea `hasil` untuk array untuk trends: tidak dicentang', async() => {
   //   await copydanpaste.trigger('change')
