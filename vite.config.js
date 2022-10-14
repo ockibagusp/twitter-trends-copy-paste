@@ -12,14 +12,19 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
-  server: {
-    proxy: {
-      '/twitter-trends/url': {
-        target: 'https://getdaytrends.com/indonesia/bekasi/',
-        changeOrigin: true,
-        secure: false,
-        rewrite: (path) => path.replace(/^\/twitter-trends\/url/, '')
-      },
-    }
-  }
+  // $ npm install cors
+  // https://expressjs.com/en/resources/middleware/cors.html
+
+  // heroku!
+  
+  // server: {
+  //   proxy: {
+  //     '/url': {
+  //       target: 'https://getdaytrends.com/indonesia/bekasi/',
+  //       changeOrigin: true,
+  //       secure: false,
+  //       rewrite: (path) => path.replace(/^\/url/, '')
+  //     },
+  //   }
+  // }
 })

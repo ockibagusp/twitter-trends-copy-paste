@@ -1,18 +1,19 @@
 {
   "name": "twitter-trends",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "scripts": {
     "dev": "vite --port 3000",
     "build": "vite build",
     "preview": "vite preview --port 4173",
     "test:unit": "vitest --environment jsdom",
-    "test:unit-CopydanPaste": "vitest --environment jsdom CopydanPaste",
+    "test:unit-TwitterTrends": "vitest --environment jsdom TwitterTrends",
     "test:unit-GetDayTrends": "vitest --environment jsdom GetDayTrends",
     "test:ui": "vitest --environment jsdom --ui",
     "start": "node server.js"
   },
   "dependencies": {
     "axios": "^0.27.2",
+    "cors": "^2.8.5",
     "express": "^4.18.1",
     "vue": "^3.2.37",
     "vue-axios": "^3.4.1",

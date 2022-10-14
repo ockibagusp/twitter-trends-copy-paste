@@ -60,7 +60,7 @@ export default {
     // textarea: getdaytrends
     getdaytrends() {
       this.memuat()
-    },
+    }
   },
   methods: {
     // dibuat: dari textarea getdaytrends ini
@@ -78,7 +78,7 @@ export default {
       this.hasil = 'Loading...'
 
       try {
-        const res = await axios.get('https://twitter-trends-heroku.herokuapp.com/url')
+        const res = await axios.get('https://twitter-trends-redirect.herokuapp.com/url')
         this.getdaytrends = res.data
 
         this.selectSubmit = true
@@ -128,7 +128,9 @@ export default {
               .replace(/&#39;/g, "'")
 
             // replace
-            let encodedUrl = unescapeHtml.replaceAll('#', "%23")
+            let encodedUrl = unescapeHtml
+              .replaceAll('#', "%23")
+              .replaceAll(' ', '+')
               // // replace all '%'' to '%25'
               // .replaceAll('%', "%25")
             this.arraytrends[i] = {
@@ -332,7 +334,7 @@ export default {
 </script>
 
 <template>
-  <h2 style="margin-top: -5px; margin-bottom: -5px;">GetDayTrends.com!</h2>
+  <h2 style="margin-top: 10px; margin-bottom: -5px;">GetDayTrends.com!</h2>
   <p style="margin-top: 0px; margin-bottom: 10px;"> <a href="https://getdaytrends.com/indonesia/bekasi/" target="_blank">getdaytrends.com/indonesia/bekasi/</a> </p>
 
   <button @click="btnSubmit" data-test="btn-submit" :disabled="isSubmit">Submit</button>
