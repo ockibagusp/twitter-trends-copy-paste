@@ -4,11 +4,20 @@
 Link:
 [ockibagusp.github.io/twitter-trends](https://ockibagusp.github.io/twitter-trends)
 
-### Twitter Trends:
+### Twitter Trends API:
 
 ![Twitter Trends 1](../images/twitter-trends1.png?raw=true)
 
+### Twitter Trends, Copy dan Paste!:
+
 ![Twitter Trends 2](../images/twitter-trends2.png?raw=true)
+
+![Twitter Trends 3](../images/twitter-trends3.png?raw=true)
+
+### GetDayTrends.com:
+
+![Twitter Trends 4](../images/twitter-trends4.png?raw=true)
+
 
 ## Vue 3 project
 
