@@ -7,11 +7,23 @@ import axios from 'axios'
 
 // test html: https://getdaytrends.com/indonesia/bekasi/
 const mockGetDayTrends = { 
-  data: '<td class="main"><a href="/indonesia/bekasi/trend/%23TimnasIndonesia/">#TimnasIndonesia</a><div class="desc"><span class="small text-muted">22.1K tweets</span></div></td>' +
-    '<td class="main"><a href="/indonesia/bekasi/trend/Test%201/">Test 1</a><div class="desc"><span class="small text-muted">Under 10K tweets</span></div></td>' +
-    '<td class="main"><a class="string" href="/indonesia/bekasi/trend/%23Test2/">#Test2</a><div class="desc"><span class="small text-muted">53.9K tweets</span></div></td>' +
-    '<td class="main"><a class="string" href="/indonesia/bekasi/trend/Test%203/">Test 3</a><div class="desc"><span class="small text-muted">54.5K tweets</span></div></td>'
-
+  data: '<td class="main"><a href="...">#Test1</a><div class="desc"><span class="small text-muted">22.1K tweets</span></div></td>' +
+    '<td class="main"><a href="...">#Test2</a><div class="desc"><span class="small text-muted">Under 10K tweets</span></div></td>' +
+    '<td class="main"><a class="string" href="...">#Test3</a><div class="desc"><span class="small text-muted">53.9K tweets</span></div></td>' +
+    '<td class="main"><a class="string" href="...">#Test4</a><div class="desc"><span class="small text-muted">54.5K tweets</span></div></td>' +
+    '<td class="main"><a href="...">#Test5</a><div class="desc"><span class="small text-muted">22.1K tweets</span></div></td>' +
+    '<td class="main"><a href="...">Test 6</a><div class="desc"><span class="small text-muted">Under 10K tweets</span></div></td>' +
+    '<td class="main"><a class="string" href="...">Test 7</a><div class="desc"><span class="small text-muted">53.9K tweets</span></div></td>' +
+    '<td class="main"><a class="string" href="...">Test 8</a><div class="desc"><span class="small text-muted">54.5K tweets</span></div></td>' +
+    '<td class="main"><a href="...">Test 9</a><div class="desc"><span class="small text-muted">22.1K tweets</span></div></td>' +
+    '<td class="main"><a href="...">Test 10</a><div class="desc"><span class="small text-muted">Under 10K tweets</span></div></td>' +
+    '<td class="main"><a class="string" href="...">Test 11</a><div class="desc"><span class="small text-muted">53.9K tweets</span></div></td>' +
+    '<td class="main"><a class="string" href="...">Test 12</a><div class="desc"><span class="small text-muted">54.5K tweets</span></div></td>' +
+    '<td class="main"><a href="...">Test 13</a><div class="desc"><span class="small text-muted">22.1K tweets</span></div></td>' +
+    '<td class="main"><a href="...">Test 14</a><div class="desc"><span class="small text-muted">Under 10K tweets</span></div></td>' +
+    '<td class="main"><a class="string" href="...">Test 15</a><div class="desc"><span class="small text-muted">53.9K tweets</span></div></td>' +
+    '<td class="main"><a class="string" href="...">Faults 1</a><div class="desc"><span class="small text-muted">54.5K tweets</span></div></td>' + 
+    '<td class="main"><a href="...">Faults 2</a><div class="desc"><span class="small text-muted">22.1K tweets</span></div></td>'
 }
 
 // GET
@@ -30,29 +42,8 @@ describe('getdaytrends.com', async() => {
     data() {
       return {
         arraytrends: [
-          {
-            name: '#TimnasIndonesia',
-            tweetVolume: '22.1K tweets',
-            completed: true
-          },
-          {
-            name: 'Test 1',
-            tweetVolume: 'Under 10K tweets',
-            completed: true
-          },
-          {
-            name: '#Test2',
-            tweetVolume: '53.9K tweets',
-            completed: true
-          },
-          {
-            name: 'Test 3',
-            tweetVolume: '54.5K tweets',
-            completed: true
-          },
-        ], 
-        // pindah: test GitHub Pages
-        pindah: 2,
+         // ...
+        ]
       }
     }
   })
@@ -96,12 +87,12 @@ describe('getdaytrends.com', async() => {
     assert.isUndefined(btnSubmit.attributes().disabled)
 
     // textarea hasil: test getdaytrends.com
-    assert.equal(hasil.element.value, 'Tags: #TimnasIndonesia, Test 1, #Test2, Test 3')
+    assert.equal(hasil.element.value, 'Tags: #Test1, #Test2, #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15')
     // button: btnCopy dan btnTweet diaktifkan
     assert.isUndefined(btnCopy.attributes().disabled)
     assert.isUndefined(btnTweet.attributes().disabled)
     
-    assert.equal(btnTweet.text(), 'Tweet is: + 234')
+    assert.equal(btnTweet.text(), 'Tweet is: + 150')
   })
 
   // array dan checkbox untuk trends
@@ -109,8 +100,14 @@ describe('getdaytrends.com', async() => {
   const checkboxTrends = wrapper.findAll('[data-test="trends-checkbox"]')
 
   it('kotak centang untuk trends di getdaytrends.com: baru', async => {
-    for (let i = 0; i < arrayTrends.length; i++) {
+    assert.equal(arrayTrends.length, 17)
+    
+    for (let i = 0; i < 15; i++) {
       expect(arrayTrends.at(i).classes()).toContain('completed')
+    }
+
+    for (let i = 15; i < arrayTrends.length; i++) {
+      expect(arrayTrends.at(i).classes()).to.deep.equal([])
     }
   })
 
