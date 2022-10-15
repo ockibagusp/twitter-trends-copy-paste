@@ -112,43 +112,43 @@ describe('getdaytrends.com', async() => {
   })
 
   it('kotak centang untuk trends di getdaytrends.com: tidak dicentang', async() => {
-    assert.equal(hasil.element.value, 'Tags: #TimnasIndonesia, Test 1, #Test2, Test 3')
-    assert.equal(btnTweet.text(), 'Tweet is: + 234')
+    assert.equal(hasil.element.value,'Tags: #Test1, #Test2, #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15')
+    assert.equal(btnTweet.text(), 'Tweet is: + 150')
 
     // test cases
     const testCases = [
       {
-        name: '#TimnasIndonesia',
+        name: '#Test1',
         index: 0,
         listBool: [false, true, true, true],
-        hasil: 'Tags: Test 1, #Test2, Test 3',
-        tweetIs: 'Tweet is: + 252',
+        hasil: 'Tags: #Test2, #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15',
+        tweetIs: 'Tweet is: + 158',
         // `semua kotak centang` diaktifkan
-        allCheckboxesEnabled: 'diaktifkan: 3'
-      },
-      {
-        name: 'Test 1',
-        index: 1,
-        listBool: [false, false, true, true],
-        hasil: 'Tags: #Test2, Test 3',
-        tweetIs: 'Tweet is: + 260',
-        allCheckboxesEnabled: 'diaktifkan: 2'
+        allCheckboxesEnabled: 'diaktifkan: 14'
       },
       {
         name: '#Test2',
-        index: 2,
-        listBool: [false, false, false, true],
-        hasil: 'Tags: Test 3',
-        tweetIs: 'Tweet is: + 268',
-        allCheckboxesEnabled: 'diaktifkan: 1'
+        index: 1,
+        listBool: [false, false, true, true],
+        hasil: 'Tags: #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15',
+        tweetIs: 'Tweet is: + 166',
+        allCheckboxesEnabled: 'diaktifkan: 13'
       },
       {
-        name: 'Test 3',
+        name: '#Test3',
+        index: 2,
+        listBool: [false, false, false, true],
+        hasil: 'Tags: #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15',
+        tweetIs: 'Tweet is: + 174',
+        allCheckboxesEnabled: 'diaktifkan: 12'
+      },
+      {
+        name: '#Test4',
         index: 3,
         listBool: [false, false, false, false],
-        hasil: 'Tidak ada hasil',
-        tweetIs: 'Tweet is: + 280',
-        allCheckboxesEnabled: 'diaktifkan: 0'
+        hasil: 'Tags: #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15',
+        tweetIs: 'Tweet is: + 182',
+        allCheckboxesEnabled: 'diaktifkan: 11'
       },
     ]
 
@@ -170,6 +170,17 @@ describe('getdaytrends.com', async() => {
       // `semua kotak centang` diaktifkan
       assert.equal(allCheckboxesEnabled.text(), test.allCheckboxesEnabled)
     }
+
+    console.debug('unchecked ke-5 sd. ke-15')
+    for (let i = 4; i < 15; i++) {
+      await checkboxTrends.at(i).setValue(false)
+      expect(arrayTrends.at(i).classes()).to.deep.equal([])
+    }
+
+    assert.equal(hasil.element.value, 'Tidak ada hasil')
+    assert.equal(btnTweet.text(), 'Tweet is: + 280')
+    // `semua kotak centang` tidak diaktifkan
+    assert.equal(allCheckboxesEnabled.text(), 'diaktifkan: 0')
   })
 
   it('kotak centang untuk trends di getdaytrends.com: dicentang', async() => {
