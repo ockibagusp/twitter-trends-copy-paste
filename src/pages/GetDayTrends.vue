@@ -81,6 +81,24 @@ export default {
         const res = await axios.get('https://twitter-trends-redirect.herokuapp.com/url')
         this.getdaytrends = res.data
 
+        // this.getdaytrends = '<td class="main"><a href="...">#Test1</a><div class="desc"><span class="small text-muted">22.1K tweets</span></div></td>' +
+        //   '<td class="main"><a href="...">#Test2</a><div class="desc"><span class="small text-muted">Under 10K tweets</span></div></td>' +
+        //   '<td class="main"><a class="string" href="...">#Test3</a><div class="desc"><span class="small text-muted">53.9K tweets</span></div></td>' +
+        //   '<td class="main"><a class="string" href="...">#Test4</a><div class="desc"><span class="small text-muted">54.5K tweets</span></div></td>' +
+        //   '<td class="main"><a href="...">#Test5</a><div class="desc"><span class="small text-muted">22.1K tweets</span></div></td>' +
+        //   '<td class="main"><a href="...">Test 6</a><div class="desc"><span class="small text-muted">Under 10K tweets</span></div></td>' +
+        //   '<td class="main"><a class="string" href="...">Test 7</a><div class="desc"><span class="small text-muted">53.9K tweets</span></div></td>' +
+        //   '<td class="main"><a class="string" href="...">Test 8</a><div class="desc"><span class="small text-muted">54.5K tweets</span></div></td>' +
+        //   '<td class="main"><a href="...">Test 9</a><div class="desc"><span class="small text-muted">22.1K tweets</span></div></td>' +
+        //   '<td class="main"><a href="...">Test 10</a><div class="desc"><span class="small text-muted">Under 10K tweets</span></div></td>' +
+        //   '<td class="main"><a class="string" href="...">Test 11</a><div class="desc"><span class="small text-muted">53.9K tweets</span></div></td>' +
+        //   '<td class="main"><a class="string" href="...">Test 12</a><div class="desc"><span class="small text-muted">54.5K tweets</span></div></td>' +
+        //   '<td class="main"><a href="...">Test 13</a><div class="desc"><span class="small text-muted">22.1K tweets</span></div></td>' +
+        //   '<td class="main"><a href="...">Test 14</a><div class="desc"><span class="small text-muted">Under 10K tweets</span></div></td>' +
+        //   '<td class="main"><a class="string" href="...">Test 15</a><div class="desc"><span class="small text-muted">53.9K tweets</span></div></td>' +
+        //   '<td class="main"><a class="string" href="...">Faults 1</a><div class="desc"><span class="small text-muted">54.5K tweets</span></div></td>' + 
+        //   '<td class="main"><a href="...">Faults 2</a><div class="desc"><span class="small text-muted">22.1K tweets</span></div></td>'
+
         this.selectSubmit = true
 
         // hasil
@@ -136,30 +154,28 @@ export default {
             this.arraytrends[i] = {
               name: unescapeHtml,
               url: 'https://twitter.com/search?q=' + encodedUrl,
-              tweetVolume: '',
-              completed: true
+              tweet_volume: '',
+              completed: (i < 15) ? true: false
             }
 
-            trends += `${unescapeHtml}, `
+            if (i < 15) {
+              trends += `${unescapeHtml}, `
+              this.allCheckboxesEnabled++
+            }
           }
 
           if (groupIndex === 3) {
             if (match !== undefined)
-              this.arraytrends[i].tweetVolume = `${match}`
+              this.arraytrends[i].tweet_volume = `${match}`
           }
 
           // Misalnya: 20K
           if (groupIndex === 4) {
-            this.arraytrends[i].tweetVolume += match
+            this.arraytrends[i].tweet_volume += match
           }
         })
-        
-        this.allCheckboxesEnabled++
+
         i++
-        // trends getdaytrends.com: no. 1-15
-        if (i === 15 && this.allCheckboxesEnabled === 15) {
-          break
-        }
       }
 
       // 'Oknum, Motor, ' ke 'Oknum, Motor'
@@ -222,7 +238,7 @@ export default {
         let newArrayTrendsName = ''
         this.allCheckboxesEnabled = 0
 
-        for (let i = 0; i < this.arraytrends.length; i++) {
+        for (let i = 0; i < 15; i++) {
           this.arraytrends[i].completed = true
           newArrayTrendsName += `${this.arraytrends[i].name}, `
           this.allCheckboxesEnabled++
@@ -373,7 +389,7 @@ export default {
       data-test="trends-checkbox"
     />
     <a :href="trends.url" target="_blank">{{ trends.name }}</a>
-    <small class="tweetVolume-class">{{ trends.tweetVolume !== 0 ? `(${trends.tweetVolume})` : '' }}</small>
+    <small>{{ trends.tweet_volume !== 0 ? `(${trends.tweet_volume})` : '' }}</small>
   </div>
 </template>
 
