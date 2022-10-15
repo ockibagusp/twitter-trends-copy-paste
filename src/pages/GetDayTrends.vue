@@ -137,10 +137,10 @@ export default {
               name: unescapeHtml,
               url: 'https://twitter.com/search?q=' + encodedUrl,
               tweet_volume: '',
-              completed: true
+              completed: (i < 15) ? true: false
             }
 
-            trends += `${unescapeHtml}, `
+            if (i < 15) trends += `${unescapeHtml}, `
           }
 
           if (groupIndex === 3) {
@@ -154,12 +154,8 @@ export default {
           }
         })
         
-        this.allCheckboxesEnabled++
+        if (i < 15) this.allCheckboxesEnabled++
         i++
-        // trends getdaytrends.com: no. 1-15
-        if (i === 15 && this.allCheckboxesEnabled === 15) {
-          break
-        }
       }
 
       // 'Oknum, Motor, ' ke 'Oknum, Motor'
