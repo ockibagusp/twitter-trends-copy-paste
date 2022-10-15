@@ -218,7 +218,7 @@ export default {
         let newArrayTrendsName = ''
         this.allCheckboxesEnabled = 0
 
-        for (let i = 0; i < this.arraytrends.length; i++) {
+        for (let i = 0; i < 15; i++) {
           this.arraytrends[i].completed = true
           newArrayTrendsName += `${this.arraytrends[i].name}, `
           this.allCheckboxesEnabled++
