@@ -136,7 +136,7 @@ export default {
             this.arraytrends[i] = {
               name: unescapeHtml,
               url: 'https://twitter.com/search?q=' + encodedUrl,
-              tweetVolume: '',
+              tweet_volume: '',
               completed: true
             }
 
@@ -145,12 +145,12 @@ export default {
 
           if (groupIndex === 3) {
             if (match !== undefined)
-              this.arraytrends[i].tweetVolume = `${match}`
+              this.arraytrends[i].tweet_volume = `${match}`
           }
 
           // Misalnya: 20K
           if (groupIndex === 4) {
-            this.arraytrends[i].tweetVolume += match
+            this.arraytrends[i].tweet_volume += match
           }
         })
         
@@ -373,7 +373,7 @@ export default {
       data-test="trends-checkbox"
     />
     <a :href="trends.url" target="_blank">{{ trends.name }}</a>
-    <small class="tweetVolume-class">{{ trends.tweetVolume !== 0 ? `(${trends.tweetVolume})` : '' }}</small>
+    <small>{{ trends.tweet_volume !== 0 ? `(${trends.tweet_volume})` : '' }}</small>
   </div>
 </template>
 
