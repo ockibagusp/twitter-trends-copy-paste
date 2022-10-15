@@ -140,7 +140,10 @@ export default {
               completed: (i < 15) ? true: false
             }
 
-            if (i < 15) trends += `${unescapeHtml}, `
+            if (i < 15) {
+              trends += `${unescapeHtml}, `
+              this.allCheckboxesEnabled++
+            }
           }
 
           if (groupIndex === 3) {
@@ -153,8 +156,7 @@ export default {
             this.arraytrends[i].tweet_volume += match
           }
         })
-        
-        if (i < 15) this.allCheckboxesEnabled++
+
         i++
       }
 
