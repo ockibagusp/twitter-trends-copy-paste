@@ -5,9 +5,9 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <template>
   <nav>
-    <RouterLink to="/">Twitter Trends API</RouterLink> |
-    <RouterLink to="/copydanpaste">Twitter Trends: Copy dan Paste!</RouterLink> |
-    <RouterLink to="/getdaytrends">GetDayTrends.com</RouterLink>
+    <RouterLink to="/">Home</RouterLink> |
+    <RouterLink to="/twitter-trends-api">Twitter Trends API</RouterLink> |
+    <RouterLink to="/getdaytrends.com">GetDayTrends.com</RouterLink>
   </nav>
 
   <main>

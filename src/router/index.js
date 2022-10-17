@@ -10,15 +10,15 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: TwitterTrendsAPI
-    },
-    {
-      path: '/copydanpaste',
-      name: 'Twitter Trends: Copy dan Paste',
       component: CopydanPaste
     },
     {
-      path: '/getdaytrends',
+      path: '/twitter-trends-api',
+      name: 'Twitter Trends API',
+      component: TwitterTrendsAPI
+    },
+    {
+      path: '/getdaytrends.com',
       name: 'getdaytrends',
       component: GetDayTrends
     },
