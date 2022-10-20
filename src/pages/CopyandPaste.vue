@@ -6,7 +6,7 @@ export default {
   data() {
     return {
       // textarea: copydanpaste dan hasil
-      copydanpaste: '',
+      copyandpaste: '',
       hasil: '',
       // array untuk trends
       arraytrends: [],
@@ -57,7 +57,7 @@ export default {
       // regex101.com
       const regex = /(Sedang tren dalam topik (.+)|Trending in (.+)|(.+) Popular|(.+) Populer|(.+) Trending)\n?\n(.+)\n?\n([\d.,]+.*)?/gm
       
-      const str = this.copydanpaste
+      const str = this.copyandpaste
       let m
       let i = 0
       while ((m = regex.exec(str)) !== null) {
@@ -265,7 +265,7 @@ export default {
   <p style="margin-top: -5px; margin-bottom: 5px; color: red;">aplikasi Android dan iOS ❌</p>
 
   <h3>Paste [ctrl + v]...</h3>
-    <textarea style="margin-top: -15px; margin-bottom: 5px;" v-model="copydanpaste" ref="copydanpaste" data-test="copydanpaste" rows="8" cols="50" 
+    <textarea style="margin-top: -15px; margin-bottom: 5px;" v-model="copyandpaste" ref="copyandpaste" data-test="copydanpaste" rows="8" cols="50" 
     placeholder="Tren
 Sedang tren dalam topik Indonesia
 Aksi Cepat Tanggap

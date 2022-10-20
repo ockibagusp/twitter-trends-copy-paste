@@ -1,30 +1,22 @@
 <script>
 const TAGS = 'Tags: '
 
-// Slots - Vue.js
-// https://vuejs.org/guide/components/slots.html#scoped-slots
-
 import axios from 'axios'
+import ResultsSlots from './Results.slots.vue'
 
 export default {
   data() {
     return {
       // textarea: twittertrends dan hasil
       twittertrends: '',
-      hasil: '',
+      results: '',
 
       // array untuk trends
       arraytrends: [],
-
-      // tweet dihasil maks. 280 karakter
-      count: 280,
-
-      // pilih hasil, button submit, button copy dan button tweet: true atau false
+      
+      // pilih button hasil dan submit: true atau false
       selectSubmit: false,
-      selectHasil: false,
-      selectCopy: false,
-      selectTweet: false,
-
+      selectResults: false,
       // pilih `semua kotak centang`: true atau false
       selectCheckBoxAll: false,
 
@@ -33,18 +25,9 @@ export default {
     }
   },
   computed: {
-    // adalah submit, hasil dan button copy: true atau false
+    // adalah submit: true atau false
     isSubmit: function() {
       return !this.selectSubmit
-    },
-    isHasil: function() {
-      return !this.selectHasil
-    },
-    isCopy: function() {
-      return !this.selectCopy
-    },
-    isTweet: function() {
-      return !this.selectTweet
     },
 
     // adalah button `semua kotak centang`: true atau false
@@ -53,32 +36,32 @@ export default {
     },
   },
   created() {
-    this.dibuat()
+    this.beMade()
   },
   watch: {
     // textarea: twittertrends
     twittertrends() {
       // textarea hasil: loading...
-      this.hasil = 'Loading...'
+      this.results = 'Loading...'
       
       // vue methods: memuat
-      this.memuat()
+      this.carry()
     }
   },
   methods: {
-    // dibuat: dari textarea getdaytrends ini
-    async dibuat() {
+    // dibuat: dari textarea Twitter Trends API ini
+    async beMade() {
       this.arraytrends = []
       this.allCheckboxesEnabled = 0
 
+      this.selectResults = false
       this.selectSubmit = false
       this.selectCopy = false
       this.selectTweet = false
       this.count = 280
 
-      this.selectHasil = false
       // textarea hasil: loading...
-      this.hasil = 'Loading...'
+      this.results = 'Loading...'
 
       try {
         const res = await axios.get('https://twitter-trends-redirect.herokuapp.com/api/trends')
@@ -90,10 +73,10 @@ export default {
         this.selectSubmit = true
 
         // hasil
-        this.memuat()
+        this.carry()
       } catch (error) {
-        this.hasil = ''
-        this.selectHasil = false
+        this.results = ''
+        this.selectResults = false
         this.selectSubmit = false
         this.selectCopy = false
         this.selectTweet = false
@@ -101,7 +84,7 @@ export default {
       }
     },
     // memuat: dari textarea copydanpaste ini
-    memuat() {
+    carry() {
       this.arraytrends = []
       this.allCheckboxesEnabled = 0
       
@@ -126,54 +109,33 @@ export default {
       // 'Oknum, Motor, ' ke 'Oknum, Motor'
       if (trends != '') {
         trends = TAGS + trends.substring(0, trends.length-2)
-        this.selectHasil = true
+        this.selectResults = true
         this.selectCopy = true
         this.selectTweet = true
 
         this.count = 280 - trends.length
       } else if (this.twittertrends === 0 && trends == '') {
         trends = 'Tidak ada hasil'
-        this.selectHasil = false
+        this.selectResults = false
         this.selectCopy = false
         this.selectTweet = false
 
         this.count = 280
       }
       
-      this.hasil = trends
+      this.results = trends
       this.isCopyAndCountTweet()
     },
     
     // button: submit dan copy
     btnSubmit() {
-      this.selectHasil = false
+      this.selectResults = false
       this.selectCopy = false
 
       // textarea hasil: loading...
-      this.hasil = 'Loading...'
+      this.results = 'Loading...'
 
-      this.memuat()
-    },
-    // sama GetDayTrends:btnCopy()
-    btnCopy() {
-      if (this.hasil == '' || this.hasil == 'Tidak ada hasil') {
-        return
-      }
-      
-      this.$refs.hasil.select()
-      // Untuk perangkat seluler
-      this.$refs.hasil.setSelectionRange(0, 99999);
-    
-      navigator.clipboard.writeText(this.hasil);
-    },
-    // sama GetDayTrends:btnTweet()
-    btnTweet() {
-      if (this.hasil.length > 280) {
-        this.selectTweet = false
-        return
-      }
-      const UTF8_hash = this.hasil.replaceAll("#", "%23")
-      window.open("https://twitter.com/intent/tweet?text="+UTF8_hash, "_blank")
+      this.carry()
     },
     // sama GetDayTrends:btnCheckBoxAll()
     
@@ -188,14 +150,14 @@ export default {
           newArrayTrendsName += `${this.arraytrends[i].name}, `
           this.allCheckboxesEnabled++
         }
-        this.selectHasil = true
+        this.selectResults = true
         this.selectCopy = true
         this.selectTweet = true
 
         this.selectCheckBoxAll = false
 
-        this.hasil = TAGS + newArrayTrendsName.substring(0, newArrayTrendsName.length-2)
-        this.count = 280 - this.hasil.length
+        this.results = TAGS + newArrayTrendsName.substring(0, newArrayTrendsName.length-2)
+        this.count = 280 - this.results.length
         this.isCopyAndCountTweet()
       } else {
         this.arraytrends.forEach((val, index) => {
@@ -203,11 +165,11 @@ export default {
         })
 
         this.count = 280
-        this.hasil = 'Tidak ada hasil'
+        this.results = 'Tidak ada hasil'
         this.isCopyAndCountTweet()
         this.allCheckboxesEnabled = 0
 
-        this.selectHasil = false
+        this.selectResults = false
         this.selectCopy = false
         this.selectTweet = false        
         this.selectCheckBoxAll = true
@@ -221,10 +183,10 @@ export default {
       const name = this.arraytrends[index].name
 
       if (event.target.checked) {
-        if (this.hasil === 'Tidak ada hasil') {
-          this.hasil =  TAGS + name
+        if (this.results === 'Tidak ada hasil') {
+          this.results =  TAGS + name
           // pilih hasil, button copy dan button tweet: true
-          this.selectHasil = true
+          this.selectResults = true
           this.selectCopy = true
           this.selectTweet = true
 
@@ -237,30 +199,30 @@ export default {
             }
           }
 
-          this.hasil = TAGS + newArrayTrendsName.substring(0, newArrayTrendsName.length-2)
+          this.results = TAGS + newArrayTrendsName.substring(0, newArrayTrendsName.length-2)
           this.isCopyAndCountTweet()
 
           this.allCheckboxesEnabled++
         }
 
-        this.count = 280 - this.hasil.length
+        this.count = 280 - this.results.length
       } else {
-        const kananKoma = `${name}, `
-        const kiriKoma = `, ${name}`
-        const keduanyaKoma = `, ${name}, `
+        const rightComma = `${name}, `
+        const leftComma = `, ${name}`
+        const bothComma = `, ${name}, `
 
         let melepas = ''
-        if (this.hasil.includes(kananKoma)) {
-          melepas = kananKoma
-        } else if (this.hasil.includes(kiriKoma)) {
-          melepas = kiriKoma
-        } else if (this.hasil.includes(keduanyaKoma)) {
-          melepas = keduanyaKoma
+        if (this.results.includes(rightComma)) {
+          melepas = rightComma
+        } else if (this.results.includes(leftComma)) {
+          melepas = leftComma
+        } else if (this.results.includes(bothComma)) {
+          melepas = bothComma
         } else {
           // melepas = text 
-          this.hasil = 'Tidak ada hasil'
+          this.results = 'Tidak ada hasil'
           // pilih hasil, button copy dan button tweet: false
-          this.selectHasil = false
+          this.selectResults = false
           this.selectCopy = false
           this.selectTweet = false
           this.count = 280
@@ -268,9 +230,9 @@ export default {
           this.allCheckboxesEnabled = 0
           return
         }
-        this.hasil = this.hasil.replace(melepas, '')
+        this.results = this.results.replace(melepas, '')
 
-        this.count = 280 - this.hasil.length
+        this.count = 280 - this.results.length
         this.isCopyAndCountTweet()
 
         this.allCheckboxesEnabled--
@@ -283,8 +245,8 @@ export default {
 
     // adalah textarea hitungan dan tombol tweet
     isCopyAndCountTweet() {
-      if (this.hasil === '' || this.hasil === 'Tidak ada hasil' 
-        || this.hasil.length > 280) { 
+      if (this.results === '' || this.results === 'Tidak ada hasil' 
+        || this.results.length > 280) { 
         this.selectCopy = false
         this.selectTweet = false
       } else {
@@ -292,6 +254,9 @@ export default {
         this.selectTweet = true
       }
     }
+  },
+  components: {
+    ResultsSlots: ResultsSlots
   }
 }
 </script>
@@ -301,13 +266,12 @@ export default {
   <button @click="btnSubmit" data-test="btn-submit" :disabled="isSubmit">Submit</button>
   <br>
 
-  <h3 style="margin-top: 10px; margin-bottom: 5px;">Hasil</h3>
-  <textarea v-model="hasil" data-test="hasil" ref="hasil" rows="5" cols="50" 
-    placeholder="Tags: Aksi Cepat Tanggap, Axelsen, Desta, Oknum, Motor, ..." :disabled="isHasil"></textarea>
-  <br>
-  <button @click="btnCopy" data-test="btn-copy" :disabled="isCopy">Copy</button>
-  <button @click="btnTweet" data-test="btn-tweet" :disabled="isTweet">Tweet is: <small v-if="hasil.length < 280">+</small> {{count}}</button>
-  <br>
+  <ResultsSlots 
+    :results="results" 
+    :count="count"
+    :selectResults="selectResults"
+    :selectCopy="selectCopy"
+    :selectTweet="selectTweet"/>
   
   <h4 v-if="arraytrends.length > 0">Kotak Centang: 
     <button @click="btnCheckBoxAll()" data-test="btn-checkbox-all">

@@ -53,7 +53,7 @@ describe('Twitter Trends API', async() => {
   const btnSubmit = wrapper.find('[data-test="btn-submit"]')
 
   // textarea: hasil
-  const hasil = wrapper.find('[data-test="hasil"]')
+  const results = wrapper.find('[data-test="results"]')
 
   // button: btnCopy 
   const btnCopy = wrapper.find('[data-test="btn-copy"]')
@@ -70,7 +70,7 @@ describe('Twitter Trends API', async() => {
     assert.isUndefined(btnSubmit.attributes().disabled)
 
     // textarea hasil: test getdaytrends.com
-    assert.equal(hasil.element.value, 'Tags: #Test1, #Test2, #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15')
+    assert.equal(results.element.value, 'Tags: #Test1, #Test2, #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15')
 
     window.alert = vi.fn()
     window.alert.mockClear()
@@ -99,7 +99,7 @@ describe('Twitter Trends API', async() => {
   })
   
   it('kotak centang untuk trends di Twitter Trends API: tidak dicentang', async() => {
-    assert.equal(hasil.element.value, 'Tags: #Test1, #Test2, #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15')
+    assert.equal(results.element.value, 'Tags: #Test1, #Test2, #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15')
     assert.equal(btnTweet.text(), 'Tweet is: + 150')
 
     // test cases
@@ -152,7 +152,7 @@ describe('Twitter Trends API', async() => {
         }
       }
 
-      assert.equal(hasil.element.value, test.hasil)
+      assert.equal(results.element.value, test.hasil)
       assert.equal(btnTweet.text(), test.tweetIs)
       // `semua kotak centang` diaktifkan
       assert.equal(allCheckboxesEnabled.text(), test.allCheckboxesEnabled)
@@ -164,7 +164,7 @@ describe('Twitter Trends API', async() => {
       expect(arrayTrends.at(i).classes()).to.deep.equal([])
     }
 
-    assert.equal(hasil.element.value, 'Tidak ada hasil')
+    assert.equal(results.element.value, 'Tidak ada hasil')
     assert.equal(btnTweet.text(), 'Tweet is: + 280')
     // `semua kotak centang` tidak diaktifkan
     assert.equal(allCheckboxesEnabled.text(), 'diaktifkan: 0')
@@ -173,7 +173,7 @@ describe('Twitter Trends API', async() => {
   it('kotak centang untuk trends di getdaytrends.com: dicentang', async() => {
     console.debug('-----')
 
-    assert.equal(hasil.element.value, 'Tidak ada hasil')
+    assert.equal(results.element.value, 'Tidak ada hasil')
 
     // test cases
     const testCases = [   
@@ -216,7 +216,7 @@ describe('Twitter Trends API', async() => {
         }
       }
 
-      assert.equal(hasil.element.value, test.hasil)
+      assert.equal(results.element.value, test.hasil)
     }
 
     console.debug('checked ke-5 sd. ke-15')
@@ -225,7 +225,7 @@ describe('Twitter Trends API', async() => {
       expect(arrayTrends.at(i).classes()).toContain('completed')
     }
 
-    assert.equal(hasil.element.value, 'Tags: #Test1, #Test2, #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15')
+    assert.equal(results.element.value, 'Tags: #Test1, #Test2, #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15')
     assert.equal(btnTweet.text(), 'Tweet is: + 150')
     // `semua kotak centang` diaktifkan
     assert.equal(allCheckboxesEnabled.text(), 'diaktifkan: 15')
@@ -236,7 +236,7 @@ describe('Twitter Trends API', async() => {
 
     await btnCheckBoxAll.trigger('click')
     assert.equal(btnCheckBoxAll.text(), 'diaktifkan')
-    assert.equal(hasil.element.value, 'Tidak ada hasil')
+    assert.equal(results.element.value, 'Tidak ada hasil')
 
     for (let i = 0; i < arrayTrends.length; i++) {
       // same: assert.deepEqual(arrayTrends.at(...).classes(), [])
@@ -245,7 +245,7 @@ describe('Twitter Trends API', async() => {
 
     await btnCheckBoxAll.trigger('click')
     assert.equal(btnCheckBoxAll.text(), 'tidak diaktifkan')
-    assert.equal(hasil.element.value, 'Tags: #Test1, #Test2, #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15')
+    assert.equal(results.element.value, 'Tags: #Test1, #Test2, #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15')
     assert.equal(btnTweet.text(), 'Tweet is: + 150')
   })
 
@@ -300,7 +300,7 @@ describe('Twitter Trends API', async() => {
         }
       }
 
-      assert.equal(hasil.element.value, test.hasil)
+      assert.equal(results.element.value, test.hasil)
       assert.equal(btnTweet.text(), test.tweetIs)
       // `semua kotak centang` diaktifkan
       assert.equal(allCheckboxesEnabled.text(), test.allCheckboxesEnabled)
@@ -313,7 +313,7 @@ describe('Twitter Trends API', async() => {
       expect(arrayTrends.at(i).classes()).to.deep.equal([])
     }
 
-    assert.equal(hasil.element.value, 'Tidak ada hasil')
+    assert.equal(results.element.value, 'Tidak ada hasil')
     assert.equal(btnTweet.text(), 'Tweet is: + 280')
     // `semua kotak centang` diaktifkan
     assert.equal(allCheckboxesEnabled.text(), 'diaktifkan: 0')
@@ -322,7 +322,7 @@ describe('Twitter Trends API', async() => {
   it('textarea `hasil` untuk array untuk trends: dicentang', async() => {    
     console.debug('-----')
     
-    assert.equal(hasil.element.value, 'Tidak ada hasil')
+    assert.equal(results.element.value, 'Tidak ada hasil')
 
     // test cases
     const testCases = [   
@@ -376,7 +376,7 @@ describe('Twitter Trends API', async() => {
         assert.equal(btnTweet.text(), test.tweetIs)
       }
 
-      assert.equal(hasil.element.value, test.hasil)
+      assert.equal(results.element.value, test.hasil)
       // `semua kotak centang` diaktifkan
       assert.equal(allCheckboxesEnabled.text(), test.allCheckboxesEnabled)
     }
@@ -387,7 +387,7 @@ describe('Twitter Trends API', async() => {
       expect(arrayTrends.at(i).classes()).toContain('completed')
     }
 
-    assert.equal(hasil.element.value, 'Tags: #Test1, #Test2, #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15')
+    assert.equal(results.element.value, 'Tags: #Test1, #Test2, #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15')
     assert.equal(btnTweet.text(), 'Tweet is: + 150')
     // `semua kotak centang` diaktifkan
     assert.equal(allCheckboxesEnabled.text(), 'diaktifkan: 15')
@@ -398,7 +398,7 @@ describe('Twitter Trends API', async() => {
 
     await btnCheckBoxAll.trigger('click')
     assert.equal(btnCheckBoxAll.text(), 'diaktifkan')
-    assert.equal(hasil.element.value, 'Tidak ada hasil')
+    assert.equal(results.element.value, 'Tidak ada hasil')
 
     for (let i = 0; i < arrayTrends.length; i++) {
       // same: assert.deepEqual(arrayTrends.at(...).classes(), [])
@@ -407,7 +407,7 @@ describe('Twitter Trends API', async() => {
 
     await btnCheckBoxAll.trigger('click')
     assert.equal(btnCheckBoxAll.text(), 'tidak diaktifkan')
-    assert.equal(hasil.element.value, 'Tags: #Test1, #Test2, #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15')
+    assert.equal(results.element.value, 'Tags: #Test1, #Test2, #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15')
   })
 
   // it('jumlah tweet', () => {

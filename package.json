@@ -6,7 +6,8 @@
     "build": "vite build",
     "preview": "vite preview --port 4173",
     "test:unit": "vitest --environment jsdom",
-    "test:unit-TwitterTrends": "vitest --environment jsdom TwitterTrends",
+    "test:unit-CopyandPaste": "vitest --environment jsdom CopyandPaste",
+    "test:unit-TwitterTrendsAPI": "vitest --environment jsdom TwitterTrendsAPI",
     "test:unit-GetDayTrends": "vitest --environment jsdom GetDayTrends",
     "test:ui": "vitest --environment jsdom --ui",
     "start": "node server.js"

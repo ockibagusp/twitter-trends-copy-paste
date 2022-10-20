@@ -1,12 +1,12 @@
 import { describe, it, assert, expect } from 'vitest'
 
 import { mount } from '@vue/test-utils'
-import CopydanPaste from '../CopydanPaste.vue'
+import CopyandPaste from '../CopyandPaste.vue'
 
 describe('Copy dan Paste', () => {
-  assert.exists(CopydanPaste)
+  assert.exists(CopyandPaste)
 
-  const wrapper = mount(CopydanPaste, {
+  const wrapper = mount(CopyandPaste, {
     props: { } 
   })
 
@@ -135,9 +135,9 @@ Entertainment · Trending
 // 3. textarea `copy` ini diaktifkan dan textarea `tweet` jika ini dinonaktifkan ✅
 // 4. button `semua kotak centang` jika ini diaktifkan atau tidak diaktifkan ✅
 describe('Tweet', () => {
-  assert.exists(CopydanPaste)
+  assert.exists(CopyandPaste)
 
-  const wrapper = mount(CopydanPaste, {
+  const wrapper = mount(CopyandPaste, {
     props: { },
     data() {
       return {
