@@ -11,6 +11,8 @@ export default {
       twittertrends: '',
       results: '',
 
+      // tweet dihasil maks. 280 karakter
+      count: 0,
       // array untuk trends
       arraytrends: [],
       
@@ -211,13 +213,13 @@ export default {
         const leftComma = `, ${name}`
         const bothComma = `, ${name}, `
 
-        let melepas = ''
+        let release = ''
         if (this.results.includes(rightComma)) {
-          melepas = rightComma
+          release = rightComma
         } else if (this.results.includes(leftComma)) {
-          melepas = leftComma
+          release = leftComma
         } else if (this.results.includes(bothComma)) {
-          melepas = bothComma
+          release = bothComma
         } else {
           // melepas = text 
           this.results = 'Tidak ada hasil'
@@ -230,7 +232,7 @@ export default {
           this.allCheckboxesEnabled = 0
           return
         }
-        this.results = this.results.replace(melepas, '')
+        this.results = this.results.replace(release, '')
 
         this.count = 280 - this.results.length
         this.isCopyAndCountTweet()
@@ -239,10 +241,7 @@ export default {
       }
     },
 
-    // Slots - Vue.js
-    // https://vuejs.org/guide/components/slots.html#scoped-slots
     // sama GetDayTrends:isCountTweet()
-
     // adalah textarea hitungan dan tombol tweet
     isCopyAndCountTweet() {
       if (this.results === '' || this.results === 'Tidak ada hasil' 
@@ -255,6 +254,8 @@ export default {
       }
     }
   },
+  // Slots - Vue.js
+  // https://vuejs.org/guide/components/slots.html#scoped-slots
   components: {
     ResultsSlots: ResultsSlots
   }

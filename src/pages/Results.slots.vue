@@ -12,14 +12,13 @@ export default {
   data() {
     return {
       // pilih hasil, button submit, button copy dan button tweet: true atau false
-      
     }
   },
   mounted() {
     
   },
   methods: {
-     btnCopy() {
+    btnCopy() {
       if (this.results == '' || this.results == 'Tidak ada hasil') {
         return
       }
