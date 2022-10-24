@@ -1,32 +1,32 @@
 import { describe, it, assert, expect } from 'vitest'
 
 import { mount } from '@vue/test-utils'
-import CopydanPaste from '../CopydanPaste.vue'
+import CopyandPaste from '../CopyandPaste.vue'
 
-describe('Copy dan Paste', () => {
-  assert.exists(CopydanPaste)
+describe('Copy and Paste', () => {
+  assert.exists(CopyandPaste)
 
-  const wrapper = mount(CopydanPaste, {
+  const wrapper = mount(CopyandPaste, {
     props: { } 
   })
 
-  // textarea: copydanpaste dan hasil
-  const copydanpaste = wrapper.find('[data-test="copydanpaste"]')
-  const hasil = wrapper.find('[data-test="hasil"]')
+  // textarea: copyandpaste dan hasil
+  const copyandpaste = wrapper.find('[data-test="copyandpaste"]')
+  const results = wrapper.find('[data-test="results"]')
 
   // button: btnReset dan btnCopy
-  const btnReset = wrapper.find('[data-test="btnReset"]') 
-  const btnCopy = wrapper.find('[data-test="btnCopy"]')
+  const btnReset = wrapper.find('[data-test="btn-reset"]') 
+  const btnCopy = wrapper.find('[data-test="btn-copy"]')
 
   // button: btnTweet
-  const btnTweet = wrapper.find('[data-test="btnTweet"]')
+  const btnTweet = wrapper.find('[data-test="btn-tweet"]')
 
   it('init', () => {
-    assert.isEmpty(copydanpaste.element.value)
+    assert.isEmpty(copyandpaste.element.value)
     // TODO: copydanpaste.element.focus() => undefined. Why?
-    assert.equal(copydanpaste.element.focus(), undefined)
+    assert.equal(copyandpaste.element.focus(), undefined)
 
-    assert.isEmpty(hasil.element.value)
+    assert.isEmpty(results.element.value)
 
     assert.isUndefined(btnReset.attributes().disabled)
     assert.equal(btnCopy.attributes().disabled, '')
@@ -36,7 +36,7 @@ describe('Copy dan Paste', () => {
     // test cases
     const testCases = [
       { 
-        copydanpaste:`
+        copyandpaste:`
 ...
 >>> Indonesia
 
@@ -59,34 +59,34 @@ Entertainment · Trending
 (Inggris) Yayasan Aksi Cepat Tanggap
 54.5 Tweets
 `, 
-        hasil: 'Tags: (Indonesia) Menpan RB, (Indonesia) #TimnasIndonesia, (Indonesia) Yayasan Aksi Cepat Tanggap, (Inggris) Menpan RB, (Inggris) #TimnasIndonesia, (Inggris) Yayasan Aksi Cepat Tanggap',
+        results: 'Tags: (Indonesia) Menpan RB, (Indonesia) #TimnasIndonesia, (Indonesia) Yayasan Aksi Cepat Tanggap, (Inggris) Menpan RB, (Inggris) #TimnasIndonesia, (Inggris) Yayasan Aksi Cepat Tanggap',
         tweetIs: 'Tweet is: + 96',
         bntCopyDanTweet: true
       },
       {
-        copydanpaste: '-',
-        hasil: 'Tidak ada hasil',
+        copyandpaste: '-',
+        results: 'Tidak ada hasil',
         tweetIs: 'Tweet is: + 280',
         bntCopyDanTweet: false
       },
       {
-        copydanpaste: '',
-        hasil: '',
+        copyandpaste: '',
+        results: '',
         tweetIs: 'Tweet is: + 280',
         bntCopyDanTweet: false
       }
     ]
 
     for (let test of testCases) {
-      copydanpaste.setValue(test.copydanpaste)
+      copyandpaste.setValue(test.copyandpaste)
 
-      assert.equal(test.copydanpaste, copydanpaste.element.value)
+      assert.equal(test.copyandpaste, copyandpaste.element.value)
 
-      await copydanpaste.trigger('change')
+      await copyandpaste.trigger('change')
 
       assert.equal(
-        hasil.element.value,
-        test.hasil
+        results.element.value,
+        test.results
       )
 
       assert.equal(btnTweet.text(), test.tweetIs)
@@ -116,15 +116,15 @@ Entertainment · Trending
   it('button reset', async() => {
     // 1. textarea: copydanpaste = '-'
     // 2. textarea: hasil = 'Tidak ada hasil'
-    copydanpaste.setValue('-')
-    hasil.setValue('Tidak ada hasil')
+    copyandpaste.setValue('-')
+    results.setValue('Tidak ada hasil')
 
-    assert.equal(copydanpaste.element.value, '-')
-    assert.equal(hasil.element.value, 'Tidak ada hasil')
+    assert.equal(copyandpaste.element.value, '-')
+    assert.equal(results.element.value, 'Tidak ada hasil')
 
     await btnReset.trigger('click')
-    assert.equal(copydanpaste.element.value, '')
-    assert.equal(hasil.element.value, '')
+    assert.equal(copyandpaste.element.value, '')
+    assert.equal(results.element.value, '')
   })
 })
 
@@ -135,9 +135,9 @@ Entertainment · Trending
 // 3. textarea `copy` ini diaktifkan dan textarea `tweet` jika ini dinonaktifkan ✅
 // 4. button `semua kotak centang` jika ini diaktifkan atau tidak diaktifkan ✅
 describe('Tweet', () => {
-  assert.exists(CopydanPaste)
+  assert.exists(CopyandPaste)
 
-  const wrapper = mount(CopydanPaste, {
+  const wrapper = mount(CopyandPaste, {
     props: { },
     data() {
       return {
@@ -168,22 +168,22 @@ describe('Tweet', () => {
   })
 
   // array dan checkbox untuk trends
-  const arrayTrends = wrapper.findAll('[data-test="arrayTrends"]')
+  const arrayTrends = wrapper.findAll('[data-test="array-trends"]')
   const checkboxTrends = wrapper.findAll('[data-test="trends-checkbox"]')
 
   // textarea: copydanpaste dan hasil
-  const copydanpaste = wrapper.find('[data-test="copydanpaste"]')
-  const hasil = wrapper.find('[data-test="hasil"]')
+  const copyandpaste = wrapper.find('[data-test="copyandpaste"]')
+  const results = wrapper.find('[data-test="results"]')
 
   // button: btnTweet
-  const btnTweet = wrapper.find('[data-test="btnTweet"]')
+  const btnTweet = wrapper.find('[data-test="btn-tweet"]')
   // button: btnCheckBoxAll diaktifkan atau tidak diaktifkan semua kotak centang
-  const btnCheckBoxAll = wrapper.find('[data-test="btnCheckBoxAll"]') 
+  const btnCheckBoxAll = wrapper.find('[data-test="btn-checkbox-all"]') 
   
   // `semua kotak centang` diaktifkan
   const allCheckboxesEnabled = wrapper.find('[data-test="all-checkboxes-enabled"]')
 
-  copydanpaste.setValue(`
+  copyandpaste.setValue(`
 ...
 Olahraga · Populer
 #TimnasIndonesia
@@ -200,9 +200,9 @@ Test 3
   `)
 
   it('textarea `hasil` untuk array untuk trends: tidak dicentang', async() => {
-    await copydanpaste.trigger('change')
+    await copyandpaste.trigger('change')
         
-    assert.equal(hasil.element.value, 'Tags: #TimnasIndonesia, Test 1, #Test2, Test 3')
+    assert.equal(results.element.value, 'Tags: #TimnasIndonesia, Test 1, #Test2, Test 3')
     assert.equal(btnTweet.text(), 'Tweet is: + 234')
 
     // test cases
@@ -211,7 +211,7 @@ Test 3
         name: '#TimnasIndonesia',
         index: 0,
         listBool: [false, true, true, true],
-        hasil: 'Tags: Test 1, #Test2, Test 3',
+        results: 'Tags: Test 1, #Test2, Test 3',
         tweetIs: 'Tweet is: + 252',
         // `semua kotak centang` diaktifkan
         allCheckboxesEnabled: 'diaktifkan: 3'
@@ -220,7 +220,7 @@ Test 3
         name: 'Test 1',
         index: 1,
         listBool: [false, false, true, true],
-        hasil: 'Tags: #Test2, Test 3',
+        results: 'Tags: #Test2, Test 3',
         tweetIs: 'Tweet is: + 260',
         allCheckboxesEnabled: 'diaktifkan: 2'
       },
@@ -228,7 +228,7 @@ Test 3
         name: '#Test2',
         index: 2,
         listBool: [false, false, false, true],
-        hasil: 'Tags: Test 3',
+        results: 'Tags: Test 3',
         tweetIs: 'Tweet is: + 268',
         allCheckboxesEnabled: 'diaktifkan: 1'
       },
@@ -236,7 +236,7 @@ Test 3
         name: 'Test 3',
         index: 3,
         listBool: [false, false, false, false],
-        hasil: 'Tidak ada hasil',
+        results: 'Tidak ada hasil',
         tweetIs: 'Tweet is: + 280',
         allCheckboxesEnabled: 'diaktifkan: 0'
       }
@@ -255,7 +255,7 @@ Test 3
         }
       }
 
-      assert.equal(hasil.element.value, test.hasil)
+      assert.equal(results.element.value, test.results)
       assert.equal(btnTweet.text(), test.tweetIs)
       // `semua kotak centang` diaktifkan
       assert.equal(allCheckboxesEnabled.text(), test.allCheckboxesEnabled)
@@ -265,7 +265,7 @@ Test 3
   it('textarea `hasil` untuk array untuk trends: dicentang', async() => {    
     console.debug('-----')
     
-    assert.equal(hasil.element.value, 'Tidak ada hasil')
+    assert.equal(results.element.value, 'Tidak ada hasil')
 
     // test cases
     const testCases = [   
@@ -319,7 +319,7 @@ Test 3
         assert.equal(btnTweet.text(), test.tweetIs)
       }
 
-      assert.equal(hasil.element.value, test.hasil)
+      assert.equal(results.element.value, test.hasil)
       // `semua kotak centang` diaktifkan
       assert.equal(allCheckboxesEnabled.text(), test.allCheckboxesEnabled)
     }
@@ -335,7 +335,7 @@ Test 3
 
     await btnCheckBoxAll.trigger('click')
     assert.equal(btnCheckBoxAll.text(), 'diaktifkan')
-    assert.equal(hasil.element.value, 'Tidak ada hasil')
+    assert.equal(results.element.value, 'Tidak ada hasil')
 
     listBool = [false, false, false, false]
     for (let i = 0; i < listBool.length; i++) {
@@ -345,20 +345,20 @@ Test 3
 
     await btnCheckBoxAll.trigger('click')
     assert.equal(btnCheckBoxAll.text(), 'tidak diaktifkan')
-    assert.equal(hasil.element.value, 'Tags: #TimnasIndonesia, Test 1, #Test2, Test 3')
+    assert.equal(results.element.value, 'Tags: #TimnasIndonesia, Test 1, #Test2, Test 3')
   })
 
   it('jumlah tweet', () => {
-    assert.equal(arrayTrends.at(0).get('.tweetVolume-class').text(), '')
-    assert.equal(arrayTrends.at(1).get('.tweetVolume-class').text(), '(2.233 rb Tweet)')
-    assert.equal(arrayTrends.at(2).get('.tweetVolume-class').text(), '(1.660 Tweet)')
-    assert.equal(arrayTrends.at(3).get('.tweetVolume-class').text(), '(54.5K Tweet)')
+    assert.equal(arrayTrends.at(0).get('.tweet-volume-class').text(), '')
+    assert.equal(arrayTrends.at(1).get('.tweet-volume-class').text(), '(2.233 rb Tweet)')
+    assert.equal(arrayTrends.at(2).get('.tweet-volume-class').text(), '(1.660 Tweet)')
+    assert.equal(arrayTrends.at(3).get('.tweet-volume-class').text(), '(54.5K Tweet)')
   })
 
   it('topik yang sedang tren', () => {
-    assert.equal(arrayTrends.at(0).get('.trendingTopics-class').text(), 'Olahraga · Populer')
-    assert.equal(arrayTrends.at(1).get('.trendingTopics-class').text(), 'Sedang tren dalam topik Indonesia')
-    assert.equal(arrayTrends.at(2).get('.trendingTopics-class').text(), 'Sedang tren dalam topik Indonesia')
-    assert.equal(arrayTrends.at(3).get('.trendingTopics-class').text(), 'Technology · Trending')
+    assert.equal(arrayTrends.at(0).get('.trending-topics-class').text(), 'Olahraga · Populer')
+    assert.equal(arrayTrends.at(1).get('.trending-topics-class').text(), 'Sedang tren dalam topik Indonesia')
+    assert.equal(arrayTrends.at(2).get('.trending-topics-class').text(), 'Sedang tren dalam topik Indonesia')
+    assert.equal(arrayTrends.at(3).get('.trending-topics-class').text(), 'Technology · Trending')
   })
 })

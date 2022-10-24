@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import TwitterTrendsAPI from '../pages/TwitterTrendsAPI.vue'
-import CopydanPaste from '../pages/CopydanPaste.vue'
+import CopyandPaste from '../pages/CopyandPaste.vue'
 import GetDayTrends from '../pages/GetDayTrends.vue'
 import NotFound from '../pages/NotFound.vue'
 
@@ -10,15 +10,15 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
+      component: CopyandPaste
+    },
+    {
+      path: '/twitter-trends-api',
+      name: 'Twitter Trends API',
       component: TwitterTrendsAPI
     },
     {
-      path: '/copydanpaste',
-      name: 'Twitter Trends: Copy dan Paste',
-      component: CopydanPaste
-    },
-    {
-      path: '/getdaytrends',
+      path: '/getdaytrends.com',
       name: 'getdaytrends',
       component: GetDayTrends
     },
