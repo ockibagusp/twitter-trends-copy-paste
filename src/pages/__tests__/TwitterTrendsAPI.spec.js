@@ -245,6 +245,7 @@ describe('Twitter Trends API', async() => {
 
     await btnCheckBoxAll.trigger('click')
     assert.equal(btnCheckBoxAll.text(), 'tidak diaktifkan')
+
     assert.equal(results.element.value, 'Tags: #Test1, #Test2, #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15')
     assert.equal(btnTweet.text(), 'Tweet is: + 150')
   })
@@ -301,6 +302,7 @@ describe('Twitter Trends API', async() => {
       }
 
       assert.equal(results.element.value, test.hasil)
+
       assert.equal(btnTweet.text(), test.tweetIs)
       // `semua kotak centang` diaktifkan
       assert.equal(allCheckboxesEnabled.text(), test.allCheckboxesEnabled)
@@ -314,6 +316,7 @@ describe('Twitter Trends API', async() => {
     }
 
     assert.equal(results.element.value, 'Tidak ada hasil')
+
     assert.equal(btnTweet.text(), 'Tweet is: + 280')
     // `semua kotak centang` diaktifkan
     assert.equal(allCheckboxesEnabled.text(), 'diaktifkan: 0')

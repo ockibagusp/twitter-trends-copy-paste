@@ -94,10 +94,13 @@ export default {
 
       let i = 0
       this.twittertrends.forEach((value, index) => {
+        // https://stackoverflow.com/questions/9461621/format-a-number-as-2-5k-if-a-thousand-or-more-otherwise-900
+        const tweet_val = Math.abs(value.tweet_volume) > 999 ? Math.sign(value.tweet_volume)*((Math.abs(value.tweet_volume)/1000).toFixed(1)) + 'k' : Math.sign(value.tweet_volume)*Math.abs(value.tweet_volume)
+        
         this.arraytrends.push({
           name: value.name,
           url: value.url,
-          tweet_volume: value.tweet_volume,
+          tweet_volume: tweet_val,
           completed: (i < 15) ? true: false
         })
 
@@ -298,7 +301,7 @@ export default {
       data-test="trends-checkbox"
     />
     <a :href="trends.url" target="_blank">{{ trends.name }}</a>
-    <small class="tweet-volume-class">{{ trends.tweet_volume !== null ? `(${trends.tweet_volume} tweets)` : '' }}</small>
+    <small class="tweet-volume-class">{{ trends.tweet_volume !== 0 ? `(${trends.tweet_volume} tweets)` : '' }}</small>
   </div>
 
   <br>
