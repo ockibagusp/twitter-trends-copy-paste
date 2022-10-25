@@ -2,6 +2,7 @@
 const TAGS = 'Tags: '
 
 import axios from 'axios'
+import ResultsSlots from './Results.slots.vue'
 
 export default {
   data() {
@@ -18,8 +19,6 @@ export default {
       // pilih hasil, button submit, button copy dan button tweet: true atau false
       selectSubmit: false,
       selectResults: false,
-      selectCopy: false,
-      selectTweet: false,
 
       // pilih `semua kotak centang`: true atau false
       selectCheckBoxAll: false,
@@ -32,15 +31,6 @@ export default {
     // adalah submit, hasil dan button copy: true atau false
     isSubmit: function() {
       return !this.selectSubmit
-    },
-    isResults: function() {
-      return !this.selectResults
-    },
-    isCopy: function() {
-      return !this.selectCopy
-    },
-    isTweet: function() {
-      return !this.selectTweet
     },
 
     // adalah button `semua kotak centang`: true atau false
@@ -208,27 +198,6 @@ export default {
 
       this.carry()
     },
-    // sama CopydanPaste:btnCopy()
-    btnCopy() {
-      if (this.results == '' || this.results == 'Tidak ada hasil') {
-        return
-      }
-      
-      this.$refs.results.select()
-      // Untuk perangkat seluler
-      this.$refs.results.setSelectionRange(0, 99999);
-    
-      navigator.clipboard.writeText(this.results);
-    },
-    // sama CopydanPaste:btnTweet()
-    btnTweet() {
-      if (this.results.length > 280) {
-        this.selectTweet = false
-        return
-      }
-      const UTF8_hash = this.results.replaceAll("#", "%23")
-      window.open("https://twitter.com/intent/tweet?text="+UTF8_hash, "_blank")
-    },
     // sama CopydanPaste:btnCheckBoxAll()
 
     // button `semua kotak centang`
@@ -345,6 +314,11 @@ export default {
         this.selectTweet = true
       }
     }
+  },
+  // Slots - Vue.js
+  // https://vuejs.org/guide/components/slots.html#scoped-slots
+  components: {
+    ResultsSlots: ResultsSlots
   }
 }
 </script>
@@ -356,13 +330,12 @@ export default {
   <button @click="btnSubmit" data-test="btn-submit" :disabled="isSubmit">Submit</button>
   <br>
   
-  <h3 style="margin-top: 10px; margin-bottom: 5px;">Hasil</h3>
-  <textarea v-model="results" data-test="results" ref="results" rows="5" cols="50" 
-    placeholder="Tags: Aksi Cepat Tanggap, Axelsen, Desta, Oknum, Motor, ..." :disabled="isResults"></textarea>
-  <br>
-  <button @click="btnCopy" data-test="btn-copy" :disabled="isCopy">Copy</button>
-  <button @click="btnTweet" data-test="btn-tweet" :disabled="isTweet">Tweet is: <small v-if="results.length < 280">+</small> {{count}}</button>
-  <br>
+  <ResultsSlots 
+    :results="results" 
+    :count="count"
+    :selectResults="selectResults"
+    :selectCopy="selectCopy"
+    :selectTweet="selectTweet"/>
 
   <h4 style="margin-top: 15px; margin-bottom: 5px;" v-if="arraytrends.length > 0">Tren Sekarang</h4>
   <h4 style="margin-top: -3px; margin-bottom: 5px;" v-if="arraytrends.length > 0">Kotak Centang: 
