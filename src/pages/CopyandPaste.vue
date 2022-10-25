@@ -143,9 +143,9 @@ export default {
       
       this.$refs.results.select()
       // Untuk perangkat seluler
-      this.$refs.release.setSelectionRange(0, 99999);
+      this.$refs.results.setSelectionRange(0, 99999)
     
-      navigator.clipboard.writeText(this.results);
+      navigator.clipboard.writeText(this.results)
     },
     // sama GetDayTrends:btnTweet()
     btnTweet() {
