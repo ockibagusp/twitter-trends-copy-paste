@@ -4,13 +4,13 @@
 Link:
 [ockibagusp.github.io/twitter-trends](https://ockibagusp.github.io/twitter-trends)
 
-### Twitter Trends API:
+### Twitter Trends, Copy dan Paste!:
 
 ![Twitter Trends 1](../images/twitter-trends1.png?raw=true)
 
-### Twitter Trends, Copy dan Paste!:
-
 ![Twitter Trends 2](../images/twitter-trends2.png?raw=true)
+
+### Twitter Trends API:
 
 ![Twitter Trends 3](../images/twitter-trends3.png?raw=true)
 
