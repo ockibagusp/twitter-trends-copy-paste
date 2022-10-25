@@ -70,7 +70,7 @@ describe('getdaytrends.com', async() => {
   const btnSubmit = wrapper.find('[data-test="btn-submit"]')
   
   // textarea: hasil
-  const hasil = wrapper.find('[data-test="hasil"]')
+  const results = wrapper.find('[data-test="results"]')
   
   // button: btnTweet
   const btnTweet = wrapper.find('[data-test="btn-tweet"]')
@@ -87,7 +87,7 @@ describe('getdaytrends.com', async() => {
     assert.isUndefined(btnSubmit.attributes().disabled)
 
     // textarea hasil: test getdaytrends.com
-    assert.equal(hasil.element.value, 'Tags: #Test1, #Test2, #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15')
+    assert.equal(results.element.value, 'Tags: #Test1, #Test2, #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15')
     // button: btnCopy dan btnTweet diaktifkan
     assert.isUndefined(btnCopy.attributes().disabled)
     assert.isUndefined(btnTweet.attributes().disabled)
@@ -112,7 +112,7 @@ describe('getdaytrends.com', async() => {
   })
 
   it('kotak centang untuk trends di getdaytrends.com: tidak dicentang', async() => {
-    assert.equal(hasil.element.value,'Tags: #Test1, #Test2, #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15')
+    assert.equal(results.element.value,'Tags: #Test1, #Test2, #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15')
     assert.equal(btnTweet.text(), 'Tweet is: + 150')
 
     // test cases
@@ -121,7 +121,7 @@ describe('getdaytrends.com', async() => {
         name: '#Test1',
         index: 0,
         listBool: [false, true, true, true],
-        hasil: 'Tags: #Test2, #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15',
+        results: 'Tags: #Test2, #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15',
         tweetIs: 'Tweet is: + 158',
         // `semua kotak centang` diaktifkan
         allCheckboxesEnabled: 'diaktifkan: 14'
@@ -130,7 +130,7 @@ describe('getdaytrends.com', async() => {
         name: '#Test2',
         index: 1,
         listBool: [false, false, true, true],
-        hasil: 'Tags: #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15',
+        results: 'Tags: #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15',
         tweetIs: 'Tweet is: + 166',
         allCheckboxesEnabled: 'diaktifkan: 13'
       },
@@ -138,7 +138,7 @@ describe('getdaytrends.com', async() => {
         name: '#Test3',
         index: 2,
         listBool: [false, false, false, true],
-        hasil: 'Tags: #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15',
+        results: 'Tags: #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15',
         tweetIs: 'Tweet is: + 174',
         allCheckboxesEnabled: 'diaktifkan: 12'
       },
@@ -146,7 +146,7 @@ describe('getdaytrends.com', async() => {
         name: '#Test4',
         index: 3,
         listBool: [false, false, false, false],
-        hasil: 'Tags: #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15',
+        results: 'Tags: #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15',
         tweetIs: 'Tweet is: + 182',
         allCheckboxesEnabled: 'diaktifkan: 11'
       },
@@ -165,7 +165,7 @@ describe('getdaytrends.com', async() => {
         }
       }
 
-      assert.equal(hasil.element.value, test.hasil)
+      assert.equal(results.element.value, test.results)
       assert.equal(btnTweet.text(), test.tweetIs)
       // `semua kotak centang` diaktifkan
       assert.equal(allCheckboxesEnabled.text(), test.allCheckboxesEnabled)
@@ -177,7 +177,7 @@ describe('getdaytrends.com', async() => {
       expect(arrayTrends.at(i).classes()).to.deep.equal([])
     }
 
-    assert.equal(hasil.element.value, 'Tidak ada hasil')
+    assert.equal(results.element.value, 'Tidak ada hasil')
     assert.equal(btnTweet.text(), 'Tweet is: + 280')
     // `semua kotak centang` tidak diaktifkan
     assert.equal(allCheckboxesEnabled.text(), 'diaktifkan: 0')
@@ -186,7 +186,7 @@ describe('getdaytrends.com', async() => {
   it('kotak centang untuk trends di getdaytrends.com: dicentang', async() => {
     console.debug('-----')
 
-    assert.equal(hasil.element.value, 'Tidak ada hasil')
+    assert.equal(results.element.value, 'Tidak ada hasil')
 
     // test cases
     const testCases = [   
@@ -194,25 +194,25 @@ describe('getdaytrends.com', async() => {
         name: '#Test2',
         index: 1,
         listBool: [false, true, false, false],
-        hasil: 'Tags: #Test2',
+        results: 'Tags: #Test2',
       },
       {
         name: '#Test4',
         index: 3,
         listBool: [false, true, false, true],
-        hasil: 'Tags: #Test2, #Test4',
+        results: 'Tags: #Test2, #Test4',
       },
       {
         name: '#Test1',
         index: 0,
         listBool: [true, true, false, true],
-        hasil: 'Tags: #Test1, #Test2, #Test4',
+        results: 'Tags: #Test1, #Test2, #Test4',
       },
       {
         name: '#Test3',
         index: 2,
         listBool: [true, true, true, true],
-        hasil: 'Tags: #Test1, #Test2, #Test3, #Test4',
+        results: 'Tags: #Test1, #Test2, #Test3, #Test4',
       }  
     ]
 
@@ -229,7 +229,7 @@ describe('getdaytrends.com', async() => {
         }
       }
 
-      assert.equal(hasil.element.value, test.hasil)
+      assert.equal(results.element.value, test.results)
     }
 
     console.debug('checked ke-5 sd. ke-15')
@@ -238,7 +238,7 @@ describe('getdaytrends.com', async() => {
       expect(arrayTrends.at(i).classes()).toContain('completed')
     }
 
-    assert.equal(hasil.element.value, 'Tags: #Test1, #Test2, #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15')
+    assert.equal(results.element.value, 'Tags: #Test1, #Test2, #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15')
     assert.equal(btnTweet.text(), 'Tweet is: + 150')
     // `semua kotak centang` diaktifkan
     assert.equal(allCheckboxesEnabled.text(), 'diaktifkan: 15')
@@ -249,7 +249,7 @@ describe('getdaytrends.com', async() => {
 
     await btnCheckBoxAll.trigger('click')
     assert.equal(btnCheckBoxAll.text(), 'diaktifkan')
-    assert.equal(hasil.element.value, 'Tidak ada hasil')
+    assert.equal(results.element.value, 'Tidak ada hasil')
 
     for (let i = 0; i < arrayTrends.length; i++) {
       // same: assert.deepEqual(arrayTrends.at(...).classes(), [])
@@ -258,7 +258,7 @@ describe('getdaytrends.com', async() => {
 
     await btnCheckBoxAll.trigger('click')
     assert.equal(btnCheckBoxAll.text(), 'tidak diaktifkan')
-    assert.equal(hasil.element.value, 'Tags: #Test1, #Test2, #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15')
+    assert.equal(results.element.value, 'Tags: #Test1, #Test2, #Test3, #Test4, #Test5, Test 6, Test 7, Test 8, Test 9, Test 10, Test 11, Test 12, Test 13, Test 14, Test 15')
     assert.equal(btnTweet.text(), 'Tweet is: + 150')
   })
 })
