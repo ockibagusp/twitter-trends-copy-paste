@@ -11,10 +11,10 @@ export default {
       twittertrends: '',
       results: '',
 
-      // tweet dihasil maks. 280 karakter
-      count: 0,
       // array untuk trends
       arraytrends: [],
+      // tweet dihasil maks. 280 karakter
+      count: 280,
       
       // pilih button hasil dan submit: true atau false
       selectSubmit: false,
