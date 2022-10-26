@@ -259,6 +259,9 @@ export default {
   },
   // Slots - Vue.js
   // https://vuejs.org/guide/components/slots.html#scoped-slots
+
+  // Vue.js Scoped Slots & Renderless Components
+  // https://www.youtube.com/watch?v=6cn3xyK4Alk
   components: {
     ResultsSlots: ResultsSlots
   }
