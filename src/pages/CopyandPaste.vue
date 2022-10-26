@@ -58,7 +58,7 @@ export default {
       this.allCheckboxesEnabled = 0
       let trends = ''
       // regex101.com
-      const regex = /(Sedang tren dalam topik (.+)|Trending in (.+)|(.+) Popular|(.+) Populer|(.+) Trending)\n?\n(.+)\n?\n([\d.,]+.*)?/gm
+      const regex = /(Sedang tren dalam topik (.+)|Trending in (.+)|(.+) Popular|(.+) Populer|(.+) Trending|Trending|Sedang tren)\n?\n(.+)\n?\n([\d.,]+.*)?/gm
       
       const str = this.copyandpaste
       let m
