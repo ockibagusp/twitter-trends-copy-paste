@@ -66,11 +66,11 @@ or,
 Example:
 
 ```bash
-ls src/pages/__tests__/CopydanPaste.spec.js
+ls src/pages/__tests__/CopyandPaste.spec.js
 ```
 
 ```sh
-npm run test:unit -t CopydanPaste
+npm run test:unit -t CopyandPaste
 ```
 
 ### Comment bash: deploy.sh
