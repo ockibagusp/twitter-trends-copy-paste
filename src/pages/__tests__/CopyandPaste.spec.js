@@ -34,86 +34,146 @@ describe('Copy and Paste', () => {
     assert.equal(btnCopy.attributes().disabled, '')
   })  
 
-//   it('lingkaran dari `for`', async() => {
-//     // test cases
-//     const testCases = [
-//       { 
-//         copyandpaste:`
-// ...
-// >>> Indonesia
+  it('lingkaran dari `for`', async() => {
+    const TWEET = 'Timnas Indonesia! 🙂'
 
-// Sedang tren dalam topik Indonesia
-// (Indonesia) Menpan RB
-// Olahraga · Populer
-// (Indonesia) #TimnasIndonesia
-// 2.233 rb Tweet
-// Sedang tren dalam topik Indonesia
-// (Indonesia) Yayasan Aksi Cepat Tanggap
-// 1.660 Tweet
+    // test cases
+    const testCases = [
+      // tweet: ok
+      {
+        name: 'Test 1',
+        tweetText: TWEET,
+        copyandpaste:`
+...
+>>> Indonesia
 
-// >>> Inggris
-// Trending in Indonesia
-// (Inggris) Menpan RB
-// Trending in Indonesia
-// (Inggris) #TimnasIndonesia
-// 10.9K Tweets
-// Entertainment · Trending
-// (Inggris) Yayasan Aksi Cepat Tanggap
-// 54.5 Tweets
-// `, 
-//         results: 'Tags: (Indonesia) Menpan RB, (Indonesia) #TimnasIndonesia, (Indonesia) Yayasan Aksi Cepat Tanggap, (Inggris) Menpan RB, (Inggris) #TimnasIndonesia, (Inggris) Yayasan Aksi Cepat Tanggap',
-//         tweetIs: 'Tweet is: + 95',
-//         bntCopyAndTweet: true
-//       },
-//       {
-//         copyandpaste: '-',
-//         results: 'Tidak ada hasil',
-//         tweetIs: 'Tweet is: + 280',
-//         bntCopyAndTweet: false
-//       },
-//       {
-//         copyandpaste: '',
-//         results: '',
-//         tweetIs: 'Tweet is: + 280',
-//         bntCopyAndTweet: false
-//       }
-//     ]
+Sedang tren dalam topik Indonesia
+(Indonesia) Menpan RB
+Olahraga · Populer
+(Indonesia) #TimnasIndonesia
+2.233 rb Tweet
+Sedang tren dalam topik Indonesia
+(Indonesia) Yayasan Aksi Cepat Tanggap
+1.660 Tweet
 
-//     for (let test of testCases) {
-//       copyandpaste.setValue(test.copyandpaste)
+>>> Inggris
+Trending in Indonesia
+(Inggris) Menpan RB
+Trending in Indonesia
+(Inggris) #TimnasIndonesia
+10.9K Tweets
+Entertainment · Trending
+(Inggris) Yayasan Aksi Cepat Tanggap
+54.5 Tweets
+`, 
+        resultsTags: 'Tags: (Indonesia) Menpan RB, (Indonesia) #TimnasIndonesia, (Indonesia) Yayasan Aksi Cepat Tanggap, (Inggris) Menpan RB, (Inggris) #TimnasIndonesia, (Inggris) Yayasan Aksi Cepat Tanggap',
+        tweetIs: 'Tweet is: + 75',
+        bntCopyAndTweet: true
+      },
+      {
+        name: 'Test 2',
+        tweetText: TWEET,
+        copyandpaste: '-',
+        resultsTags: 'Tidak ada hasil',
+        tweetIs: 'Tweet is: + 244',
+        bntCopyAndTweet: false
+      },
+      {
+        name: 'Test 3',
+        tweetText: TWEET,
+        copyandpaste: '',
+        resultsTags: '',
+        tweetIs: 'Tweet is: + 259',
+        bntCopyAndTweet: false
+      },
+      // tweet: no
+      {
+        name: 'Test -1',
+        tweetText: '',
+        copyandpaste:`
+...
+>>> Indonesia
 
-//       assert.equal(test.copyandpaste, copyandpaste.element.value)
+Sedang tren dalam topik Indonesia
+(Indonesia) Menpan RB
+Olahraga · Populer
+(Indonesia) #TimnasIndonesia
+2.233 rb Tweet
+Sedang tren dalam topik Indonesia
+(Indonesia) Yayasan Aksi Cepat Tanggap
+1.660 Tweet
 
-//       await copyandpaste.trigger('change')
+>>> Inggris
+Trending in Indonesia
+(Inggris) Menpan RB
+Trending in Indonesia
+(Inggris) #TimnasIndonesia
+10.9K Tweets
+Entertainment · Trending
+(Inggris) Yayasan Aksi Cepat Tanggap
+54.5 Tweets
+`, 
+        resultsTags: 'Tags: (Indonesia) Menpan RB, (Indonesia) #TimnasIndonesia, (Indonesia) Yayasan Aksi Cepat Tanggap, (Inggris) Menpan RB, (Inggris) #TimnasIndonesia, (Inggris) Yayasan Aksi Cepat Tanggap',
+        tweetIs: 'Tweet is: + 95',
+        bntCopyAndTweet: true
+      },
+      {
+        name: 'Test -2',
+        tweetText: '',
+        copyandpaste: '-',
+        resultsTags: 'Tidak ada hasil',
+        tweetIs: 'Tweet is: + 264',
+        bntCopyAndTweet: false
+      },
+      {
+        name: 'Test -3',
+        tweetText: '',
+        copyandpaste: '',
+        resultsTags: '',
+        tweetIs: 'Tweet is: + 279',
+        bntCopyAndTweet: false
+      }
+    ]
 
-//       assert.equal(
-//         resultsTags.element.value,
-//         test.results
-//       )
+    for (let test of testCases) {
+      console.debug('group ke-', test.name)
 
-//       assert.equal(btnTweet.text(), test.tweetIs)
+      copyandpaste.setValue(test.copyandpaste)
+      assert.equal(test.copyandpaste, copyandpaste.element.value)
+      await copyandpaste.trigger('change')
 
-//       if (test.bntCopyAndTweet) {
-//         // button: bntCopy dan bntTweet diaktifkan
-//         assert.isUndefined(btnCopy.attributes().disabled)
-//         assert.isUndefined(btnTweet.attributes().disabled)
-//       } else {
-//         // button: bntCopy dan bntTweet dinonaktifkan
-//         assert.equal(btnCopy.attributes().disabled, '')
-//         assert.equal(btnTweet.attributes().disabled, '')
-//       }
-//     }
+      assert.equal(
+        resultsTags.element.value,
+        test.resultsTags
+      )
 
-//     // // ?
-//     // copydanpaste.setValue('')
-//     // await copydanpaste.trigger('change')
-//     // assert.equal(
-//     //   hasil.element.value,
-//     //   ''
-//     // )
-//     // assert.equal(btnCopy.attributes().disabled, '')
-//     // assert.equal(btnTweet.attributes().disabled, '')
-//   })
+      tweetText.setValue(test.tweetText)
+      await tweetText.trigger('change')
+      assert.equal(tweetText.element.value, test.tweetText)
+
+      assert.equal(btnTweet.text(), test.tweetIs)
+
+      if (test.bntCopyAndTweet) {
+        // button: bntCopy dan bntTweet diaktifkan
+        assert.isUndefined(btnCopy.attributes().disabled)
+        assert.isUndefined(btnTweet.attributes().disabled)
+      } else {
+        // button: bntCopy dan bntTweet dinonaktifkan
+        assert.equal(btnCopy.attributes().disabled, '')
+        assert.equal(btnTweet.attributes().disabled, '')
+      }
+    }
+
+    // // ?
+    // copydanpaste.setValue('')
+    // await copydanpaste.trigger('change')
+    // assert.equal(
+    //   hasil.element.value,
+    //   ''
+    // )
+    // assert.equal(btnCopy.attributes().disabled, '')
+    // assert.equal(btnTweet.attributes().disabled, '')
+  })
 
   // it('button reset', async() => {
   //   // 1. textarea: copydanpaste = '-'
