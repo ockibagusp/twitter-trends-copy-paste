@@ -15,8 +15,9 @@ describe('Copy and Paste', () => {
   const copyandpaste = wrapper.find('[data-test="copyandpaste"]')
   const resultsTags = wrapper.find('[data-test="results-tags"]')
 
-  // button: btnReset dan btnCopy
-  const btnReset = wrapper.find('[data-test="btn-reset"]') 
+  // button: btnResetTweet, btnResetTags dan btnCopy
+  const btnResetTweet = wrapper.find('[data-test="btn-reset-tweet"]') 
+  const btnResetTags = wrapper.find('[data-test="btn-reset-tags"]') 
   const btnCopy = wrapper.find('[data-test="btn-copy"]')
 
   // button: btnTweet
@@ -30,13 +31,12 @@ describe('Copy and Paste', () => {
     assert.isEmpty(tweetText.element.value)
     assert.isEmpty(resultsTags.element.value)
 
-    assert.isUndefined(btnReset.attributes().disabled)
+    assert.isUndefined(btnResetTags.attributes().disabled)
     assert.equal(btnCopy.attributes().disabled, '')
   })  
 
+  const TWEET = 'Timnas Indonesia! 🙂'
   it('lingkaran dari `for`', async() => {
-    const TWEET = 'Timnas Indonesia! 🙂'
-
     // test cases
     const testCases = [
       // tweet: ok
@@ -175,19 +175,27 @@ Entertainment · Trending
     // assert.equal(btnTweet.attributes().disabled, '')
   })
 
-  // it('button reset', async() => {
-  //   // 1. textarea: copydanpaste = '-'
-  //   // 2. textarea: hasil = 'Tidak ada hasil'
-  //   copyandpaste.setValue('-')
-  //   resultsTags.setValue('Tidak ada hasil')
+  it('button reset tweet', async() => {
+    tweetText.setValue(TWEET)
+    assert.equal(tweetText.element.value, TWEET)
 
-  //   assert.equal(copyandpaste.element.value, '-')
-  //   assert.equal(resultsTags.element.value, 'Tidak ada hasil')
+    await btnResetTweet.trigger('click')
+    assert.equal(tweetText.element.value, '')
+  })
 
-  //   await btnReset.trigger('click')
-  //   assert.equal(copyandpaste.element.value, '')
-  //   assert.equal(resultsTags.element.value, '')
-  // })
+  it('button reset tags', async() => {
+    // 1. textarea: copydanpaste = '-'
+    // 2. textarea: hasil = 'Tidak ada hasil'
+    copyandpaste.setValue('-')
+    resultsTags.setValue('Tidak ada hasil')
+
+    assert.equal(copyandpaste.element.value, '-')
+    assert.equal(resultsTags.element.value, 'Tidak ada hasil')
+
+    await btnResetTags.trigger('click')
+    assert.equal(copyandpaste.element.value, '')
+    assert.equal(resultsTags.element.value, '')
+  })
 })
 
 
