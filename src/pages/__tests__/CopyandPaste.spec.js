@@ -3,6 +3,8 @@ import { describe, it, assert, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import CopyandPaste from '../CopyandPaste.vue'
 
+const TWEET = 'Timnas Indonesia! 🙂'
+
 describe('Copy and Paste', () => {
   assert.exists(CopyandPaste)
 
@@ -35,7 +37,6 @@ describe('Copy and Paste', () => {
     assert.equal(btnCopy.attributes().disabled, '')
   })  
 
-  const TWEET = 'Timnas Indonesia! 🙂'
   it('lingkaran dari `for`', async() => {
     // test cases
     const testCases = [
@@ -75,7 +76,7 @@ Entertainment · Trending
         tweetText: TWEET,
         copyandpaste: '-',
         resultsTags: 'Tidak ada hasil',
-        tweetIs: 'Tweet is: + 244',
+        tweetIs: 'Tweet is: + 260',
         bntCopyAndTweet: false
       },
       {
@@ -83,7 +84,15 @@ Entertainment · Trending
         tweetText: TWEET,
         copyandpaste: '',
         resultsTags: '',
-        tweetIs: 'Tweet is: + 259',
+        tweetIs: 'Tweet is: + 260',
+        bntCopyAndTweet: false
+      },
+      {
+        name: 'Test 4',
+        tweetText: TWEET,
+        copyandpaste: '',
+        resultsTags: '',
+        tweetIs: 'Tweet is: + 260',
         bntCopyAndTweet: false
       },
       // tweet: no
@@ -114,7 +123,7 @@ Entertainment · Trending
 54.5 Tweets
 `, 
         resultsTags: 'Tags: (Indonesia) Menpan RB, (Indonesia) #TimnasIndonesia, (Indonesia) Yayasan Aksi Cepat Tanggap, (Inggris) Menpan RB, (Inggris) #TimnasIndonesia, (Inggris) Yayasan Aksi Cepat Tanggap',
-        tweetIs: 'Tweet is: + 95',
+        tweetIs: 'Tweet is: + 96',
         bntCopyAndTweet: true
       },
       {
@@ -122,7 +131,7 @@ Entertainment · Trending
         tweetText: '',
         copyandpaste: '-',
         resultsTags: 'Tidak ada hasil',
-        tweetIs: 'Tweet is: + 264',
+        tweetIs: 'Tweet is: + 280',
         bntCopyAndTweet: false
       },
       {
@@ -130,7 +139,7 @@ Entertainment · Trending
         tweetText: '',
         copyandpaste: '',
         resultsTags: '',
-        tweetIs: 'Tweet is: + 279',
+        tweetIs: 'Tweet is: + 280',
         bntCopyAndTweet: false
       }
     ]
@@ -199,139 +208,146 @@ Entertainment · Trending
 })
 
 
-// // TDD
-// // ✅ ❌
-// // 1. textarea `hasil` untuk array untuk trends ✅
-// // 2. textarea `tweet` ini diaktifkan, jika maks. 280 karakter ✅
-// // 3. textarea `copy` ini diaktifkan dan textarea `tweet` jika ini dinonaktifkan ✅
-// // 4. button `semua kotak centang` jika ini diaktifkan atau tidak diaktifkan ✅
-// describe('Tweet', () => {
-//   assert.exists(CopyandPaste)
+// TDD
+// ✅ ❌
+// 1. textarea `hasil` untuk array untuk trends ✅
+// 2. textarea `tweet` ini diaktifkan, jika maks. 280 karakter ✅
+// 3. textarea `copy` ini diaktifkan dan textarea `tweet` jika ini dinonaktifkan ✅
+// 4. button `semua kotak centang` jika ini diaktifkan atau tidak diaktifkan ✅
+describe('Tweet', () => {
+  assert.exists(CopyandPaste)
 
-//   const wrapper = mount(CopyandPaste, {
-//     props: { },
-//     data() {
-//       return {
-//         arraytrends: [
-//           {
-//             name: "#TimnasIndonesia",
-//             tweetVolume: '200k Tweets',
-//             completed: true
-//           },
-//           {
-//             name: "Test 1",
-//             tweetVolume: '1k Tweets',
-//             completed: true
-//           },
-//           {
-//             name: "#Test2",
-//             tweetVolume: '2k Tweets',
-//             completed: true
-//           },
-//           {
-//             name: "Test 3",
-//             tweetVolume: 0,
-//             completed: true
-//           }
-//         ],
-//       }
-//     } 
-//   })
+  const wrapper = mount(CopyandPaste, {
+    props: { },
+    data() {
+      return {
+        arraytrends: [
+          {
+            name: "#TimnasIndonesia",
+            tweetVolume: '200k Tweets',
+            completed: true
+          },
+          {
+            name: "Test 1",
+            tweetVolume: '1k Tweets',
+            completed: true
+          },
+          {
+            name: "#Test2",
+            tweetVolume: '2k Tweets',
+            completed: true
+          },
+          {
+            name: "Test 3",
+            tweetVolume: 0,
+            completed: true
+          }
+        ],
+      }
+    } 
+  })
 
-//   // array dan checkbox untuk trends
-//   const arrayTrends = wrapper.findAll('[data-test="array-trends"]')
-//   const checkboxTrends = wrapper.findAll('[data-test="trends-checkbox"]')
+  // textarea: tweet text
+  const tweetText = wrapper.find('[data-test="tweet-text"]')
 
-//   // textarea: copydanpaste dan hasil
-//   const copyandpaste = wrapper.find('[data-test="copyandpaste"]')
-//   const results = wrapper.find('[data-test="results"]')
+  // array dan checkbox untuk trends
+  const arrayTrends = wrapper.findAll('[data-test="array-trends"]')
+  const checkboxTrends = wrapper.findAll('[data-test="trends-checkbox"]')
 
-//   // button: btnTweet
-//   const btnTweet = wrapper.find('[data-test="btn-tweet"]')
-//   // button: btnCheckBoxAll diaktifkan atau tidak diaktifkan semua kotak centang
-//   const btnCheckBoxAll = wrapper.find('[data-test="btn-checkbox-all"]') 
+  // textarea: copydanpaste dan hasil
+  const copyandpaste = wrapper.find('[data-test="copyandpaste"]')
+  const resultsTags = wrapper.find('[data-test="results-tags"]')
+
+  // button: btnTweet
+  const btnTweet = wrapper.find('[data-test="btn-tweet"]')
+  // button: btnCheckBoxAll diaktifkan atau tidak diaktifkan semua kotak centang
+  const btnCheckBoxAll = wrapper.find('[data-test="btn-checkbox-all"]') 
   
-//   // `semua kotak centang` diaktifkan
-//   const allCheckboxesEnabled = wrapper.find('[data-test="all-checkboxes-enabled"]')
+  // `semua kotak centang` diaktifkan
+  const allCheckboxesEnabled = wrapper.find('[data-test="all-checkboxes-enabled"]')
 
-//   copyandpaste.setValue(`
-// ...
-// Olahraga · Populer
-// #TimnasIndonesia
-// Sedang tren dalam topik Indonesia
-// Test 1
-// 2.233 rb Tweet
-// Sedang tren dalam topik Indonesia
-// #Test2
-// 1.660 Tweet
-// Technology · Trending
-// Test 3
-// 54.5K Tweet
-// ...
-//   `)
+  copyandpaste.setValue(`
+...
+Olahraga · Populer
+#TimnasIndonesia
+Sedang tren dalam topik Indonesia
+Test 1
+2.233 rb Tweet
+Sedang tren dalam topik Indonesia
+#Test2
+1.660 Tweet
+Technology · Trending
+Test 3
+54.5K Tweet
+...
+  `)
 
-//   it('textarea `hasil` untuk array untuk trends: tidak dicentang', async() => {
-//     await copyandpaste.trigger('change')
+  it('textarea `hasil` untuk array untuk trends: tidak dicentang', async() => {
+    tweetText.setValue(TWEET)
+    assert.equal(tweetText.element.value, TWEET)
+    assert.equal(btnTweet.text(), 'Tweet is: + 234')
+    
+    await copyandpaste.trigger('change')
         
-//     assert.equal(results.element.value, 'Tags: #TimnasIndonesia, Test 1, #Test2, Test 3')
-//     assert.equal(btnTweet.text(), 'Tweet is: + 234')
+    assert.equal(resultsTags.element.value, 'Tags: #TimnasIndonesia, Test 1, #Test2, Test 3')
+    assert.equal(btnTweet.text(), 'Tweet is: + 213')
 
-//     // test cases
-//     const testCases = [
-//       {
-//         name: '#TimnasIndonesia',
-//         index: 0,
-//         listBool: [false, true, true, true],
-//         results: 'Tags: Test 1, #Test2, Test 3',
-//         tweetIs: 'Tweet is: + 252',
-//         // `semua kotak centang` diaktifkan
-//         allCheckboxesEnabled: 'diaktifkan: 3'
-//       },
-//       {
-//         name: 'Test 1',
-//         index: 1,
-//         listBool: [false, false, true, true],
-//         results: 'Tags: #Test2, Test 3',
-//         tweetIs: 'Tweet is: + 260',
-//         allCheckboxesEnabled: 'diaktifkan: 2'
-//       },
-//       {
-//         name: '#Test2',
-//         index: 2,
-//         listBool: [false, false, false, true],
-//         results: 'Tags: Test 3',
-//         tweetIs: 'Tweet is: + 268',
-//         allCheckboxesEnabled: 'diaktifkan: 1'
-//       },
-//       {
-//         name: 'Test 3',
-//         index: 3,
-//         listBool: [false, false, false, false],
-//         results: 'Tidak ada hasil',
-//         tweetIs: 'Tweet is: + 280',
-//         allCheckboxesEnabled: 'diaktifkan: 0'
-//       }
-//     ]
+    // test cases
+    const testCases = [
+      {
+        name: '#TimnasIndonesia',
+        index: 0,
+        listBool: [false, true, true, true],
+        results: 'Tags: Test 1, #Test2, Test 3',
+        tweetIs: 'Tweet is: + 252',
+        // `semua kotak centang` diaktifkan
+        allCheckboxesEnabled: 'diaktifkan: 3'
+      },
+      {
+        name: 'Test 1',
+        index: 1,
+        listBool: [false, false, true, true],
+        results: 'Tags: #Test2, Test 3',
+        tweetIs: 'Tweet is: + 260',
+        allCheckboxesEnabled: 'diaktifkan: 2'
+      },
+      {
+        name: '#Test2',
+        index: 2,
+        listBool: [false, false, false, true],
+        results: 'Tags: Test 3',
+        tweetIs: 'Tweet is: + 268',
+        allCheckboxesEnabled: 'diaktifkan: 1'
+      },
+      {
+        name: 'Test 3',
+        index: 3,
+        listBool: [false, false, false, false],
+        results: 'Tidak ada hasil',
+        tweetIs: 'Tweet is: + 280',
+        allCheckboxesEnabled: 'diaktifkan: 0'
+      }
+    ]
 
-//     for (let test of testCases) {
-//       console.debug('unchecked ke-', test.name)
-//       await checkboxTrends.at(test.index).setValue(false)
+    for (let test of testCases) {
+      console.debug('unchecked ke-', test.name)
+      await checkboxTrends.at(test.index).setValue(false)
       
-//       for (let i = 0; i < test.listBool.length; i++) {
-//         if (test.listBool[i]) {
-//           expect(arrayTrends.at(i).classes()).toContain('completed')
-//         } else {
-//           // same: assert.deepEqual(arrayTrends.at(...).classes(), [])
-//           expect(arrayTrends.at(i).classes()).to.deep.equal([])
-//         }
-//       }
+      for (let i = 0; i < test.listBool.length; i++) {
+        if (test.listBool[i]) {
+          expect(arrayTrends.at(i).classes()).toContain('completed')
+        } else {
+          // same: assert.deepEqual(arrayTrends.at(...).classes(), [])
+          expect(arrayTrends.at(i).classes()).to.deep.equal([])
+        }
+      }
 
-//       assert.equal(results.element.value, test.results)
-//       assert.equal(btnTweet.text(), test.tweetIs)
-//       // `semua kotak centang` diaktifkan
-//       assert.equal(allCheckboxesEnabled.text(), test.allCheckboxesEnabled)
-//     }
-//   })
+      assert.equal(resultsTags.element.value, test.results)
+      assert.equal(btnTweet.text(), test.tweetIs)
+      // `semua kotak centang` diaktifkan
+      assert.equal(allCheckboxesEnabled.text(), test.allCheckboxesEnabled)
+    }
+  })
 
 //   it('textarea `hasil` untuk array untuk trends: dicentang', async() => {    
 //     console.debug('-----')
@@ -432,4 +448,4 @@ Entertainment · Trending
 //     assert.equal(arrayTrends.at(2).get('.trending-topics-class').text(), 'Sedang tren dalam topik Indonesia')
 //     assert.equal(arrayTrends.at(3).get('.trending-topics-class').text(), 'Technology · Trending')
 //   })
-// })
+})

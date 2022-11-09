@@ -12,6 +12,7 @@ export default {
   data() {
     return {
       // pilih hasil, button submit, button copy dan button tweet: true atau false
+      tweet: ""
     }
   },
   mounted() {
@@ -53,7 +54,11 @@ export default {
 </script>
 
 <template>
-  <h3 style="margin-top: 10px; margin-bottom: 5px;">Hasil</h3>
+  <h3 style="margin-top: 10px; margin-bottom: 5px;">Tweet dan Tags</h3>
+  <textarea style="margin-top: 0px;margin-bottom: -23px;" v-model="tweetText" data-test="tweet" ref="tweetText" rows="3" cols="50" 
+    placeholder="Tweet ..."></textarea>
+  <br>
+  <br>
   <textarea v-model="results" data-test="results" ref="results" rows="5" cols="50" 
     placeholder="Tags: Aksi Cepat Tanggap, Axelsen, Desta, Oknum, Motor, ..." :disabled="isResults"></textarea>
   <br>

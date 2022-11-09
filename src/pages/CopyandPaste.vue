@@ -5,8 +5,11 @@ const TAGS = 'Tags: '
 export default {
   data() {
     return {
-      // textarea: copydanpaste dan hasil
+      // textarea: copydanpaste, tweet text dan hasil
       copyandpaste: '',
+      tweetText: '',
+      resultsTags: '',
+      // teks tweet dan hasil tags
       results: '',
       // tweet dihasil maks. 280 karakter
       count: 280,
@@ -42,10 +45,18 @@ export default {
     },
   },
   watch: {
-    // textarea: copydanpaste
+    // textarea: tweetText dan copydanpaste
+    tweetText() {
+      if (this.tweetText.length !== 0 && this.resultsTags.length !== 0)
+        this.count = 280 - (this.tweetText.length + this.resultsTags.length + 1)
+      else if (this.tweetText.length !== 0)
+        this.count = 280 - this.tweetText.length
+      else
+        this.count = 280 - this.resultsTags.length
+    },
     copyandpaste() {
       // textarea hasil: loading...
-      this.results = 'Loading...'
+      this.resultsTags = 'Loading...'
       
       // vue methods: memuat
       this.carry()
@@ -58,7 +69,7 @@ export default {
       this.allCheckboxesEnabled = 0
       let trends = ''
       // regex101.com
-      const regex = /(Sedang tren dalam topik (.+)|Trending in (.+)|(.+) Popular|(.+) Populer|(.+) Trending)\n?\n(.+)\n?\n([\d.,]+.*)?/gm
+      const regex = /(Sedang tren dalam topik (.+)|Trending in (.+)|(.+) Popular|(.+) Populer|(.+) Trending|Trending)\n?\n(.+)\n?\n([\d.,]+.*)?/gm
       
       const str = this.copyandpaste
       let m
@@ -108,28 +119,41 @@ export default {
       // 'Oknum, Motor, ' ke 'Oknum, Motor'
       if (this.arraytrends.length != 0) {
         trends = TAGS + trends.substring(0, trends.length-2)
+
+        this.results = this.addResults(trends) 
         this.selectResults = true
         this.selectCopy = true
         this.selectTweet = true
-        this.count = 280 - trends.length
+
+        if (this.tweetText.length != 0)
+          this.count = 280 - (this.tweetText.length + trends + 1)
+        else
+          this.count = 280 - trends.length
       } else if (str != '' && this.arraytrends.length == 0) {
         trends = 'Tidak ada hasil'
         this.selectResults = false
         this.selectCopy = false
         this.selectTweet = false
-        this.count = 280
+        this.count = 280 - this.tweetText.length
       }
       
-      this.results = trends
+      this.resultsTags = trends
+      // this.results = this.addResults(trends)
       this.isCopyAndCountTweet()
     },
     
     // button: reset, copy dan `semua kotak centang`
-    btnReset() {
+    btnResetTweet() {
+      this.tweetText = ''
+      // autofocus
+      this.$refs.tweetText.focus()
+    },
+    btnResetTags() {
       this.copyandpaste = ''
       // autofocus
       this.$refs.copyandpaste.focus()
-      this.results = ''
+      this.tweetText = ''
+      this.resultsTags = ''
       this.selectCopy = false
       this.selectTweet = false
       this.arraytrends = []
@@ -137,19 +161,34 @@ export default {
     },
     // sama GetDayTrends:btnCopy()
     btnCopy() {
-      if (this.results == '' || this.results == 'Tidak ada hasil') {
+      if (this.resultsTags == '' || this.resultsTags == 'Tidak ada hasil') {
         return
       }
       
-      this.$refs.results.select()
+      // ? tweetText: tidak rentang pilihan
+      // this.$refs.tweetText.select()
+      // this.$refs.tweetText.setSelectionRange(0, 99999)
+
+      this.$refs.resultsTags.select()
       // Untuk perangkat seluler
-      this.$refs.release.setSelectionRange(0, 99999);
+      this.$refs.resultsTags.setSelectionRange(0, 99999)
     
-      navigator.clipboard.writeText(this.results);
+      let results
+      if (this.tweetText.length !== 0)
+        results = this.tweetText + '\n' + this.resultsTags
+      else
+        results = this.resultsTags
+      navigator.clipboard.writeText(results)
     },
     // sama GetDayTrends:btnTweet()
     btnTweet() {
-      if (this.results.length > 280) {
+      let length
+      if (this.tweetText.length !== 0)
+        length = this.tweetText.length + this.resultsTags.length + 1
+      else
+        length = this.resultsTags.length
+
+      if (length > 280) {
         this.selectTweet = false
         return
       }
@@ -175,15 +214,15 @@ export default {
 
         this.selectCheckBoxAll = false
         
-        this.results = TAGS + newArrayTrendsName.substring(0, newArrayTrendsName.length-2)
-        this.count = 280 - this.results.length
+        this.resultsTags = TAGS + newArrayTrendsName.substring(0, newArrayTrendsName.length-2)
+        this.count = 280 - this.resultsTags.length
         this.isCopyAndCountTweet()
       } else {
         this.arraytrends.forEach((val, index) => {
           this.arraytrends[index].completed = false
         })
         this.count = 280
-        this.results = 'Tidak ada hasil'
+        this.resultsTags = 'Tidak ada hasil'
         this.isCopyAndCountTweet()
         this.allCheckboxesEnabled = 0
         
@@ -199,8 +238,8 @@ export default {
       const name = this.arraytrends[index].name
       
       if (event.target.checked) {
-        if (this.results === 'Tidak ada hasil') {
-          this.results =  TAGS + name
+        if (this.resultsTags === 'Tidak ada hasil') {
+          this.resultsTags =  TAGS + name
           // pilih hasil, button copy dan button tweet: true
           this.selectResults = true
           this.selectCopy = true
@@ -215,28 +254,28 @@ export default {
             }
           }
 
-          this.results = TAGS + newArrayTrendsName.substring(0, newArrayTrendsName.length-2)
+          this.resultsTags = TAGS + newArrayTrendsName.substring(0, newArrayTrendsName.length-2)
           this.isCopyAndCountTweet()
           
           this.allCheckboxesEnabled++
         }
 
-        this.count = 280 - this.results.length
+        this.count = 280 - this.resultsTags.length
       } else {
         const rightComma = `${name}, `
         const leftComma = `, ${name}`
         const bothComma = `, ${name}, `
         
         let release = ''
-        if (this.results.includes(rightComma)) {
+        if (this.resultsTags.includes(rightComma)) {
           release = rightComma
-        } else if (this.results.includes(leftComma)) {
+        } else if (this.resultsTags.includes(leftComma)) {
           release = leftComma
-        } else if (this.results.includes(bothComma)) {
+        } else if (this.resultsTags.includes(bothComma)) {
           release = bothComma
         } else {
           // melepas = text 
-          this.results = 'Tidak ada hasil'
+          this.resultsTags = 'Tidak ada hasil'
           // pilih hasil, button copy dan button tweet: false
           this.selectResults = false
           this.selectCopy = false
@@ -246,9 +285,9 @@ export default {
           this.allCheckboxesEnabled = 0
           return
         }
-        this.results = this.results.replace(release, '')
+        this.resultsTags = this.resultsTags.replace(release, '')
         
-        this.count = 280 - this.results.length
+        this.count = 280 - this.resultsTags.length
         this.isCopyAndCountTweet()
         
         this.allCheckboxesEnabled--
@@ -258,29 +297,43 @@ export default {
     // sama GetDayTrends:isCountTweet()
     // adalah textarea hitungan dan tombol tweet
     isCopyAndCountTweet() {
-      if (this.results === '' || this.results === 'Tidak ada hasil' 
-        || this.results.length > 280) { 
+      if (this.resultsTags === '' || this.resultsTags === 'Tidak ada hasil' 
+        || this.resultsTags.length > 280) { 
         this.selectCopy = false
         this.selectTweet = false
       } else {
         this.selectCopy = true
         this.selectTweet = true
       }
+    },
+
+    addResults(trends) {
+      if (this.tweetText.length !== 0)
+        return this.tweetText + '\n' + trends
+      else
+        return trends
     }
   }
 }
 </script>
 
 <template>
-  <h2 style="margin-top: 10px; margin-bottom: 25px;">Twitter Trends (Indonesia atau Inggris)</h2>
-  <h3 style="margin-top: -25px; margin-bottom: 25px;">>> Copy dan Paste!</h3>
+  <h2 style="margin-top: 10px; margin-bottom: 25px">Twitter Trends (Indonesia atau Inggris)</h2>
+  <h3 style="margin-top: -25px; margin-bottom: 25px">>> Copy dan Paste!</h3>
 
-  <p style="margin-top: -18px; margin-bottom: 5px;"> <a href="https://twitter.com/i/trends" target="_blank">twitter.com/i/trends</a> + (Select All [ctrl + a] dan Copy [ctrl + c])</p>
+  <p style="margin-top: -18px; margin-bottom: 5px"> <a href="https://twitter.com/i/trends" target="_blank">twitter.com/i/trends</a> + (Select All [ctrl + a] dan Copy [ctrl + c])</p>
   <p style="margin-top: -5px; margin-bottom: 5px; color: green;">web browser (PC, Laptop, Android dan iOS: Chrome, Firefox, dll) ✅</p>
   <p style="margin-top: -5px; margin-bottom: 5px; color: red;">aplikasi Android dan iOS ❌</p>
 
+  <h3>Tweet</h3>
+  <textarea style="margin-top: -15px; margin-bottom: 5px" v-model="tweetText" data-test="tweet-text" ref="tweetText" rows="3" cols="50" 
+    placeholder="Tweet ..."></textarea>
+    <br>
+  <button @click="btnResetTweet" data-test="btn-reset-tweet">Reset</button>
+  <br>
+
   <h3>Paste [ctrl + v]...</h3>
-    <textarea style="margin-top: -15px; margin-bottom: 5px;" v-model="copyandpaste" ref="copyandpaste" data-test="copyandpaste" rows="8" cols="50" 
+    <textarea style="margin-top: -15px; margin-bottom: 5px" v-model="copyandpaste" ref="copyandpaste" data-test="copyandpaste" rows="8" cols="50" 
     placeholder="Tren
 Sedang tren dalam topik Indonesia
 Aksi Cepat Tanggap
@@ -292,11 +345,13 @@ Sedang tren dalam topik Indonesia
 Motor
 44,9 rb Tweet ..." autofocus></textarea>
   <br>
-  <button @click="btnReset" data-test="btn-reset">Reset</button>
+  <button @click="btnResetTags" data-test="btn-reset-tags">Reset</button>
   <br>
 
-  <h3>Hasil</h3>
-  <textarea style="margin-top: -15px; margin-bottom: 5px;" v-model="results" data-test="results" ref="results" rows="5" cols="50" 
+  <h3>Tags</h3>
+  <!-- data-test="results-tags" => method: this.$refs['results-tags']... -->
+  <!-- data-test="resultsTags" => method: this.$refs.resultsTags']... -->
+  <textarea style="margin-top: -15px; margin-bottom: 5px" v-model="resultsTags" data-test="results-tags" ref="resultsTags" rows="5" cols="50" 
     placeholder="Tags: Aksi Cepat Tanggap, Axelsen, Desta, Oknum, Motor, ..." :disabled="isResults"></textarea>
   <br>
   <button @click="btnCopy" data-test="btn-copy" :disabled="isCopy">Copy</button>
