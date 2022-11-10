@@ -12,7 +12,8 @@ export default {
       // teks tweet dan hasil tags
       results: '',
       // tweet dihasil maks. 280 karakter
-      count: 280,
+      countOfCopy: 280,
+      countOfTweet: 280,
       // array untuk trends
       arraytrends: [],
      
@@ -47,12 +48,12 @@ export default {
   watch: {
     // textarea: tweetText dan copydanpaste
     tweetText() {
-      if (this.tweetText.length !== 0 && this.resultsTags.length !== 0)
-        this.count = 280 - (this.tweetText.length + this.resultsTags.length + 1)
-      else if (this.tweetText.length !== 0)
-        this.count = 280 - this.tweetText.length
+      if (this.tweetText !== '' && this.resultsTags !== '')
+        this.countOfTweet = 280 - (this.tweetText.length + this.resultsTags.length + 2)
+      else if (this.tweetText !== '')
+        this.countOfTweet = 280 - this.tweetText.length
       else
-        this.count = 280 - this.resultsTags.length
+        this.countOfTweet = 280 - this.resultsTags.length
     },
     copyandpaste() {
       // textarea hasil: loading...
@@ -125,16 +126,16 @@ export default {
         this.selectCopy = true
         this.selectTweet = true
 
-        if (this.tweetText.length != 0)
-          this.count = 280 - (this.tweetText.length + trends + 1)
+        if (this.tweetText !== '')
+          this.countOfTweet = 280 - (this.tweetText.length + trends + 2)
         else
-          this.count = 280 - trends.length
+          this.countOfTweet = 280 - trends.length
       } else if (str != '' && this.arraytrends.length == 0) {
         trends = 'Tidak ada hasil'
         this.selectResults = false
         this.selectCopy = false
         this.selectTweet = false
-        this.count = 280 - this.tweetText.length
+        this.countOfTweet = 280 - this.tweetText.length
       }
       
       this.resultsTags = trends
@@ -174,25 +175,29 @@ export default {
       this.$refs.resultsTags.setSelectionRange(0, 99999)
     
       let results
-      if (this.tweetText.length !== 0)
-        results = this.tweetText + '\n' + this.resultsTags
+      if (this.tweetText !== '')
+        results = this.tweetText + '\n\n' + this.resultsTags
       else
         results = this.resultsTags
       navigator.clipboard.writeText(results)
     },
     // sama GetDayTrends:btnTweet()
     btnTweet() {
-      let length
-      if (this.tweetText.length !== 0)
-        length = this.tweetText.length + this.resultsTags.length + 1
-      else
+      let results, length
+      if (this.tweetText !== '') {
+        results = this.tweetText + ' ➞' + this.resultsTags
+        length = this.tweetText.length + this.resultsTags.length + 2
+      } else {
+        results = this.resultsTags
         length = this.resultsTags.length
+      }
 
       if (length > 280) {
         this.selectTweet = false
         return
       }
-      const UTF8_hash = this.results.replaceAll("#", "%23")
+
+      const UTF8_hash = results.replaceAll("#", "%23")
       window.open("https://twitter.com/intent/tweet?text="+UTF8_hash, "_blank")
     },
     // sama GetDayTrends:btnCheckBoxAll()
@@ -215,13 +220,13 @@ export default {
         this.selectCheckBoxAll = false
         
         this.resultsTags = TAGS + newArrayTrendsName.substring(0, newArrayTrendsName.length-2)
-        this.count = 280 - this.resultsTags.length
+        this.countOfTweet = 280 - this.resultsTags.length
         this.isCopyAndCountTweet()
       } else {
         this.arraytrends.forEach((val, index) => {
           this.arraytrends[index].completed = false
         })
-        this.count = 280
+        this.countOfTweet = 280
         this.resultsTags = 'Tidak ada hasil'
         this.isCopyAndCountTweet()
         this.allCheckboxesEnabled = 0
@@ -260,7 +265,7 @@ export default {
           this.allCheckboxesEnabled++
         }
 
-        this.count = 280 - this.resultsTags.length
+        this.countOfTweet = 280 - this.resultsTags.length
       } else {
         const rightComma = `${name}, `
         const leftComma = `, ${name}`
@@ -280,14 +285,14 @@ export default {
           this.selectResults = false
           this.selectCopy = false
           this.selectTweet = false
-          this.count = 280
+          this.countOfTweet = 280
           
           this.allCheckboxesEnabled = 0
           return
         }
         this.resultsTags = this.resultsTags.replace(release, '')
         
-        this.count = 280 - this.resultsTags.length
+        this.countOfTweet = 280 - this.resultsTags.length
         this.isCopyAndCountTweet()
         
         this.allCheckboxesEnabled--
@@ -308,8 +313,8 @@ export default {
     },
 
     addResults(trends) {
-      if (this.tweetText.length !== 0)
-        return this.tweetText + '\n' + trends
+      if (this.tweetText !== '')
+        return this.tweetText + '\n\n' + trends
       else
         return trends
     }
@@ -354,8 +359,8 @@ Motor
   <textarea style="margin-top: -15px; margin-bottom: 5px" v-model="resultsTags" data-test="results-tags" ref="resultsTags" rows="5" cols="50" 
     placeholder="Tags: Aksi Cepat Tanggap, Axelsen, Desta, Oknum, Motor, ..." :disabled="isResults"></textarea>
   <br>
-  <button @click="btnCopy" data-test="btn-copy" :disabled="isCopy">Copy</button>
-  <button @click="btnTweet" data-test="btn-tweet" :disabled="isTweet">Tweet is: <small v-if="results.length < 280">+</small> {{count}}</button>
+  <button @click="btnCopy" data-test="btn-copy" :disabled="isCopy">Copy is: <small v-if="results.length < 280">+</small> {{countOfCopy}}</button>
+  <button @click="btnTweet" data-test="btn-tweet" :disabled="isTweet">Tweet is: <small v-if="results.length < 280">+</small> {{countOfTweet}}</button>
   <br>
   
   <h4 v-if="arraytrends.length > 0">Kotak Centang: 

@@ -68,7 +68,7 @@ Entertainment · Trending
 54.5 Tweets
 `, 
         resultsTags: 'Tags: (Indonesia) Menpan RB, (Indonesia) #TimnasIndonesia, (Indonesia) Yayasan Aksi Cepat Tanggap, (Inggris) Menpan RB, (Inggris) #TimnasIndonesia, (Inggris) Yayasan Aksi Cepat Tanggap',
-        tweetIs: 'Tweet is: + 75',
+        tweetIs: 'Tweet is: + 74',
         bntCopyAndTweet: true
       },
       {
@@ -242,7 +242,7 @@ describe('Tweet', () => {
             tweetVolume: 0,
             completed: true
           }
-        ],
+        ]
       }
     } 
   })
@@ -282,7 +282,7 @@ Test 3
 ...
   `)
 
-  it('textarea `hasil` untuk array untuk trends: tidak dicentang', async() => {
+  it('textarea `hasil` untuk array untuk trends: tidak dicentang', async() => {    
     tweetText.setValue(TWEET)
     assert.equal(tweetText.element.value, TWEET)
     assert.equal(btnTweet.text(), 'Tweet is: + 234')
@@ -290,7 +290,7 @@ Test 3
     await copyandpaste.trigger('change')
         
     assert.equal(resultsTags.element.value, 'Tags: #TimnasIndonesia, Test 1, #Test2, Test 3')
-    assert.equal(btnTweet.text(), 'Tweet is: + 213')
+    assert.equal(btnTweet.text(), 'Tweet is: + 212')
 
     // test cases
     const testCases = [
@@ -298,7 +298,8 @@ Test 3
         name: '#TimnasIndonesia',
         index: 0,
         listBool: [false, true, true, true],
-        results: 'Tags: Test 1, #Test2, Test 3',
+        tweetText: TWEET,
+        resultsTags: 'Tags: Test 1, #Test2, Test 3',
         tweetIs: 'Tweet is: + 252',
         // `semua kotak centang` diaktifkan
         allCheckboxesEnabled: 'diaktifkan: 3'
@@ -307,7 +308,8 @@ Test 3
         name: 'Test 1',
         index: 1,
         listBool: [false, false, true, true],
-        results: 'Tags: #Test2, Test 3',
+        tweetText: TWEET,
+        resultsTags: 'Tags: #Test2, Test 3',
         tweetIs: 'Tweet is: + 260',
         allCheckboxesEnabled: 'diaktifkan: 2'
       },
@@ -315,7 +317,8 @@ Test 3
         name: '#Test2',
         index: 2,
         listBool: [false, false, false, true],
-        results: 'Tags: Test 3',
+        tweetText: TWEET,
+        resultsTags: 'Tags: Test 3',
         tweetIs: 'Tweet is: + 268',
         allCheckboxesEnabled: 'diaktifkan: 1'
       },
@@ -323,7 +326,8 @@ Test 3
         name: 'Test 3',
         index: 3,
         listBool: [false, false, false, false],
-        results: 'Tidak ada hasil',
+        tweetText: TWEET,
+        resultsTags: 'Tidak ada hasil',
         tweetIs: 'Tweet is: + 280',
         allCheckboxesEnabled: 'diaktifkan: 0'
       }
@@ -342,7 +346,8 @@ Test 3
         }
       }
 
-      assert.equal(resultsTags.element.value, test.results)
+      assert.equal(tweetText.element.value, test.tweetText)
+      assert.equal(resultsTags.element.value, test.resultsTags)
       assert.equal(btnTweet.text(), test.tweetIs)
       // `semua kotak centang` diaktifkan
       assert.equal(allCheckboxesEnabled.text(), test.allCheckboxesEnabled)
