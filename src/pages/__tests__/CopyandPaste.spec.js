@@ -68,7 +68,8 @@ Entertainment · Trending
 54.5 Tweets
 `, 
         resultsTags: 'Tags: (Indonesia) Menpan RB, (Indonesia) #TimnasIndonesia, (Indonesia) Yayasan Aksi Cepat Tanggap, (Inggris) Menpan RB, (Inggris) #TimnasIndonesia, (Inggris) Yayasan Aksi Cepat Tanggap',
-        tweetIs: 'Tweet is: + 74',
+        copyIs: 'Copy is: + 74',
+        tweetIs: 'Tweet is: + 73',
         bntCopyAndTweet: true
       },
       {
@@ -76,6 +77,7 @@ Entertainment · Trending
         tweetText: TWEET,
         copyandpaste: '-',
         resultsTags: 'Tidak ada hasil',
+        copyIs: 'Copy is: + 260',
         tweetIs: 'Tweet is: + 260',
         bntCopyAndTweet: false
       },
@@ -84,62 +86,8 @@ Entertainment · Trending
         tweetText: TWEET,
         copyandpaste: '',
         resultsTags: '',
+        copyIs: 'Copy is: + 260',
         tweetIs: 'Tweet is: + 260',
-        bntCopyAndTweet: false
-      },
-      {
-        name: 'Test 4',
-        tweetText: TWEET,
-        copyandpaste: '',
-        resultsTags: '',
-        tweetIs: 'Tweet is: + 260',
-        bntCopyAndTweet: false
-      },
-      // tweet: no
-      {
-        name: 'Test -1',
-        tweetText: '',
-        copyandpaste:`
-...
->>> Indonesia
-
-Sedang tren dalam topik Indonesia
-(Indonesia) Menpan RB
-Olahraga · Populer
-(Indonesia) #TimnasIndonesia
-2.233 rb Tweet
-Sedang tren dalam topik Indonesia
-(Indonesia) Yayasan Aksi Cepat Tanggap
-1.660 Tweet
-
->>> Inggris
-Trending in Indonesia
-(Inggris) Menpan RB
-Trending in Indonesia
-(Inggris) #TimnasIndonesia
-10.9K Tweets
-Entertainment · Trending
-(Inggris) Yayasan Aksi Cepat Tanggap
-54.5 Tweets
-`, 
-        resultsTags: 'Tags: (Indonesia) Menpan RB, (Indonesia) #TimnasIndonesia, (Indonesia) Yayasan Aksi Cepat Tanggap, (Inggris) Menpan RB, (Inggris) #TimnasIndonesia, (Inggris) Yayasan Aksi Cepat Tanggap',
-        tweetIs: 'Tweet is: + 96',
-        bntCopyAndTweet: true
-      },
-      {
-        name: 'Test -2',
-        tweetText: '',
-        copyandpaste: '-',
-        resultsTags: 'Tidak ada hasil',
-        tweetIs: 'Tweet is: + 280',
-        bntCopyAndTweet: false
-      },
-      {
-        name: 'Test -3',
-        tweetText: '',
-        copyandpaste: '',
-        resultsTags: '',
-        tweetIs: 'Tweet is: + 280',
         bntCopyAndTweet: false
       }
     ]
@@ -160,6 +108,7 @@ Entertainment · Trending
       await tweetText.trigger('change')
       assert.equal(tweetText.element.value, test.tweetText)
 
+      assert.equal(btnCopy.text(), test.copyIs)
       assert.equal(btnTweet.text(), test.tweetIs)
 
       if (test.bntCopyAndTweet) {
@@ -259,6 +208,7 @@ describe('Tweet', () => {
   const resultsTags = wrapper.find('[data-test="results-tags"]')
 
   // button: btnTweet
+  const btnCopy = wrapper.find('[data-test="btn-copy"]')
   const btnTweet = wrapper.find('[data-test="btn-tweet"]')
   // button: btnCheckBoxAll diaktifkan atau tidak diaktifkan semua kotak centang
   const btnCheckBoxAll = wrapper.find('[data-test="btn-checkbox-all"]') 
@@ -290,17 +240,19 @@ Test 3
     await copyandpaste.trigger('change')
         
     assert.equal(resultsTags.element.value, 'Tags: #TimnasIndonesia, Test 1, #Test2, Test 3')
-    assert.equal(btnTweet.text(), 'Tweet is: + 212')
+    assert.equal(btnTweet.text(), 'Tweet is: + 211')
 
     // test cases
     const testCases = [
+      // tweet: ok
       {
         name: '#TimnasIndonesia',
         index: 0,
         listBool: [false, true, true, true],
         tweetText: TWEET,
         resultsTags: 'Tags: Test 1, #Test2, Test 3',
-        tweetIs: 'Tweet is: + 252',
+        copyIs: 'Copy is: + 230',
+        tweetIs: 'Tweet is: + 229',
         // `semua kotak centang` diaktifkan
         allCheckboxesEnabled: 'diaktifkan: 3'
       },
@@ -310,24 +262,27 @@ Test 3
         listBool: [false, false, true, true],
         tweetText: TWEET,
         resultsTags: 'Tags: #Test2, Test 3',
-        tweetIs: 'Tweet is: + 260',
+        copyIs: 'Copy is: + 238',
+        tweetIs: 'Tweet is: + 237',
         allCheckboxesEnabled: 'diaktifkan: 2'
       },
       {
         name: '#Test2',
         index: 2,
         listBool: [false, false, false, true],
-        tweetText: TWEET,
+        tweetText: '',
         resultsTags: 'Tags: Test 3',
-        tweetIs: 'Tweet is: + 268',
+        copyIs: 'Copy is: + 265',
+        tweetIs: 'Tweet is: + 265',
         allCheckboxesEnabled: 'diaktifkan: 1'
       },
       {
         name: 'Test 3',
         index: 3,
         listBool: [false, false, false, false],
-        tweetText: TWEET,
+        tweetText: '',
         resultsTags: 'Tidak ada hasil',
+        copyIs: 'Copy is: + 280',
         tweetIs: 'Tweet is: + 280',
         allCheckboxesEnabled: 'diaktifkan: 0'
       }
@@ -345,9 +300,11 @@ Test 3
           expect(arrayTrends.at(i).classes()).to.deep.equal([])
         }
       }
-
+    
+      tweetText.setValue(test.tweetText)
       assert.equal(tweetText.element.value, test.tweetText)
       assert.equal(resultsTags.element.value, test.resultsTags)
+      assert.equal(btnCopy.text(), test.copyIs)
       assert.equal(btnTweet.text(), test.tweetIs)
       // `semua kotak centang` diaktifkan
       assert.equal(allCheckboxesEnabled.text(), test.allCheckboxesEnabled)
