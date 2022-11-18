@@ -10,11 +10,11 @@ Link:
 
 ![Twitter Trends 2](../images/twitter-trends2.png?raw=true)
 
-### Twitter Trends API:
+### GetDayTrends.com:
 
 ![Twitter Trends 3](../images/twitter-trends3.png?raw=true)
 
-### GetDayTrends.com:
+### Twitter Trends API:
 
 ![Twitter Trends 4](../images/twitter-trends4.png?raw=true)
 
