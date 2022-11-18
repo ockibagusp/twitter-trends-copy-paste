@@ -7,7 +7,7 @@ import { RouterLink, RouterView } from 'vue-router'
   <nav>
     <RouterLink to="/">Home</RouterLink> |
     <RouterLink to="/getdaytrends.com">GetDayTrends.com</RouterLink> |
-    <RouterLink to="/twitter-trends-api">Twitter Trends API</RouterLink>
+    <RouterLink to="/twitter-trends-api">Twitter Trends API (slow)</RouterLink>
   </nav>
 
   <main>
