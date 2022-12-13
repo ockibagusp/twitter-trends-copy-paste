@@ -14,7 +14,7 @@ Link:
 
 ![Twitter Trends 3](../images/twitter-trends3.png?raw=true)
 
-### <s>Twitter Trends API(slow)</s> [1]:
+### <s>Twitter Trends API (slow)</s> [1]:
 
 ![Twitter Trends 4](../images/twitter-trends4.png?raw=true)
 
