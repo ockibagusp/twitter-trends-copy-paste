@@ -90,6 +90,7 @@ Example:
 
 ---
 $ ➜  twitter-trends git:(master) heroku ps:scale web=1 --app xxxxx
+
 Scaling dynos... ! ❌ <sup>[1]<sup> 
  
  ▸    Subscribe to Eco to scale your dynos. Learn more at
