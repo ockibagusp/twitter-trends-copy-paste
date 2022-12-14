@@ -10,11 +10,11 @@ Link:
 
 ![Twitter Trends 2](../images/twitter-trends2.png?raw=true)
 
-### <s>GetDayTrends.com</s> [1]:
+### ~~GetDayTrends.com~~: <sup>[1]<sup>
 
 ![Twitter Trends 3](../images/twitter-trends3.png?raw=true)
 
-### <s>Twitter Trends API (slow)</s> [1]:
+### ~~Twitter Trends API (slow)~~: <sup>[1]<sup>
 
 ![Twitter Trends 4](../images/twitter-trends4.png?raw=true)
 
@@ -89,7 +89,8 @@ Example:
 
 
 ---
-Scaling dynos... ! ❌ [1]
+$ ➜  twitter-trends git:(master) heroku ps:scale web=1 --app xxxxx
+Scaling dynos... ! ❌ <sup>[1]<sup> 
  
  ▸    Subscribe to Eco to scale your dynos. Learn more at
  
