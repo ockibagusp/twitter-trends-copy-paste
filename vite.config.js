@@ -6,6 +6,10 @@ import vue from '@vitejs/plugin-vue'
 // https://vitejs.dev/config/
 export default defineConfig({
   base: '/twitter-trends/',
+  define: {
+    // enable hydration mismatch details in production build
+    __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'true'
+  },
   plugins: [vue()],
   resolve: {
     alias: {
@@ -16,7 +20,7 @@ export default defineConfig({
   // https://expressjs.com/en/resources/middleware/cors.html
 
   // heroku!
-  
+
   // server: {
   //   proxy: {
   //     '/url': {
