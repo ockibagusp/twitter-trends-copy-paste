@@ -1,18 +1,17 @@
-<script setup>
-import { RouterLink, RouterView } from 'vue-router'
-
-</script>
+<script setup></script>
 
 <template>
   <nav>
     <RouterLink to="/">Home</RouterLink> |
     <RouterLink to="/getdaytrends.com"><s>GetDayTrends.com</s></RouterLink> |
-    <RouterLink to="/twitter-trends-api"><s>Twitter Trends API (slow)</s></RouterLink>
+    <RouterLink to="/twitter-trends-api"
+      ><s>Twitter Trends API (slow)</s></RouterLink
+    >
   </nav>
 
   <main>
-    <h2 style="margin-top: 5px;">Trending Topic Twitter di Indonesia</h2>
-    <h3 style="margin-top: -25px; margin-bottom: 0px;">Web browser aja.</h3>
+    <h2 style="margin-top: 5px">Trending Twitter Topics di Indonesia</h2>
+    <h3 style="margin-top: -25px; margin-bottom: 0px">Web browser aja.</h3>
 
     <RouterView />
   </main>
