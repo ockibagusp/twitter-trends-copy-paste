@@ -1,25 +1,35 @@
 import { describe, it, assert, expect } from 'vitest'
 
-import { mount } from '@vue/test-utils'
+import { flushPromises, mount } from '@vue/test-utils'
 import CopyandPaste from '../CopyandPaste.vue'
+
+const wrapper = mount(CopyandPaste, {
+  props: {}
+})
+
+// textarea: copyandpaste dan hasil
+const copyandpaste = wrapper.find('[data-test="copyandpaste"]')
+const results = wrapper.find('[data-test="results"]')
+
+// array dan checkbox untuk trends
+const arrayTrends = wrapper.findAll('[data-test="array-trends"]')
+const checkboxTrends = wrapper.findAll('[data-test="trends-checkbox"]')
+
+// button: btnReset dan btnCopy
+const btnReset = wrapper.find('[data-test="btn-reset"]')
+const btnCopy = wrapper.find('[data-test="btn-copy"]')
+
+// button: btnTweet
+const btnTweet = wrapper.find('[data-test="btn-tweet"]')
+
+// button: btnCheckBoxAll diaktifkan atau tidak diaktifkan semua kotak centang
+const btnCheckBoxAll = wrapper.find('[data-test="btn-checkbox-all"]')
+
+// `semua kotak centang` diaktifkan
+const allCheckboxesEnabled = wrapper.find('[data-test="all-checkboxes-enabled"]')
 
 describe('Copy and Paste', () => {
   assert.exists(CopyandPaste)
-
-  const wrapper = mount(CopyandPaste, {
-    props: { } 
-  })
-
-  // textarea: copyandpaste dan hasil
-  const copyandpaste = wrapper.find('[data-test="copyandpaste"]')
-  const results = wrapper.find('[data-test="results"]')
-
-  // button: btnReset dan btnCopy
-  const btnReset = wrapper.find('[data-test="btn-reset"]') 
-  const btnCopy = wrapper.find('[data-test="btn-copy"]')
-
-  // button: btnTweet
-  const btnTweet = wrapper.find('[data-test="btn-tweet"]')
 
   it('init', () => {
     assert.isEmpty(copyandpaste.element.value)
@@ -30,13 +40,13 @@ describe('Copy and Paste', () => {
 
     assert.isUndefined(btnReset.attributes().disabled)
     assert.equal(btnCopy.attributes().disabled, '')
-  })  
+  })
 
-  it('lingkaran dari `for`', async() => {
+  it('lingkaran dari `for`', async () => {
     // test cases
     const testCases = [
-      { 
-        copyandpaste:`
+      {
+        copyandpaste: `
 ...
 >>> Indonesia
 
@@ -58,7 +68,7 @@ Trending in Indonesia
 Entertainment · Trending
 (Inggris) Yayasan Aksi Cepat Tanggap
 54.5 Tweets
-`, 
+`,
         results: 'Tags: (Indonesia) Menpan RB, (Indonesia) #TimnasIndonesia, (Indonesia) Yayasan Aksi Cepat Tanggap, (Inggris) Menpan RB, (Inggris) #TimnasIndonesia, (Inggris) Yayasan Aksi Cepat Tanggap',
         tweetIs: 'Tweet is: + 96',
         bntCopyDanTweet: true
@@ -113,7 +123,7 @@ Entertainment · Trending
     // assert.equal(btnTweet.attributes().disabled, '')
   })
 
-  it('button reset', async() => {
+  it('button reset', async () => {
     // 1. textarea: copydanpaste = '-'
     // 2. textarea: hasil = 'Tidak ada hasil'
     copyandpaste.setValue('-')
@@ -135,55 +145,11 @@ Entertainment · Trending
 // 3. textarea `copy` ini diaktifkan dan textarea `tweet` jika ini dinonaktifkan ✅
 // 4. button `semua kotak centang` jika ini diaktifkan atau tidak diaktifkan ✅
 describe('Tweet', () => {
-  assert.exists(CopyandPaste)
+  assert.equal(copyandpaste.element.value, '')
+  assert.equal(results.element.value, '')
 
-  const wrapper = mount(CopyandPaste, {
-    props: { },
-    data() {
-      return {
-        arraytrends: [
-          {
-            name: "#TimnasIndonesia",
-            tweetVolume: '200k Tweets',
-            completed: true
-          },
-          {
-            name: "Test 1",
-            tweetVolume: '1k Tweets',
-            completed: true
-          },
-          {
-            name: "#Test2",
-            tweetVolume: '2k Tweets',
-            completed: true
-          },
-          {
-            name: "Test 3",
-            tweetVolume: 0,
-            completed: true
-          }
-        ],
-      }
-    } 
-  })
-
-  // array dan checkbox untuk trends
-  const arrayTrends = wrapper.findAll('[data-test="array-trends"]')
-  const checkboxTrends = wrapper.findAll('[data-test="trends-checkbox"]')
-
-  // textarea: copydanpaste dan hasil
-  const copyandpaste = wrapper.find('[data-test="copyandpaste"]')
-  const results = wrapper.find('[data-test="results"]')
-
-  // button: btnTweet
-  const btnTweet = wrapper.find('[data-test="btn-tweet"]')
-  // button: btnCheckBoxAll diaktifkan atau tidak diaktifkan semua kotak centang
-  const btnCheckBoxAll = wrapper.find('[data-test="btn-checkbox-all"]') 
-  
-  // `semua kotak centang` diaktifkan
-  const allCheckboxesEnabled = wrapper.find('[data-test="all-checkboxes-enabled"]')
-
-  copyandpaste.setValue(`
+  it('textarea `hasil` untuk array untuk trends: tidak dicentang', async () => {
+    const testCopyandpaste = `
 ...
 Olahraga · Populer
 #TimnasIndonesia
@@ -197,11 +163,15 @@ Technology · Trending
 Test 3
 54.5K Tweet
 ...
-  `)
+  `;
+    copyandpaste.setValue(testCopyandpaste)
 
-  it('textarea `hasil` untuk array untuk trends: tidak dicentang', async() => {
+    assert.equal(testCopyandpaste, copyandpaste.element.value)
     await copyandpaste.trigger('change')
-        
+
+    // ?
+    await flushPromises() // start loading, so vitest started loading
+
     assert.equal(results.element.value, 'Tags: #TimnasIndonesia, Test 1, #Test2, Test 3')
     assert.equal(btnTweet.text(), 'Tweet is: + 234')
 
@@ -245,7 +215,7 @@ Test 3
     for (let test of testCases) {
       console.debug('unchecked ke-', test.name)
       await checkboxTrends.at(test.index).setValue(false)
-      
+
       for (let i = 0; i < test.listBool.length; i++) {
         if (test.listBool[i]) {
           expect(arrayTrends.at(i).classes()).toContain('completed')
@@ -262,13 +232,13 @@ Test 3
     }
   })
 
-  it('textarea `hasil` untuk array untuk trends: dicentang', async() => {    
+  it('textarea `hasil` untuk array untuk trends: dicentang', async () => {
     console.debug('-----')
-    
+
     assert.equal(results.element.value, 'Tidak ada hasil')
 
     // test cases
-    const testCases = [   
+    const testCases = [
       {
         name: 'Test 1',
         index: 1,
@@ -301,13 +271,13 @@ Test 3
         hasil: 'Tags: #TimnasIndonesia, Test 1, #Test2, Test 3',
         tweetIs: 'Tweet is: + 234',
         allCheckboxesEnabled: 'diaktifkan: 4'
-      }  
+      }
     ]
 
     for (let test of testCases) {
       console.debug('checked ke-', test.name)
       await checkboxTrends.at(test.index).setValue(true)
-      
+
       for (let i = 0; i < test.listBool.length; i++) {
         if (test.listBool[i]) {
           expect(arrayTrends.at(i).classes()).toContain('completed')
@@ -325,7 +295,7 @@ Test 3
     }
   })
 
-  it('button `semua kotak centang` di array untuk trends: tidak diaktifkan', async() => {
+  it('button `semua kotak centang` di array untuk trends: tidak diaktifkan', async () => {
     assert.equal(btnCheckBoxAll.text(), 'tidak diaktifkan')
 
     let listBool = [true, true, true, true]
