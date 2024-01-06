@@ -16,7 +16,8 @@ const count = ref(280);
 // array untuk trends
 const arraytrends = ref([]);
 
-const showInput = ref(false);
+// kotak centang: boolean
+const showCheckboxs = ref(false);
 
 // pilih hasil: true atau false
 const selectResults = ref(false);
@@ -51,6 +52,14 @@ watch(copyandpaste, () => {
   // vue methods: memuat
   carry();
 });
+
+// // TODO:
+// // document.execCommand('copy');
+// // document.execCommand("selectAll");
+// setTimeout(() => {
+//   console.log("selectAll: ok");
+//   document.execCommand("selectAll");
+// }, 8000);
 
 /**
  * functions that mutate state and trigger updates
