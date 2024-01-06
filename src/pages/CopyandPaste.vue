@@ -41,18 +41,6 @@ const isTweet = computed(() => !selectTweet.value);
 // adalah button `semua kotak centang`: true atau false
 const isCheckBoxAll = computed(() => !selectCheckBoxAll.value);
 
-// test
-`Trending in Indonesia
-Wasit
-2,177 posts
-Trending in Indonesia
-Jepang
-69.7K posts
-Entertainment · Trending
-Doraemon
-3,297 posts
-`;
-
 /**
  * watch
  */
