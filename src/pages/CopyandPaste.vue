@@ -16,6 +16,9 @@ const count = ref(280);
 // array untuk trends
 const arraytrends = ref([]);
 
+// kotak centang: boolean
+const showCheckboxs = ref(false);
+
 // pilih hasil: true atau false
 const selectResults = ref(false);
 const selectCopy = ref(false);
@@ -49,6 +52,14 @@ watch(copyandpaste, () => {
   // vue methods: memuat
   carry();
 });
+
+// // TODO:
+// // document.execCommand('copy');
+// // document.execCommand("selectAll");
+// setTimeout(() => {
+//   console.log("selectAll: ok");
+//   document.execCommand("selectAll");
+// }, 8000);
 
 /**
  * functions that mutate state and trigger updates
@@ -145,10 +156,10 @@ function btnCopy() {
     return;
   }
 
-  // ?
-  // results.value.select();
-  // // Untuk perangkat seluler
-  // results.value.setSelectionRange(0, 99999);
+  const tmpResultsField = document.getElementById("results");
+  tmpResultsField.select();
+  // Untuk perangkat seluler
+  tmpResultsField.setSelectionRange(0, 99999);
 
   navigator.clipboard.writeText(results.value);
 }
@@ -328,6 +339,7 @@ Motor
   <textarea
     style="margin-top: -15px; margin-bottom: 5px"
     v-model="results"
+    id="results"
     data-test="results"
     rows="5"
     cols="50"
