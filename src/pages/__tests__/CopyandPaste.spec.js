@@ -70,18 +70,21 @@ Entertainment · Trending
 54.5 Tweets
 `,
         results: 'Tags: (Indonesia) Menpan RB, (Indonesia) #TimnasIndonesia, (Indonesia) Yayasan Aksi Cepat Tanggap, (Inggris) Menpan RB, (Inggris) #TimnasIndonesia, (Inggris) Yayasan Aksi Cepat Tanggap',
+        copyIs: 'Copy is: 184',
         tweetIs: 'Tweet is: + 96',
         bntCopyDanTweet: true
       },
       {
         copyandpaste: '-',
         results: 'Tidak ada hasil',
+        copyIs: 'Copy is: 0',
         tweetIs: 'Tweet is: + 280',
         bntCopyDanTweet: false
       },
       {
         copyandpaste: '',
         results: '',
+        copyIs: 'Copy is: 0',
         tweetIs: 'Tweet is: + 280',
         bntCopyDanTweet: false
       }
@@ -99,6 +102,7 @@ Entertainment · Trending
         test.results
       )
 
+      assert.equal(btnCopy.text(), test.copyIs)
       assert.equal(btnTweet.text(), test.tweetIs)
 
       if (test.bntCopyDanTweet) {
