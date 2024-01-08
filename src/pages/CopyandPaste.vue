@@ -8,14 +8,16 @@ const TAGS = "Tags: ";
 /**
  * reactive state
  */
-// textarea: copydanpaste dan hasil
+// textarea: copydanpaste, tweet baru dan hasil
 const copyandpaste = ref("");
+const newTweet = ref("");
 const results = ref("");
 // tweet dihasil maks. 280 karakter
 const count = ref(280);
 // array untuk trends
 const arraytrends = ref([]);
 
+// ?
 // kotak centang: boolean
 const showCheckboxs = ref(false);
 
@@ -46,8 +48,8 @@ const isCheckBoxAll = computed(() => !selectCheckBoxAll.value);
  * watch
  */
 // textarea: copydanpaste;
-watch(copyandpaste, () => {
-  // textarea hasil: loading...
+// // watch([copyandpaste, () => newTweet.value], ([newX, newY]) => {
+watch([copyandpaste, () => newTweet.value], () => {
   results.value = "Loading...";
   // vue methods: memuat
   carry();
@@ -69,6 +71,7 @@ function carry() {
   arraytrends.value = [];
   allCheckboxesEnabled.value = 0;
   let trends = "";
+  // TODO: function regexTweets
   // regex101.com
   const regex =
     /(Sedang tren dalam topik (.+)|Trending in (.+)|(.+) Popular|(.+) Populer|(.+) Trending|Trending|Sedang tren)\n?\n(.+)\n?\n([\d.,]+.*)?/gm;
@@ -118,8 +121,17 @@ function carry() {
   }
 
   // 'Oknum, Motor, ' ke 'Oknum, Motor'
-  if (arraytrends.value.length != 0) {
+  if (newTweet.value == "" && arraytrends.value.length != 0) {
     trends = TAGS + trends.substring(0, trends.length - 2);
+    selectResults.value = true;
+    selectCopy.value = true;
+    selectTweet.value = true;
+    count.value = 280 - trends.length;
+  } else if (arraytrends.value.length != 0) {
+    trends =
+      (newTweet.value != "" ? newTweet.value + "\n\n" : "") +
+      TAGS +
+      trends.substring(0, trends.length - 2);
     selectResults.value = true;
     selectCopy.value = true;
     selectTweet.value = true;
@@ -193,7 +205,9 @@ function btnCheckBoxAll() {
     selectCheckBoxAll.value = false;
 
     results.value =
-      TAGS + newArrayTrendsName.substring(0, newArrayTrendsName.length - 2);
+      (newTweet.value != "" ? newTweet.value + "\n\n" : "") +
+      TAGS +
+      newArrayTrendsName.substring(0, newArrayTrendsName.length - 2);
     count.value = 280 - results.value.length;
     isCopyAndCountTweet();
   } else {
@@ -218,7 +232,7 @@ function trendsChanged(event, index) {
 
   if (event.target.checked) {
     if (results.value == "Tidak ada hasil") {
-      results.value = TAGS + name;
+      results.value = newTweet.value + "\n\n" + TAGS + name;
       // pilih hasil, button copy dan button tweet: true
       selectResults.value = true;
       selectCopy.value = true;
@@ -235,7 +249,9 @@ function trendsChanged(event, index) {
       }
 
       results.value =
-        TAGS + newArrayTrendsName.substring(0, newArrayTrendsName.length - 2);
+        (newTweet.value != "" ? newTweet.value + "\n\n" : "") +
+        TAGS +
+        newArrayTrendsName.substring(0, newArrayTrendsName.length - 2);
       isCopyAndCountTweet();
 
       allCheckboxesEnabled.value++;
@@ -311,14 +327,25 @@ function isCopyAndCountTweet() {
     aplikasi Android dan iOS ❌
   </p>
 
+  <h3>Tweet baru</h3>
+  <textarea
+    style="margin-top: -15px; margin-bottom: 5px"
+    v-model="newTweet"
+    data-test="new-tweet"
+    cols="50"
+    rows="2"
+    placeholder="Test #1 Two THREE"
+  ></textarea>
+  <br />
+
   <h3>Paste [ctrl + v]...</h3>
   <textarea
     style="margin-top: -15px; margin-bottom: 5px"
     v-model="copyandpaste"
     id="copyandpaste"
     data-test="copyandpaste"
-    rows="8"
     cols="50"
+    rows="8"
     placeholder="Tren
 Sedang tren dalam topik Indonesia
 Aksi Cepat Tanggap
@@ -343,7 +370,9 @@ Motor
     data-test="results"
     rows="5"
     cols="50"
-    placeholder="Tags: Aksi Cepat Tanggap, Axelsen, Desta, Oknum, Motor, ..."
+    placeholder="Test #1 Two THREE
+    
+Tags: Aksi Cepat Tanggap, Axelsen, Desta, Oknum, Motor, ..."
     :disabled="isResults"
   ></textarea>
   <br />
