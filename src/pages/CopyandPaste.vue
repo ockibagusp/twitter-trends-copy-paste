@@ -165,7 +165,7 @@ function btnCopy() {
 }
 
 // sama GetDayTrends:btnTweet()
-function functionbtnTweet() {
+function btnTweet() {
   if (results.value.length > 280) {
     selectTweet.value = false;
     return;
@@ -347,9 +347,7 @@ Motor
     :disabled="isResults"
   ></textarea>
   <br />
-  <button @click="btnCopy" data-test="btn-copy" :disabled="isCopy">
-    Copy is: {{ results.length }}
-  </button>
+  <button @click="btnCopy" data-test="btn-copy" :disabled="isCopy">Copy</button>
   <button @click="btnTweet" data-test="btn-tweet" :disabled="isTweet">
     Tweet is: <small v-if="results.length < 280">+</small> {{ count }}
   </button>
