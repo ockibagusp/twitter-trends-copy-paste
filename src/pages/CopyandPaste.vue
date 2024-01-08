@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch, watchEffect, nextTick } from "vue";
+import { ref, computed, watch } from "vue";
 
 const TAGS = "Tags: ";
 // Slots - Vue.js
@@ -66,7 +66,6 @@ watch(copyandpaste, () => {
  */
 // memuat: dari textarea copydanpaste ini
 function carry() {
-  // console.log(copyandpaste.value);
   arraytrends.value = [];
   allCheckboxesEnabled.value = 0;
   let trends = "";
@@ -348,7 +347,9 @@ Motor
     :disabled="isResults"
   ></textarea>
   <br />
-  <button @click="btnCopy" data-test="btn-copy" :disabled="isCopy">Copy</button>
+  <button @click="btnCopy" data-test="btn-copy" :disabled="isCopy">
+    Copy is: {{ results.length }}
+  </button>
   <button @click="btnTweet" data-test="btn-tweet" :disabled="isTweet">
     Tweet is: <small v-if="results.length < 280">+</small> {{ count }}
   </button>
