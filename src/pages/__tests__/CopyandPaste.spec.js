@@ -9,6 +9,7 @@ const wrapper = mount(CopyandPaste, {
 
 // textarea: copyandpaste dan hasil
 const copyandpaste = wrapper.find('[data-test="copyandpaste"]')
+const newTweet = wrapper.find('[data-test="new-tweet"]')
 const results = wrapper.find('[data-test="results"]')
 
 // array dan checkbox untuk trends
@@ -46,6 +47,8 @@ describe('Copy and Paste', () => {
     // test cases
     const testCases = [
       {
+        name: 'Test 1',
+        newTweet: 'Test 1 - Author One',
         copyandpaste: `
 ...
 >>> Indonesia
@@ -69,12 +72,35 @@ Entertainment · Trending
 (Inggris) Yayasan Aksi Cepat Tanggap
 54.5 Tweets
 `,
-        results: 'Tags: (Indonesia) Menpan RB, (Indonesia) #TimnasIndonesia, (Indonesia) Yayasan Aksi Cepat Tanggap, (Inggris) Menpan RB, (Inggris) #TimnasIndonesia, (Inggris) Yayasan Aksi Cepat Tanggap',
-        copyIs: 'Copy is: 184',
-        tweetIs: 'Tweet is: + 96',
+        results: 'Test 1 - Author One\n\nTags: (Indonesia) Menpan RB, (Indonesia) #TimnasIndonesia, (Indonesia) Yayasan Aksi Cepat Tanggap, (Inggris) Menpan RB, (Inggris) #TimnasIndonesia, (Inggris) Yayasan Aksi Cepat Tanggap',
+        copyIs: 'Copy is: 205',
+        tweetIs: 'Tweet is: + 75',
         bntCopyDanTweet: true
       },
       {
+        name: 'Test 2',
+        newTweet: 'Test 2 - Author One',
+        copyandpaste: `
+...
+>>> Indonesia
+
+Sedang tren dalam topik Indonesia
+(Indonesia) #TimnasIndonesia
+2.233 rb Tweet
+
+>>> Inggris
+Trending in Indonesia
+(Inggris) #TimnasIndonesia
+10.9K Tweets
+`,
+        results: 'Test 2 - Author One\n\nTags: (Indonesia) #TimnasIndonesia, (Inggris) #TimnasIndonesia',
+        copyIs: 'Copy is: 83',
+        tweetIs: 'Tweet is: + 197',
+        bntCopyDanTweet: true
+      },
+      {
+        name: 'Failure 1',
+        newTweet: 'Failure 1 - Author Two',
         copyandpaste: '-',
         results: 'Tidak ada hasil',
         copyIs: 'Copy is: 0',
@@ -82,6 +108,8 @@ Entertainment · Trending
         bntCopyDanTweet: false
       },
       {
+        name: 'Nothing',
+        newTweet: '',
         copyandpaste: '',
         results: '',
         copyIs: 'Copy is: 0',
@@ -91,11 +119,20 @@ Entertainment · Trending
     ]
 
     for (let test of testCases) {
+      console.debug('name:', test.name)
+
+      newTweet.setValue(test.newTweet)
       copyandpaste.setValue(test.copyandpaste)
 
+      assert.equal(test.newTweet, newTweet.element.value)
       assert.equal(test.copyandpaste, copyandpaste.element.value)
 
       await copyandpaste.trigger('change')
+
+      assert.equal(
+        newTweet.element.value,
+        test.newTweet
+      )
 
       assert.equal(
         results.element.value,
@@ -130,13 +167,16 @@ Entertainment · Trending
   it('button reset', async () => {
     // 1. textarea: copydanpaste = '-'
     // 2. textarea: hasil = 'Tidak ada hasil'
+    newTweet.setValue('Failure')
     copyandpaste.setValue('-')
     results.setValue('Tidak ada hasil')
 
+    assert.equal(newTweet.element.value, 'Failure')
     assert.equal(copyandpaste.element.value, '-')
     assert.equal(results.element.value, 'Tidak ada hasil')
 
     await btnReset.trigger('click')
+    assert.equal(newTweet.element.value, 'Failure')
     assert.equal(copyandpaste.element.value, '')
     assert.equal(results.element.value, '')
   })
