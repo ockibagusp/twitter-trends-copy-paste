@@ -1,9 +1,8 @@
-<script setup></script>
-
 <template>
   <nav>
     <RouterLink to="/">Home</RouterLink> |
     <RouterLink to="/getdaytrends.com"><s>GetDayTrends.com</s></RouterLink> |
+    <!-- <RouterLink to="/#/..."><s>...</s></RouterLink> | -->
     <RouterLink to="/twitter-trends-api"
       ><s>Twitter Trends API (slow)</s></RouterLink
     >

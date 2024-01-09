@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, watch } from "vue";
+import ResultsSlots from "../components/Results.slots.vue";
 
 const TAGS = "Tags: ";
 // Slots - Vue.js
@@ -9,8 +10,30 @@ const TAGS = "Tags: ";
  * reactive state
  */
 // textarea: copydanpaste, tweet baru dan hasil
-const copyandpaste = ref("");
-const newTweet = ref("");
+const newTweet = ref("Test");
+const copyandpaste = ref(`
+...
+>>> Indonesia
+
+Sedang tren dalam topik Indonesia
+(Indonesia) Menpan RB
+Olahraga · Populer
+(Indonesia) #TimnasIndonesia
+2.233 rb Tweet
+Sedang tren dalam topik Indonesia
+(Indonesia) Yayasan Aksi Cepat Tanggap
+1.660 Tweet
+
+>>> Inggris
+Trending in Indonesia
+(Inggris) Menpan RB
+Trending in Indonesia
+(Inggris) #TimnasIndonesia
+10.9K Tweets
+Entertainment · Trending
+(Inggris) Yayasan Aksi Cepat Tanggap
+54.5 Tweets`);
+
 const results = ref("");
 // tweet dihasil maks. 280 karakter
 const count = ref(280);
@@ -236,9 +259,9 @@ function trendsChanged(event, index) {
     } else {
       let newArrayTrendsName = "";
 
-      for (let i = 0; i < arraytrends.value.length; i++) {
-        if (arraytrends.value[i].completed !== false) {
-          newArrayTrendsName += `${arraytrends.value[i].name}, `;
+      for (const trend of arraytrends.value) {
+        if (trend.completed !== false) {
+          newArrayTrendsName += `${trend.name}, `;
         }
       }
 
@@ -356,29 +379,7 @@ Motor
   <button @click="btnReset" data-test="btn-reset">Reset</button>
   <br />
 
-  <h3>Hasil</h3>
-  <textarea
-    style="margin-top: -15px; margin-bottom: 5px"
-    v-model="results"
-    id="results"
-    data-test="results"
-    rows="5"
-    cols="50"
-    placeholder="Test #1 Two THREE
-    
-Tags: Aksi Cepat Tanggap, Axelsen, Desta, Oknum, Motor, ..."
-    :disabled="isResults"
-  ></textarea>
-  <br />
-  <button @click="btnCopy" data-test="btn-copy" :disabled="isCopy">
-    Copy is:
-    <template v-if="results == 'Tidak ada hasil'">0</template>
-    <template v-else>{{ results.length }}</template>
-  </button>
-  <button @click="btnTweet" data-test="btn-tweet" :disabled="isTweet">
-    Tweet is: <small v-if="results.length < 280">+</small> {{ count }}
-  </button>
-  <br />
+  <ResultsSlots :results="results" />
 
   <template v-if="arraytrends.length > 0">
     <h4>
