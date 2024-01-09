@@ -121,13 +121,7 @@ function carry() {
   }
 
   // 'Oknum, Motor, ' ke 'Oknum, Motor'
-  if (newTweet.value == "" && arraytrends.value.length != 0) {
-    trends = TAGS + trends.substring(0, trends.length - 2);
-    selectResults.value = true;
-    selectCopy.value = true;
-    selectTweet.value = true;
-    count.value = 280 - trends.length;
-  } else if (arraytrends.value.length != 0) {
+  if (arraytrends.value.length != 0) {
     trends =
       (newTweet.value != "" ? newTweet.value + "\n\n" : "") +
       TAGS +
