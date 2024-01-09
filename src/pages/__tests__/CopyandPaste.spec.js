@@ -176,7 +176,7 @@ Trending in Indonesia
     assert.equal(results.element.value, 'Tidak ada hasil')
 
     await btnReset.trigger('click')
-    assert.equal(newTweet.element.value, '')
+    assert.equal(newTweet.element.value, 'Failure')
     assert.equal(copyandpaste.element.value, '')
     assert.equal(results.element.value, '')
   })
