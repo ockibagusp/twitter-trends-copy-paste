@@ -35,8 +35,6 @@ Entertainment · Trending
 54.5 Tweets`);
 
 const results = ref("");
-// tweet dihasil maks. 280 karakter
-const count = ref(280);
 // array untuk trends
 const arraytrends = ref([]);
 
@@ -44,26 +42,14 @@ const arraytrends = ref([]);
 // kotak centang: boolean
 const showCheckboxs = ref(false);
 
-// pilih hasil: true atau false
-const selectResults = ref(false);
-const selectCopy = ref(false);
-const selectTweet = ref(false);
-
 // pilih `semua kotak centang`: true atau false
 const selectCheckBoxAll = ref(false);
-
 // `semua kotak centang` diaktifkan
 const allCheckboxesEnabled = ref(0);
 
 /**
  * computed
  */
-// adalah hasil dan button copy: true atau false
-const isResults = computed(() => {
-  return !selectResults.value;
-});
-const isCopy = computed(() => !selectCopy.value);
-const isTweet = computed(() => !selectTweet.value);
 // adalah button `semua kotak centang`: true atau false
 const isCheckBoxAll = computed(() => !selectCheckBoxAll.value);
 
@@ -149,59 +135,25 @@ function carry() {
       (newTweet.value != "" ? newTweet.value + "\n\n" : "") +
       TAGS +
       trends.substring(0, trends.length - 2);
-    selectResults.value = true;
-    selectCopy.value = true;
-    selectTweet.value = true;
-    count.value = 280 - trends.length;
   } else if (str != "" && arraytrends.value.length == 0) {
     trends = "Tidak ada hasil";
-    selectResults.value = false;
-    selectCopy.value = false;
-    selectTweet.value = false;
-    count.value = 280;
   }
 
   results.value = trends;
-  isCopyAndCountTweet();
 }
 
 // button: reset, copy dan `semua kotak centang`
 function btnReset() {
   copyandpaste.value = "";
   // autofocus
-  // this.$nextTick(() => {
-  //   this.$refs.copyandpaste.focus();
-  // });
+
+  const tmpCopyandPasteField = document.getElementById("copyandpaste");
+  tmpCopyandPasteField.select();
+
   results.value = "";
-  selectCopy.value = false;
-  selectTweet.value = false;
   arraytrends.value = [];
-  count.value = 280;
 }
 
-// sama GetDayTrends:btnCopy()
-function btnCopy() {
-  if (results.value == "" || results.value == "Tidak ada hasil") {
-    return;
-  }
-
-  const tmpResultsField = document.getElementById("results");
-  tmpResultsField.select();
-  // Untuk perangkat seluler
-  tmpResultsField.setSelectionRange(0, 99999);
-
-  navigator.clipboard.writeText(results.value);
-}
-
-// sama GetDayTrends:btnTweet()
-function btnTweet() {
-  if (results.value.length > 280) {
-    selectTweet.value = false;
-    return;
-  }
-  const UTF8_hash = results.value.replaceAll("#", "%23");
-  window.open("https://twitter.com/intent/tweet?text=" + UTF8_hash, "_blank");
-}
 // sama GetDayTrends:btnCheckBoxAll()
 
 // button `semua kotak centang`
@@ -215,30 +167,19 @@ function btnCheckBoxAll() {
       newArrayTrendsName += `${arrayts.name}, `;
       allCheckboxesEnabled.value++;
     }
-    selectResults.value = true;
-    selectCopy.value = true;
-    selectTweet.value = true;
-
     selectCheckBoxAll.value = false;
 
     results.value =
       (newTweet.value != "" ? newTweet.value + "\n\n" : "") +
       TAGS +
       newArrayTrendsName.substring(0, newArrayTrendsName.length - 2);
-    count.value = 280 - results.value.length;
-    isCopyAndCountTweet();
   } else {
     arraytrends.value.forEach((val, index) => {
       arraytrends.value[index].completed = false;
     });
-    count.value = 280;
     results.value = "Tidak ada hasil";
-    isCopyAndCountTweet();
     allCheckboxesEnabled.value = 0;
 
-    selectResults.value = false;
-    selectCopy.value = false;
-    selectTweet.value = false;
     selectCheckBoxAll.value = true;
   }
 }
@@ -251,9 +192,6 @@ function trendsChanged(event, index) {
     if (results.value == "Tidak ada hasil") {
       results.value = newTweet.value + "\n\n" + TAGS + name;
       // pilih hasil, button copy dan button tweet: true
-      selectResults.value = true;
-      selectCopy.value = true;
-      selectTweet.value = true;
 
       allCheckboxesEnabled.value = 1;
     } else {
@@ -269,12 +207,9 @@ function trendsChanged(event, index) {
         (newTweet.value != "" ? newTweet.value + "\n\n" : "") +
         TAGS +
         newArrayTrendsName.substring(0, newArrayTrendsName.length - 2);
-      isCopyAndCountTweet();
 
       allCheckboxesEnabled.value++;
     }
-
-    count.value = 280 - results.value.length;
   } else {
     const rightComma = `${name}, `;
     const leftComma = `, ${name}`;
@@ -291,36 +226,13 @@ function trendsChanged(event, index) {
       // melepas = text
       results.value = "Tidak ada hasil";
       // pilih hasil, button copy dan button tweet: false
-      selectResults.value = false;
-      selectCopy.value = false;
-      selectTweet.value = false;
-      count.value = 280;
 
       allCheckboxesEnabled.value = 0;
       return;
     }
     results.value = results.value.replace(release, "");
 
-    count.value = 280 - results.value.length;
-    isCopyAndCountTweet();
-
     allCheckboxesEnabled.value--;
-  }
-}
-
-// sama GetDayTrends:isCountTweet()
-// adalah textarea hitungan dan tombol tweet
-function isCopyAndCountTweet() {
-  if (
-    results.value == "" ||
-    results.value == "Tidak ada hasil" ||
-    results.value.length > 280
-  ) {
-    selectCopy.value = false;
-    selectTweet.value = false;
-  } else {
-    selectCopy.value = true;
-    selectTweet.value = true;
   }
 }
 </script>
@@ -379,7 +291,7 @@ Motor
   <button @click="btnReset" data-test="btn-reset">Reset</button>
   <br />
 
-  <ResultsSlots :results="results" />
+  <ResultsSlots v-model:results="results" />
 
   <template v-if="arraytrends.length > 0">
     <h4>
