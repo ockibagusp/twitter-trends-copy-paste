@@ -17,7 +17,7 @@ const props = defineProps({
 
 // methods
 function btnCopy() {
-  if (results == "" || results == "Tidak ada hasil") {
+  if (props.results == "" || props.results == "Tidak ada hasil") {
     return;
   }
 
@@ -26,15 +26,15 @@ function btnCopy() {
   // Untuk perangkat seluler
   tmpResultsField.setSelectionRange(0, 99999);
 
-  navigator.clipboard.writeText(results.value);
+  navigator.clipboard.writeText(props.results);
 }
 
 function btnTweet() {
-  if (results.length > 280) {
+  if (props.results.length > 280) {
     selectTweet.value = false;
     return;
   }
-  const UTF8_hash = results.value.replaceAll("#", "%23");
+  const UTF8_hash = props.results.replaceAll("#", "%23");
   window.open("https://twitter.com/intent/tweet?text=" + UTF8_hash, "_blank");
 }
 
