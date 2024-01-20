@@ -1,84 +1,33 @@
 <script setup>
-import { ref, computed, watch } from "vue";
+import { ref } from "vue";
 import ResultsModel from "../components/Results.model.vue";
 
 const TAGS = "Tags: ";
-// Slots - Vue.js
-// https://vuejs.org/guide/components/slots.html#scoped-slots
 
 /**
  * reactive state
  */
 // textarea: copydanpaste, tweet baru dan hasil
-const newTweet = ref("Test");
-const copyandpaste = ref(`
-...
->>> Indonesia
-
-Sedang tren dalam topik Indonesia
-(Indonesia) Menpan RB
-Olahraga · Populer
-(Indonesia) #TimnasIndonesia
-2.233 rb Tweet
-Sedang tren dalam topik Indonesia
-(Indonesia) Yayasan Aksi Cepat Tanggap
-1.660 Tweet
-
->>> Inggris
-Trending in Indonesia
-(Inggris) Menpan RB
-Trending in Indonesia
-(Inggris) #TimnasIndonesia
-10.9K Tweets
-Entertainment · Trending
-(Inggris) Yayasan Aksi Cepat Tanggap
-54.5 Tweets`);
-
+const newTweet = ref("");
+const copyandpaste = ref("");
 const results = ref("");
-// array untuk trends
-const arraytrends = ref([]);
+const selectResults = ref(false);
 
-// ?
-// kotak centang: boolean
-const showCheckboxs = ref(false);
+// textarea: new-tweet and copydanpaste;
+// // watch([copyandpaste, () => newTweet.value], ([newX, newY]) => {...});
+function setNewTweet(event, value = event.target.value) {
+  newTweet.value = value;
 
-// pilih `semua kotak centang`: true atau false
-const selectCheckBoxAll = ref(false);
-// `semua kotak centang` diaktifkan
-const allCheckboxesEnabled = ref(0);
-
-/**
- * computed
- */
-// adalah button `semua kotak centang`: true atau false
-const isCheckBoxAll = computed(() => !selectCheckBoxAll.value);
-
-/**
- * watch
- */
-// textarea: copydanpaste;
-// // watch([copyandpaste, () => newTweet.value], ([newX, newY]) => {
-watch([copyandpaste, () => newTweet.value], () => {
-  results.value = "Loading...";
-  // vue methods: memuat
-  carry();
-});
-
-// // TODO:
-// // document.execCommand('copy');
-// // document.execCommand("selectAll");
-// setTimeout(() => {
-//   console.log("selectAll: ok");
-//   document.execCommand("selectAll");
-// }, 8000);
+  if (results.value != "") setCarry();
+}
 
 /**
  * functions that mutate state and trigger updates
  */
-// memuat: dari textarea copydanpaste ini
-function carry() {
+// memuat: textarea dari copydanpaste ini
+function setCarry() {
+  selectResults.value = false;
   arraytrends.value = [];
-  allCheckboxesEnabled.value = 0;
   let trends = "";
   // TODO: function regexTweets
   // regex101.com
@@ -103,7 +52,7 @@ function carry() {
           trending_topics: match,
           name: "",
           url: "",
-          tweet_volume: 0,
+          tweet_volume: "0",
           completed: true,
         });
       }
@@ -125,12 +74,12 @@ function carry() {
       }
     });
 
-    allCheckboxesEnabled.value++;
     i++;
   }
 
   // 'Oknum, Motor, ' ke 'Oknum, Motor'
   if (arraytrends.value.length != 0) {
+    selectResults.value = true;
     trends =
       (newTweet.value != "" ? newTweet.value + "\n\n" : "") +
       TAGS +
@@ -142,98 +91,29 @@ function carry() {
   results.value = trends;
 }
 
+// // TODO:
+// // document.execCommand('copy');
+// // document.execCommand("selectAll");
+// setTimeout(() => {
+//   console.log("selectAll: ok");
+//   document.execCommand("selectAll");
+// }, 8000);
+
+// array untuk trends
+const arraytrends = ref([]);
+
 // button: reset, copy dan `semua kotak centang`
 function btnReset() {
   copyandpaste.value = "";
+
   // autofocus
+  const tmpNewTweetField = document.getElementById("new-tweet");
+  tmpNewTweetField.select();
 
-  const tmpCopyandPasteField = document.getElementById("copyandpaste");
-  tmpCopyandPasteField.select();
-
+  newTweet.value = "";
   results.value = "";
+  selectResults.value = false;
   arraytrends.value = [];
-}
-
-// sama GetDayTrends:btnCheckBoxAll()
-
-// button `semua kotak centang`
-function btnCheckBoxAll() {
-  if (selectCheckBoxAll.value) {
-    let newArrayTrendsName = "";
-    allCheckboxesEnabled.value = 0;
-
-    for (const arrayts of arraytrends.value) {
-      arrayts.completed = true;
-      newArrayTrendsName += `${arrayts.name}, `;
-      allCheckboxesEnabled.value++;
-    }
-    selectCheckBoxAll.value = false;
-
-    results.value =
-      (newTweet.value != "" ? newTweet.value + "\n\n" : "") +
-      TAGS +
-      newArrayTrendsName.substring(0, newArrayTrendsName.length - 2);
-  } else {
-    arraytrends.value.forEach((val, index) => {
-      arraytrends.value[index].completed = false;
-    });
-    results.value = "Tidak ada hasil";
-    allCheckboxesEnabled.value = 0;
-
-    selectCheckBoxAll.value = true;
-  }
-}
-// sama GetDayTrends:trendsChanged(event, index)
-// berubah dalam array untuk trends
-function trendsChanged(event, index) {
-  const name = arraytrends.value[index].name;
-
-  if (event.target.checked) {
-    if (results.value == "Tidak ada hasil") {
-      results.value = newTweet.value + "\n\n" + TAGS + name;
-      // pilih hasil, button copy dan button tweet: true
-
-      allCheckboxesEnabled.value = 1;
-    } else {
-      let newArrayTrendsName = "";
-
-      for (const trend of arraytrends.value) {
-        if (trend.completed !== false) {
-          newArrayTrendsName += `${trend.name}, `;
-        }
-      }
-
-      results.value =
-        (newTweet.value != "" ? newTweet.value + "\n\n" : "") +
-        TAGS +
-        newArrayTrendsName.substring(0, newArrayTrendsName.length - 2);
-
-      allCheckboxesEnabled.value++;
-    }
-  } else {
-    const rightComma = `${name}, `;
-    const leftComma = `, ${name}`;
-    const bothComma = `, ${name}, `;
-
-    let release = "";
-    if (results.value.includes(rightComma)) {
-      release = rightComma;
-    } else if (results.value.includes(leftComma)) {
-      release = leftComma;
-    } else if (results.value.includes(bothComma)) {
-      release = bothComma;
-    } else {
-      // melepas = text
-      results.value = "Tidak ada hasil";
-      // pilih hasil, button copy dan button tweet: false
-
-      allCheckboxesEnabled.value = 0;
-      return;
-    }
-    results.value = results.value.replace(release, "");
-
-    allCheckboxesEnabled.value--;
-  }
 }
 </script>
 
@@ -260,14 +140,17 @@ function trendsChanged(event, index) {
   <textarea
     style="margin-top: -15px; margin-bottom: 5px"
     v-model="newTweet"
+    id="new-tweet"
     data-test="new-tweet"
     cols="50"
     rows="2"
     placeholder="Test #1 Two THREE"
+    @change="setNewTweet"
+    autofocus
   ></textarea>
   <br />
 
-  <h3>Paste [ctrl + v]...</h3>
+  <h3 style="margin-top: -2px">Paste [ctrl + v]...</h3>
   <textarea
     style="margin-top: -15px; margin-bottom: 5px"
     v-model="copyandpaste"
@@ -285,48 +168,15 @@ Oknum
 Sedang tren dalam topik Indonesia
 Motor
 44,9 rb Tweet ..."
-    autofocus
+    @change="setCarry"
   ></textarea>
   <br />
   <button @click="btnReset" data-test="btn-reset">Reset</button>
   <br />
-
-  <ResultsModel v-model:results="results" />
-
-  <template v-if="arraytrends.length > 0">
-    <h4>
-      Kotak Centang:
-      <button @click="btnCheckBoxAll()" data-test="btn-checkbox-all">
-        {{ !isCheckBoxAll ? "diaktifkan" : "tidak diaktifkan" }}
-      </button>
-    </h4>
-
-    <p
-      style="margin-top: -20px; margin-bottom: 5px"
-      data-test="all-checkboxes-enabled"
-    >
-      diaktifkan: {{ allCheckboxesEnabled }}
-    </p>
-
-    📌
-    <div
-      v-for="(trends, index) in arraytrends"
-      :key="trends.name"
-      data-test="array-trends"
-      :class="[trends.completed ? 'completed' : '']"
-      @change="trendsChanged($event, index)"
-    >
-      <input
-        type="checkbox"
-        v-model="trends.completed"
-        data-test="trends-checkbox"
-      />
-      <a :href="trends.url" target="_blank">{{ trends.name }}</a>
-      <small class="tweet-volume-class">{{
-        trends.tweet_volume !== 0 ? `(${trends.tweet_volume})` : ""
-      }}</small>
-      -
-      <small class="trending-topics-class">{{ trends.trending_topics }}</small>
-    </div>
-  </template>
+  <ResultsModel
+    v-model:results="results"
+    :newTweet="newTweet"
+    :arraytrends="arraytrends"
+    :isResultsOpen="selectResults"
+  />
 </template>

@@ -7,6 +7,7 @@
     "preview": "vite preview --port 4173",
     "test:unit": "vitest --environment jsdom",
     "test:unit-CopyandPaste": "vitest --environment jsdom CopyandPaste",
+    "test:unit-ResultsMode": "vitest ResultsMode",
     "test:unit-TwitterTrendsAPI": "vitest --environment jsdom TwitterTrendsAPI",
     "test:unit-GetDayTrends": "vitest --environment jsdom GetDayTrends",
     "test:ui": "vitest --environment jsdom --ui",

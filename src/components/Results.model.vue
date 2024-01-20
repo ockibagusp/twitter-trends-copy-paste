@@ -1,20 +1,64 @@
 <script setup>
-// Slots - Vue.js
-// https://vuejs.org/guide/components/slots.html#scoped-slots
+import { ref, defineModel, watch, computed, onMounted } from "vue";
 
-// Vue.js Scoped Slots & Renderless Components
-// https://www.youtube.com/watch?v=6cn3xyK4Alk
+const TAGS = "Tags: ";
 
-import { ref, defineModel, watch, computed } from "vue";
-
+// model: results
 const results = defineModel("results");
+const ok = ref(false);
+const selectResults = ref(false);
+const isResults = computed(() => {
+  if (props.isResultsOpen) {
+    if (!ok.value) {
+      ok.value = true;
+      count.value = 280 - results.value?.length;
+      allCheckboxesEnabled.value = props.arraytrends?.length;
+      copyTweetBoolFunc(true);
 
-// methods
-function btnCopy() {
+      return !selectResults;
+    }
+
+    if (allCheckboxesEnabled.value == 0 || results.value == "Tidak ada hasil") {
+      count.value = 280;
+      allCheckboxesEnabled.value = 0;
+      copyTweetBoolFunc(false);
+      return selectResults;
+    }
+
+    count.value = 280 - results.value?.length;
+    copyTweetBoolFunc(true);
+    return !selectResults;
+  } else {
+    return selectResults;
+  }
+});
+// watch(results, () => {
+//   if (results.value == "" || results.value == "Tidak ada hasil") {
+//     copyTweetBoolFunc(false);
+//     count.value = 280;
+//     return;
+//   }
+
+//   copyTweetBoolFunc(true);
+//   count.value = 280 - results.value?.length;
+// });
+
+// function setWatchResults(e, v = e.target.value) {...}
+function setWatchResults() {
   if (results.value == "" || results.value == "Tidak ada hasil") {
+    copyTweetBoolFunc(false);
+    count.value = 280;
     return;
   }
 
+  copyTweetBoolFunc(true);
+  count.value = 280 - results.value?.length;
+}
+
+// button Copy
+const selectCopy = ref(false);
+const isCopy = computed(() => !selectCopy.value);
+function btnCopy() {
   const tmpResultsField = document.getElementById("results");
   tmpResultsField.select();
   // Untuk perangkat seluler
@@ -22,9 +66,18 @@ function btnCopy() {
 
   navigator.clipboard.writeText(results.value);
 }
+function copyTweetBoolFunc(rule) {
+  selectResults.value = rule;
+  selectCopy.value = rule;
+  selectTweet.value = rule;
+}
 
+// button Tweet
+const selectTweet = ref(false);
+const isTweet = computed(() => !selectTweet.value);
+const count = ref(280);
 function btnTweet() {
-  if (results.value.length > 280) {
+  if (results.value?.length > 280) {
     selectTweet.value = false;
     return;
   }
@@ -32,35 +85,102 @@ function btnTweet() {
   window.open("https://twitter.com/intent/tweet?text=" + UTF8_hash, "_blank");
 }
 
-function copyTweetBoolFunc(rule) {
-  selectResults.value = rule;
-  selectCopy.value = rule;
-  selectTweet.value = rule;
-}
+const props = defineProps(["newTweet", "arraytrends", "isResultsOpen"]);
 
-const count = ref(280);
+// pilih `semua kotak centang`: true atau false
+const selectCheckBoxAll = ref(false);
+// sama GetDayTrends:trendsChanged(event, index)
+// berubah dalam array untuk trends
+function trendsChanged(event, index) {
+  const name = props.arraytrends[index].name;
 
-// pilih hasil: true atau false
-const selectResults = ref(false);
-const selectCopy = ref(false);
-const selectTweet = ref(false);
+  if (event.target.checked) {
+    if (results.value == "Tidak ada hasil") {
+      results.value =
+        (props.newTweet != "" ? props.newTweet + "\n\n" : "") + TAGS + name;
+      // pilih hasil, button copy dan button tweet: true
+      count.value = 280 - results.value?.length;
+      allCheckboxesEnabled.value = 1;
+      copyTweetBoolFunc(true);
+    } else {
+      let newArrayTrendsName = "";
 
-// computed
-const isResults = computed(() => !selectResults.value);
-const isCopy = computed(() => !selectCopy.value);
-const isTweet = computed(() => !selectTweet.value);
+      for (const trend of props.arraytrends) {
+        if (trend.completed !== false) {
+          newArrayTrendsName += `${trend.name}, `;
+        }
+      }
 
-watch(results, () => {
-  if (results.value == "" || results.value == "Tidak ada hasil") {
-    copyTweetBoolFunc(false);
-    count.value = 280;
-    return;
+      results.value =
+        (props.newTweet != "" ? props.newTweet + "\n\n" : "") +
+        TAGS +
+        newArrayTrendsName.substring(0, newArrayTrendsName?.length - 2);
+
+      count.value = 280 - results.value.length;
+      allCheckboxesEnabled.value++;
+      copyTweetBoolFunc(true);
+    }
+  } else {
+    const rightComma = `${name}, `;
+    const leftComma = `, ${name}`;
+    const bothComma = `, ${name}, `;
+
+    let release = "";
+    if (results.value.includes(rightComma)) {
+      release = rightComma;
+    } else if (results.value.includes(leftComma)) {
+      release = leftComma;
+    } else if (results.value.includes(bothComma)) {
+      release = bothComma;
+    } else {
+      // melepas = text
+      results.value = "Tidak ada hasil";
+      // pilih hasil, button copy dan button tweet: false
+      count.value = 280;
+      allCheckboxesEnabled.value = 0;
+      copyTweetBoolFunc(false);
+      return;
+    }
+    results.value = results.value.replace(release, "");
+
+    count.value = 280 - results.value.length;
+    allCheckboxesEnabled.value--;
+    copyTweetBoolFunc(true);
   }
+}
+// `semua kotak centang` diaktifkan
+const allCheckboxesEnabled = ref(0);
+// adalah button `semua kotak centang`: true atau false
+const isCheckBoxAll = computed(() => !selectCheckBoxAll.value);
+// button `semua kotak centang`
+function btnCheckBoxAll() {
+  if (selectCheckBoxAll.value) {
+    let newArrayTrendsName = "";
+    allCheckboxesEnabled.value = 0;
 
-  count.value = 280 - results.value.length;
-  if (count.value >= 0) copyTweetBoolFunc(true);
-  else copyTweetBoolFunc(false);
-});
+    for (const arrayts of props.arraytrends) {
+      arrayts.completed = true;
+      newArrayTrendsName += `${arrayts.name}, `;
+      allCheckboxesEnabled.value++;
+    }
+    selectCheckBoxAll.value = false;
+    results.value =
+      (props.newTweet != "" ? props.newTweet + "\n\n" : "") +
+      TAGS +
+      newArrayTrendsName.substring(0, newArrayTrendsName?.length - 2);
+    count.value = 280 - results.value?.length;
+    copyTweetBoolFunc(true);
+  } else {
+    props.arraytrends.forEach((val, index) => {
+      props.arraytrends[index].completed = false;
+    });
+    allCheckboxesEnabled.value = 0;
+    selectCheckBoxAll.value = true;
+    results.value = "Tidak ada hasil";
+    count.value = 280;
+    copyTweetBoolFunc(false);
+  }
+}
 </script>
 
 <template>
@@ -75,12 +195,50 @@ watch(results, () => {
 
 Tags: Aksi Cepat Tanggap, Axelsen, Desta, Oknum, Motor, ...
 "
+    @change="setWatchResults"
     :disabled="isResults"
   ></textarea>
   <br />
   <button @click="btnCopy" data-test="btn-copy" :disabled="isCopy">Copy</button>
   <button @click="btnTweet" data-test="btn-tweet" :disabled="isTweet">
-    Tweet is: <small v-if="results.length < 280">+</small> {{ count }}
+    Tweet is: <small v-if="results?.length < 280">+</small> {{ count }}
   </button>
   <br />
+
+  <template v-if="props.arraytrends?.length > 0">
+    <h4>
+      Kotak Centang:
+      <button @click="btnCheckBoxAll()" data-test="btn-checkbox-all">
+        {{ !isCheckBoxAll ? "diaktifkan" : "tidak diaktifkan" }}
+      </button>
+    </h4>
+
+    <p
+      style="margin-top: -20px; margin-bottom: 5px"
+      data-test="all-checkboxes-enabled"
+    >
+      diaktifkan: {{ allCheckboxesEnabled }}
+    </p>
+
+    📌
+    <div
+      v-for="(trends, index) in props.arraytrends"
+      :key="trends.name"
+      data-test="array-trends"
+      :class="[trends.completed ? 'completed' : '']"
+      @change="trendsChanged($event, index)"
+    >
+      <input
+        type="checkbox"
+        v-model="trends.completed"
+        data-test="trends-checkbox"
+      />
+      <a :href="trends.url" target="_blank">{{ trends.name }}</a>
+      <small class="tweet-volume-class">{{
+        trends.tweet_volume !== 0 ? `(${trends.tweet_volume})` : ""
+      }}</small>
+      -
+      <small class="trending-topics-class">{{ trends.trending_topics }}</small>
+    </div>
+  </template>
 </template>
