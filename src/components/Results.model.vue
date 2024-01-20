@@ -20,7 +20,7 @@ function btnCopy() {
   // Untuk perangkat seluler
   tmpResultsField.setSelectionRange(0, 99999);
 
-  navigator.clipboard.writeText(props.results);
+  navigator.clipboard.writeText(results.value);
 }
 
 function btnTweet() {

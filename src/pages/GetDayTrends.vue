@@ -2,7 +2,7 @@
 const TAGS = "Tags: ";
 
 import axios from "axios";
-import ResultsSlots from "../components/Results.slots.vue";
+import ResultsModel from "../components/Results.model.vue";
 
 export default {
   data() {
@@ -329,7 +329,7 @@ export default {
   // Vue.js Scoped Slots & Renderless Components
   // https://www.youtube.com/watch?v=6cn3xyK4Alk
   components: {
-    ResultsSlots: ResultsSlots,
+    ResultsSlots: ResultsModel,
   },
 };
 </script>

@@ -1,3 +1,10 @@
+<script setup>
+import { ref, defineModel, watch, computed } from "vue";
+
+const newTweet = defineModel("new-tweet");
+const copyandpaste = defineModel("copy-and-paste");
+</script>
+
 <template>
   <h3>Tweet baru</h3>
   <textarea
@@ -34,5 +41,3 @@ Motor
   <button @click="btnReset" data-test="btn-reset">Reset</button>
   <br />
 </template>
-
-<script setup></script>

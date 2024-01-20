@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, watch } from "vue";
-import ResultsSlots from "../components/Results.slots.vue";
+import ResultsModel from "../components/Results.model.vue";
 
 const TAGS = "Tags: ";
 // Slots - Vue.js
@@ -291,7 +291,7 @@ Motor
   <button @click="btnReset" data-test="btn-reset">Reset</button>
   <br />
 
-  <ResultsSlots v-model:results="results" />
+  <ResultsModel v-model:results="results" />
 
   <template v-if="arraytrends.length > 0">
     <h4>
