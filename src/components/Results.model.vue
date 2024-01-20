@@ -59,7 +59,7 @@ watch(results, () => {
 
   count.value = 280 - results.value.length;
   if (count.value >= 0) copyTweetBoolFunc(true);
-  else copyTweetBoolFunc(true);
+  else copyTweetBoolFunc(false);
 });
 </script>
 
