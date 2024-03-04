@@ -16,6 +16,10 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
+  test: {
+    globals: true,
+    environment: "jsdom",
+  },
   // $ npm install cors
   // https://expressjs.com/en/resources/middleware/cors.html
 
