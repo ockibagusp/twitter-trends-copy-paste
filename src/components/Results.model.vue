@@ -192,7 +192,7 @@ function btnCheckBoxAll() {
     data-test="results"
     rows="5"
     cols="50"
-    placeholder="Test
+    placeholder="Test #1 Two THREE
 
 Tags: Aksi Cepat Tanggap, Axelsen, Desta, Oknum, Motor, ...
 "

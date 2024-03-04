@@ -53,11 +53,16 @@ describe('Copy and Paste', () => {
     assert.equal(newTweet.element.value, 'Failure')
     assert.equal(copyandpaste.element.value, '-')
     assert.equal(results.element.value, 'Tidak ada hasil')
+    await newTweet.trigger('change')
 
     await btnReset.trigger('click')
-    assert.equal(newTweet.element.value, '')
-    assert.equal(copyandpaste.element.value, '')
-    assert.equal(results.element.value, '')
+    console.log(btnReset.html());
+    const copyandpasteB = wrapper.find('[data-test="copyandpaste"]')
+    const newTweetB = wrapper.find('[data-test="new-tweet"]')
+    const resultsB = wrapper.find('[data-test="results"]')
+    assert.equal(newTweetB.element.value, '')
+    assert.equal(copyandpasteB.element.value, '')
+    assert.equal(resultsB.element.value, '')
   })
 })
 
