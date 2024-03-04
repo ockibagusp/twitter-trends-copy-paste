@@ -1,6 +1,6 @@
 import { test, expect, beforeAll, afterAll, describe } from 'vitest'
 
-import { mount, shallowMount, flushPromises } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import ResultsModel from '../Results.model.vue'
 import arrayT from './arraytrends.js'
 import resultsT from './resultsText'

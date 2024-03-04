@@ -1,5 +1,5 @@
 <script setup>
-import { ref, defineModel, watch, computed, onMounted } from "vue";
+import { ref, defineModel, computed } from "vue";
 
 const TAGS = "Tags: ";
 
@@ -29,6 +29,7 @@ const isResults = computed(() => {
     copyTweetBoolFunc(true);
     return !selectResults;
   } else {
+    copyTweetBoolFunc(false);
     return selectResults;
   }
 });
