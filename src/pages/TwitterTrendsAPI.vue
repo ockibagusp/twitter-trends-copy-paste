@@ -1,8 +1,7 @@
 <script>
-const TAGS = "Tags: ";
-
 import axios from "axios";
 import ResultsModel from "../components/Results.model.vue";
+import { TAGS } from "../utils/utils.js";
 
 export default {
   data() {

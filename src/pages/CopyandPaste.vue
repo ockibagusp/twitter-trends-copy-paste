@@ -1,8 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import ResultsModel from "../components/Results.model.vue";
-
-const TAGS = "Tags: ";
+import { TAGS } from "../utils/utils.js";
 
 /**
  * reactive state
