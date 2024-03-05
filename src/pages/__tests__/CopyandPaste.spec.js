@@ -33,36 +33,43 @@ describe('Copy and Paste', () => {
   assert.exists(CopyandPaste)
 
   it('init', () => {
+    assert.isEmpty(newTweet.element.value)
     assert.isEmpty(copyandpaste.element.value)
     // TODO: copydanpaste.element.focus() => undefined. Why?
     assert.equal(copyandpaste.element.focus(), undefined)
-
     assert.isEmpty(results.element.value)
 
     assert.isUndefined(btnReset.attributes().disabled)
     assert.equal(btnCopy.attributes().disabled, '')
+    assert.equal(btnTweet.attributes().disabled, '')
+
+    assert.equal(btnCheckBoxAll.exists(), false);
+    assert.equal(btnCheckBoxAll.exists(), false)
+    assert.equal(allCheckboxesEnabled.exists(), false)
   })
 
   it('button reset', async () => {
     // 1. textarea: copydanpaste = '-'
     // 2. textarea: hasil = 'Tidak ada hasil'
+
+    // Failure
     newTweet.setValue('Failure')
     copyandpaste.setValue('-')
-    results.setValue('Tidak ada hasil')
+    await newTweet.trigger('change')
 
     assert.equal(newTweet.element.value, 'Failure')
     assert.equal(copyandpaste.element.value, '-')
     assert.equal(results.element.value, 'Tidak ada hasil')
-    await newTweet.trigger('change')
+
+    // ''
+    newTweet.setValue('')
+    copyandpaste.setValue('')
+    await copyandpaste.trigger('change')
 
     await btnReset.trigger('click')
-    console.log(btnReset.html());
-    const copyandpasteB = wrapper.find('[data-test="copyandpaste"]')
-    const newTweetB = wrapper.find('[data-test="new-tweet"]')
-    const resultsB = wrapper.find('[data-test="results"]')
-    assert.equal(newTweetB.element.value, '')
-    assert.equal(copyandpasteB.element.value, '')
-    assert.equal(resultsB.element.value, '')
+    assert.equal(newTweet.element.value, '')
+    assert.equal(copyandpaste.element.value, '')
+    assert.equal(results.element.value, '')
   })
 })
 
