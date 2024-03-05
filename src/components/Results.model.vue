@@ -1,7 +1,6 @@
 <script setup>
 import { ref, defineModel, computed } from "vue";
-
-const TAGS = "Tags: ";
+import { TAGS } from "../utils/utils.js";
 
 // model: results
 const results = defineModel("results");
