@@ -7,17 +7,12 @@ const results = defineModel("results");
 const ok = ref(false);
 const selectResults = ref(false);
 const isResults = computed(() => {
-  // ?????
-  console.log("isResults results:", results.value);
-
   if (props.isResultsOpen) {
     if (!ok.value) {
-      console.log("isResults ok:", ok.value);
       ok.value = true;
       count.value = 280 - (results.value?.length | 0);
       allCheckboxesEnabled.value = props.arraytrends?.length;
 
-      console.log("isResults count:", count.value);
       if (count.value < 0) {
         copyTweetBoolFunc(false);
         return selectResults;
@@ -26,11 +21,6 @@ const isResults = computed(() => {
       copyTweetBoolFunc(true);
       return !selectResults;
     }
-
-    // ?
-    console.log("isResults keturaan");
-    console.log("results", results.value?.length);
-    console.log("count", count.value);
 
     if (allCheckboxesEnabled.value == 0 || results.value == "Tidak ada hasil") {
       count.value = 280;
@@ -66,7 +56,6 @@ const isResults = computed(() => {
 
 // function setWatchResults(e, v = e.target.value) {...}
 function setWatchResults() {
-  console.log("setWatchResults results.value:", results.value?.length);
   if (results.value == "" || results.value == "Tidak ada hasil") {
     copyTweetBoolFunc(false);
     count.value = 280;
