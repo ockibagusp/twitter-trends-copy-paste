@@ -18,6 +18,7 @@ function setNewTweet(event, value = event.target.value) {
   newTweet.value = value;
 
   if (results.value != "") setCarry();
+  else results.value = "Tidak ada hasil";
 }
 
 /**

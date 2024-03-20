@@ -48,6 +48,31 @@ describe('Copy and Paste', () => {
     assert.equal(allCheckboxesEnabled.exists(), false)
   })
 
+  it('textarea new tweet and not a results', async () => {
+    // 1. textarea: newTweet = 'Failure'
+    // 2. textarea: copydanpaste = ''
+    // 2. textarea: hasil = 'Tidak ada hasil'
+
+    // Failure
+    newTweet.setValue('Failure')
+    copyandpaste.setValue('')
+    await newTweet.trigger('change')
+
+    assert.equal(newTweet.element.value, 'Failure')
+    assert.equal(copyandpaste.element.value, 'a')
+    assert.equal(results.element.value, 'Tidak ada hasil')
+
+    // ''
+    newTweet.setValue('')
+    copyandpaste.setValue('')
+    await copyandpaste.trigger('change')
+
+    await btnReset.trigger('click')
+    assert.equal(newTweet.element.value, '')
+    assert.equal(copyandpaste.element.value, '')
+    assert.equal(results.element.value, '')
+  })
+
   it('button reset', async () => {
     // 1. textarea: copydanpaste = '-'
     // 2. textarea: hasil = 'Tidak ada hasil'

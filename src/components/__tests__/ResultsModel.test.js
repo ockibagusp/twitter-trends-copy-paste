@@ -250,6 +250,8 @@ describe('ResultsModel mount component', async () => {
     results.setValue('')
     await results.trigger('change')
     expect(results.element.value).toEqual('');
+    // ?
+    // expect(btnTweet.text()).toEqual('Tweet is: +280')
 
     // Test 2
     await wrapper.setProps({
@@ -257,6 +259,10 @@ describe('ResultsModel mount component', async () => {
       arraytrends: arrayT.failureTags,
       isResultsOpen: true
     })
+
+    newTweetProp = wrapper.props('newTweet')
+    expect(newTweetProp).toEqual('Test Failure#')
+    console.log('#Tweet is', btnTweet.text());
 
     results.setValue(TESTFAILURE + '#\n\n' + resultsT.failureTags)
     await results.trigger('change')
