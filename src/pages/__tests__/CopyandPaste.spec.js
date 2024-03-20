@@ -59,7 +59,7 @@ describe('Copy and Paste', () => {
     await newTweet.trigger('change')
 
     assert.equal(newTweet.element.value, 'Failure')
-    assert.equal(copyandpaste.element.value, 'a')
+    assert.equal(copyandpaste.element.value, '')
     assert.equal(results.element.value, 'Tidak ada hasil')
 
     // ''
