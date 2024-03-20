@@ -3,7 +3,7 @@ import { test, expect, beforeAll, afterAll, describe } from 'vitest'
 import { mount } from '@vue/test-utils'
 import ResultsModel from '../Results.model.vue'
 import arrayT from './arraytrends.js'
-import resultsT from './resultsText'
+import resultsT from './resultsText.js'
 
 describe('ResultsModel mount component', async () => {
   const wrapper = mount(ResultsModel, {
@@ -48,8 +48,8 @@ describe('ResultsModel mount component', async () => {
   })
 
   test('ResultsModel failure', () => {
-    results.setValue(resultsT.failure)
-    expect(results.element.value).toEqual(resultsT.failure);
+    results.setValue(resultsT.failureText)
+    expect(results.element.value).toEqual(resultsT.failureText);
 
     const newTweetProp = wrapper.props('newTweet')
     expect(newTweetProp).toEqual('')
@@ -208,23 +208,104 @@ describe('ResultsModel mount component', async () => {
     for (let i = 0; i < 5; i++) {
       expect(arrayTrendsPropB.at(i)).toEqual(arrayT.success.at(i))
     }
+
+    expect(btnCopy.attributes().disabled).toBe(undefined)
+    expect(btnTweet.attributes().disabled).toBe(undefined)
+    expect(btnTweet.text()).toEqual('Tweet is: +232')
   });
 
-  test('ResultsModel success: allCheckboxesEnabled is disabled and enabled', async () => {
+  test('ResultsModel failure: the character limit', async () => {
+    const TESTFAILURE = "Test Failure"
     await wrapper.setProps({
-      newTweet: "",
-      arraytrends: arrayT.success,
+      newTweet: TESTFAILURE,
+      arraytrends: arrayT.failureTags,
       isResultsOpen: true
     })
 
-    results.setValue(resultsT.success)
-
+    // Test 1
+    let results = wrapper.find('[data-test="results"]')
+    results.setValue(TESTFAILURE + '\n\n' + resultsT.failureTags)
     await results.trigger('change')
 
+    let newTweetProp = wrapper.props("newTweet")
+    let arrayTrendsProp = wrapper.props("arraytrends")
+
+    expect(newTweetProp).toEqual(TESTFAILURE)
+    expect(results.element.value).toEqual(TESTFAILURE + '\n\n' + resultsT.failureTags)
+    expect(arrayTrendsProp).toEqual(arrayT.failureTags)
+
+    expect(btnCopy.attributes().disabled).toBe('')
+    expect(btnTweet.attributes().disabled).toBe('')
+    expect(btnTweet.text()).toEqual('Tweet is: -195')
+
+    // init
+    await wrapper.setProps({
+      newTweet: '',
+      arraytrends: [],
+      isResultsOpen: true
+    })
+    newTweetProp = wrapper.props('newTweet')
+    expect(newTweetProp).toEqual('')
+
+    results.setValue('')
+    await results.trigger('change')
+    expect(results.element.value).toEqual('');
+
+    // Test 2
+    await wrapper.setProps({
+      newTweet: TESTFAILURE + '#',
+      arraytrends: arrayT.failureTags,
+      isResultsOpen: true
+    })
+
+    results.setValue(TESTFAILURE + '#\n\n' + resultsT.failureTags)
+    await results.trigger('change')
+    expect(results.element.value).toEqual(TESTFAILURE + '#\n\n' + resultsT.failureTags)
+
+    expect(btnCopy.attributes().disabled).toBe('')
+    expect(btnTweet.attributes().disabled).toBe('')
+    expect(btnTweet.text()).toEqual('Tweet is: -195')
+  });
+
+  test('ResultsModel success: allCheckboxesEnabled is disabled and enabled', async () => {
+    const wrapper = mount(ResultsModel, {
+      props: {
+        newTweet: '',
+        arraytrends: arrayT.success,
+        isResultsOpen: true
+      }
+    })
+
+    // // ?
+    // await wrapper.setProps({
+    //   newTweet: "",
+    //   arraytrends: arrayT.success,
+    //   isResultsOpen: true
+    // })
+
+    const results = wrapper.find('[data-test="results"]')
+    // button: btnCopy dan btnTweet
+    const btnCopy = wrapper.find('[data-test="btn-copy"]')
+    const btnTweet = wrapper.find('[data-test="btn-tweet"]')
+
+    results.setValue(resultsT.success)
+    await results.trigger('change')
+
+    const newTweetProp = wrapper.props("newTweet")
     const arrayTrendsProp = wrapper.props("arraytrends")
     const checkboxTrends = wrapper.findAll('[data-test="trends-checkbox"]')
     // `semua kotak centang` diaktifkan
     const allCheckboxesEnabled = wrapper.find('[data-test="all-checkboxes-enabled"]')
+
+    console.log("results:", results.element.value);
+    console.log('btnTweet.text():', btnTweet.text());
+
+    console.log('ar', arrayTrendsProp);
+    console.log('cb', checkboxTrends[0].attributes());
+
+    expect(newTweetProp).toEqual('')
+    expect(results.element.value).toEqual('Tags: Test Zero, Test 1, Test 2, #Test3, #Test 4')
+    expect(btnTweet.text()).toEqual('Tweet is: +232')
 
     // test cases
     const testCases = [
@@ -236,7 +317,7 @@ describe('ResultsModel mount component', async () => {
         listBool: [true, true, false, true, true],
         results: 'Tags: Test Zero, Test 1, #Test3, #Test 4',
         isResults: undefined,
-        tweetIs: 'Tweet is: + 240',
+        tweetIs: 'Tweet is: +240',
         // `semua kotak centang` diaktifkan
         allCheckboxesEnabled: 'diaktifkan: 4',
         btnCopy: true,
@@ -249,7 +330,7 @@ describe('ResultsModel mount component', async () => {
         listBool: [true, true, false, true, false],
         results: 'Tags: Test Zero, Test 1, #Test3',
         isResults: undefined,
-        tweetIs: 'Tweet is: + 249',
+        tweetIs: 'Tweet is: +249',
         allCheckboxesEnabled: 'diaktifkan: 3',
         btnCopy: true,
         btnTweet: true
@@ -261,7 +342,7 @@ describe('ResultsModel mount component', async () => {
         listBool: [true, false, false, true, false],
         results: 'Tags: Test Zero, #Test3',
         isResults: undefined,
-        tweetIs: 'Tweet is: + 257',
+        tweetIs: 'Tweet is: +257',
         allCheckboxesEnabled: 'diaktifkan: 2',
         btnCopy: true,
         btnTweet: true
@@ -273,7 +354,7 @@ describe('ResultsModel mount component', async () => {
         listBool: [true, false, false, false, false],
         results: 'Tags: Test Zero',
         isResults: undefined,
-        tweetIs: 'Tweet is: + 265',
+        tweetIs: 'Tweet is: +265',
         allCheckboxesEnabled: 'diaktifkan: 1',
         btnCopy: true,
         btnTweet: true
@@ -285,7 +366,7 @@ describe('ResultsModel mount component', async () => {
         listBool: [false, false, false, false, false],
         results: 'Tidak ada hasil',
         isResults: '',
-        tweetIs: 'Tweet is: + 280',
+        tweetIs: 'Tweet is: +280',
         allCheckboxesEnabled: 'diaktifkan: 0',
         btnCopy: false,
         btnTweet: false
@@ -299,7 +380,7 @@ describe('ResultsModel mount component', async () => {
         results: 'Tags: #Test3',
         isResults: undefined,
         btnCopy: true,
-        tweetIs: 'Tweet is: + 268',
+        tweetIs: 'Tweet is: +268',
         allCheckboxesEnabled: 'diaktifkan: 1',
         btnTweet: true
       },
@@ -310,7 +391,7 @@ describe('ResultsModel mount component', async () => {
         listBool: [false, true, false, true, false],
         results: 'Tags: Test 1, #Test3',
         isResults: undefined,
-        tweetIs: 'Tweet is: + 260',
+        tweetIs: 'Tweet is: +260',
         allCheckboxesEnabled: 'diaktifkan: 2',
         btnCopy: true,
         btnTweet: true

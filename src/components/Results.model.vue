@@ -7,15 +7,30 @@ const results = defineModel("results");
 const ok = ref(false);
 const selectResults = ref(false);
 const isResults = computed(() => {
+  // ?????
+  console.log("isResults results:", results.value);
+
   if (props.isResultsOpen) {
     if (!ok.value) {
+      console.log("isResults ok:", ok.value);
       ok.value = true;
-      count.value = 280 - results.value?.length;
+      count.value = 280 - (results.value?.length | 0);
       allCheckboxesEnabled.value = props.arraytrends?.length;
-      copyTweetBoolFunc(true);
 
+      console.log("isResults count:", count.value);
+      if (count.value < 0) {
+        copyTweetBoolFunc(false);
+        return selectResults;
+      }
+
+      copyTweetBoolFunc(true);
       return !selectResults;
     }
+
+    // ?
+    console.log("isResults keturaan");
+    console.log("results", results.value?.length);
+    console.log("count", count.value);
 
     if (allCheckboxesEnabled.value == 0 || results.value == "Tidak ada hasil") {
       count.value = 280;
@@ -25,9 +40,15 @@ const isResults = computed(() => {
     }
 
     count.value = 280 - results.value?.length;
+    if (count.value < 0) {
+      copyTweetBoolFunc(false);
+      return selectResults;
+    }
+
     copyTweetBoolFunc(true);
     return !selectResults;
   } else {
+    ok.value = false;
     copyTweetBoolFunc(false);
     return selectResults;
   }
@@ -45,6 +66,7 @@ const isResults = computed(() => {
 
 // function setWatchResults(e, v = e.target.value) {...}
 function setWatchResults() {
+  console.log("setWatchResults results.value:", results.value?.length);
   if (results.value == "" || results.value == "Tidak ada hasil") {
     copyTweetBoolFunc(false);
     count.value = 280;
@@ -201,7 +223,7 @@ Tags: Aksi Cepat Tanggap, Axelsen, Desta, Oknum, Motor, ...
   <br />
   <button @click="btnCopy" data-test="btn-copy" :disabled="isCopy">Copy</button>
   <button @click="btnTweet" data-test="btn-tweet" :disabled="isTweet">
-    Tweet is: <small v-if="results?.length < 280">+</small> {{ count }}
+    Tweet is: <small v-if="results?.length < 280">+</small>{{ count }}
   </button>
   <br />
 

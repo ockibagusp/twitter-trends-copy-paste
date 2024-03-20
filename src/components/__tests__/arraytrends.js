@@ -37,8 +37,25 @@ const success = [
   }
 ];
 
-const failure = "Tidak ada hasil";
+const failureTags = [
+  {
+    "trending_topics": "Trending in Indonesia",
+    "name": "#Failure",
+    "url": "",
+    "tweet_volume": "15K posts",
+    "completed": true
+  },
+  {
+    "trending_topics": "Trending in Indonesia",
+    "name": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    "url": "",
+    "tweet_volume": "15.8K posts",
+    "completed": true
+  }
+]
+
+const failureText = "Tidak ada hasil";
 
 export default {
-  success, failure
+  success, failureTags, failureText
 }
