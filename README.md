@@ -1,4 +1,5 @@
 # twitter-trends
+
 ## Browser aja. Copy dan Paste!
 
 Link:
@@ -17,7 +18,6 @@ Link:
 ### ~~Twitter Trends API (slow)~~: <sup>[1]<sup>
 
 ![Twitter Trends 4](../images/twitter-trends4.png?raw=true)
-
 
 ## Vue 3 project
 
@@ -52,30 +52,29 @@ npm run build
 ### Run Unit Tests with [Vitest](https://vitest.dev/)
 
 #### Web UI
+
 ```sh
 npm run test:ui
 ```
 
 #### Terminal
+
 ```sh
 npm run test:unit
 ```
 
-or,
-
-Example:
-
-```bash
-ls src/pages/__tests__/CopydanPaste.spec.js
+```sh
+npm run test:unit-CopyandPaste
 ```
 
 ```sh
-npm run test:unit -t CopydanPaste
+npm run test:unit-ResultsMode
 ```
 
 ### Comment bash: deploy.sh
 
-#### Linux or MacOS: 
+#### Linux or MacOS:
+
 ```sh
 chmod 755 deploy.sh
 ```
@@ -83,16 +82,17 @@ chmod 755 deploy.sh
 #### Use: deploy
 
 Example:
+
 ```sh
 ./deploy.sh
 ```
 
-
 ---
-$ ➜  twitter-trends git:(master) heroku ps:scale web=1 --app xxxxx
 
-Scaling dynos... ! ❌ <sup>[1]<sup> 
- 
- ▸    Subscribe to Eco to scale your dynos. Learn more at
- 
- ▸    https://blog.heroku.com/new-low-cost-plans
+$ ➜ twitter-trends git:(master) heroku ps:scale web=1 --app xxxxx
+
+Scaling dynos... ! ❌ <sup>[1]<sup>
+
+▸ Subscribe to Eco to scale your dynos. Learn more at
+
+▸ https://blog.heroku.com/new-low-cost-plans
