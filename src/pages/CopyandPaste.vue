@@ -52,7 +52,7 @@ function setCarry() {
           trending_topics: match,
           name: "",
           url: "",
-          tweet_volume: "0",
+          tweet_volume: "",
           completed: true,
         });
       }

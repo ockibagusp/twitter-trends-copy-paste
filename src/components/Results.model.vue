@@ -246,7 +246,7 @@ Tags: Aksi Cepat Tanggap, Axelsen, Desta, Oknum, Motor, ...
       />
       <a :href="trends.url" target="_blank">{{ trends.name }}</a>
       <small class="tweet-volume-class">{{
-        trends.tweet_volume !== 0 ? `(${trends.tweet_volume})` : ""
+        trends.tweet_volume !== "" ? `(${trends.tweet_volume})` : ""
       }}</small>
       -
       <small class="trending-topics-class">{{ trends.trending_topics }}</small>
