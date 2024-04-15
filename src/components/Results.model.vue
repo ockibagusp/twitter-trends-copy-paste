@@ -87,6 +87,11 @@ function copyTweetBoolFunc(rule) {
 const selectTweet = ref(false);
 const isTweet = computed(() => !selectTweet.value);
 const count = ref(280);
+const isTags = ref(false);
+const isCommaMark = ref(false);
+function btnTweetCreate() {
+  window.open("https://twitter.com/compose/tweet", "_blank");
+}
 function btnTweet() {
   if (results.value?.length > 280) {
     selectTweet.value = false;
@@ -211,12 +216,38 @@ Tags: Aksi Cepat Tanggap, Axelsen, Desta, Oknum, Motor, ...
   ></textarea>
   <br />
   <button @click="btnCopy" data-test="btn-copy" :disabled="isCopy">Copy</button>
-  <button @click="btnTweet" data-test="btn-tweet" :disabled="isTweet">
-    Tweet is: <small v-if="results?.length < 280">+</small>{{ count }}
+  <button
+    @click="btnTweetCreate"
+    data-test="btn-tweet-create"
+    :disabled="isTweet"
+  >
+    Tweet Create
   </button>
+  <button
+    @click="btnTweetWebIntent"
+    data-test="btn-tweet-web-intent"
+    :disabled="isTweet"
+  >
+    Tweet Web Intent
+  </button>
+
+  <small style="margin-left: 5px" v-if="results?.length < 280">+</small>
+  <ins data-test="count">{{ count }}</ins>
+
   <br />
 
   <template v-if="props.arraytrends?.length > 0">
+    ✂️
+    <input
+      style="margin-top: 12px"
+      type="checkbox"
+      v-model="isTags"
+      data-test="is-tags"
+    />
+    <s>Tags:</s> ...
+    <input type="checkbox" v-model="isCommaMark" data-test="is-comma-mark" />
+    <s>,</s> ...
+    <br />
     <h4>
       Kotak Centang:
       <button @click="btnCheckBoxAll()" data-test="btn-checkbox-all">

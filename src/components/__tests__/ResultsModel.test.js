@@ -17,7 +17,9 @@ describe('ResultsModel mount component', async () => {
   const results = wrapper.find('[data-test="results"]')
   // button: btnCopy dan btnTweet
   const btnCopy = wrapper.find('[data-test="btn-copy"]')
-  const btnTweet = wrapper.find('[data-test="btn-tweet"]')
+  const btnTweetCreate = wrapper.find('[data-test="btn-tweet-create"]')
+  const btnTweetWebIntent = wrapper.find('[data-test="btn-tweet-web-intent"]')
+  const count = wrapper.find('[data-test="count"]')
 
   test('ResultsModel init', () => {
     // let wrapper = null;
@@ -41,7 +43,10 @@ describe('ResultsModel mount component', async () => {
 
     expect(results.attributes().disabled).toBe('')
     expect(btnCopy.attributes().disabled).toBe('')
-    expect(btnTweet.attributes().disabled).toBe('')
+    expect(btnTweetCreate.attributes().disabled).toBe('')
+    expect(btnTweetWebIntent.attributes().disabled).toBe('')
+    // why +280?
+    expect(count.text()).toEqual('280')
 
     const arrayTrendsProp = wrapper.props('arraytrends')
     expect(arrayTrendsProp).toEqual([])
@@ -55,7 +60,10 @@ describe('ResultsModel mount component', async () => {
     expect(newTweetProp).toEqual('')
 
     expect(btnCopy.attributes().disabled).toBe('')
-    expect(btnTweet.attributes().disabled).toBe('')
+    expect(btnTweetCreate.attributes().disabled).toBe('')
+    expect(btnTweetWebIntent.attributes().disabled).toBe('')
+    // why +280?
+    expect(count.text()).toEqual('280')
 
     const arrayTrendsProp = wrapper.props('arraytrends')
     expect(arrayTrendsProp).toEqual([])
@@ -210,8 +218,9 @@ describe('ResultsModel mount component', async () => {
     }
 
     expect(btnCopy.attributes().disabled).toBe(undefined)
-    expect(btnTweet.attributes().disabled).toBe(undefined)
-    expect(btnTweet.text()).toEqual('Tweet is: +232')
+    expect(btnTweetCreate.attributes().disabled).toBe(undefined)
+    expect(btnTweetWebIntent.attributes().disabled).toBe(undefined)
+    expect(count.text()).toEqual('232')
   });
 
   test('ResultsModel failure: the character limit', async () => {
@@ -235,8 +244,10 @@ describe('ResultsModel mount component', async () => {
     expect(arrayTrendsProp).toEqual(arrayT.failureTags)
 
     expect(btnCopy.attributes().disabled).toBe('')
-    expect(btnTweet.attributes().disabled).toBe('')
-    expect(btnTweet.text()).toEqual('Tweet is: -195')
+    expect(btnTweetCreate.attributes().disabled).toBe('')
+    expect(btnTweetWebIntent.attributes().disabled).toBe('')
+    expect(btnTweetWebIntent.text()).toEqual('Tweet Web Intent')
+    expect(count.text()).toEqual('-195')
 
     // init
     await wrapper.setProps({
@@ -262,16 +273,42 @@ describe('ResultsModel mount component', async () => {
 
     newTweetProp = wrapper.props('newTweet')
     expect(newTweetProp).toEqual('Test Failure#')
-    console.log('#Tweet is', btnTweet.text());
+    console.log('#Tweet is', btnTweetWebIntent.text());
 
     results.setValue(TESTFAILURE + '#\n\n' + resultsT.failureTags)
     await results.trigger('change')
     expect(results.element.value).toEqual(TESTFAILURE + '#\n\n' + resultsT.failureTags)
 
     expect(btnCopy.attributes().disabled).toBe('')
-    expect(btnTweet.attributes().disabled).toBe('')
-    expect(btnTweet.text()).toEqual('Tweet is: -195')
+    expect(btnTweetCreate.attributes().disabled).toBe('')
+    expect(btnTweetWebIntent.attributes().disabled).toBe('')
+    expect(count.text()).toEqual('-195')
   });
+
+  test("ResultsModel success: checkbox or uncheckbox Tags and Comma Mark", async () => {
+    const wrapper = mount(ResultsModel, {
+      props: {
+        newTweet: '',
+        arraytrends: arrayT.success,
+        isResultsOpen: true
+      }
+    })
+
+    const isTags = wrapper.find('[data-test="is-tags"]')
+    const isCommaMark = wrapper.find('[data-test="is-comma-mark"')
+
+    const resultsTextSuccess = `Author 2\n\n${resultsT.success}`;
+    results.setValue(resultsTextSuccess)
+    expect(results.element.value).toEqual(resultsTextSuccess);
+
+    await results.trigger('change')
+
+    const arrayTrendsProp = wrapper.props("arraytrends")
+    for (let i = 0; i < arrayTrendsProp.length; i++) {
+      expect(arrayTrendsProp.at(i)).toEqual(arrayT.success.at(i))
+    }
+
+  })
 
   test('ResultsModel success: allCheckboxesEnabled is disabled and enabled', async () => {
     const wrapper = mount(ResultsModel, {
@@ -292,7 +329,9 @@ describe('ResultsModel mount component', async () => {
     const results = wrapper.find('[data-test="results"]')
     // button: btnCopy dan btnTweet
     const btnCopy = wrapper.find('[data-test="btn-copy"]')
-    const btnTweet = wrapper.find('[data-test="btn-tweet"]')
+    const btnTweetCreate = wrapper.find('[data-test="btn-tweet-create"]')
+    const btnTweetWebIntent = wrapper.find('[data-test="btn-tweet-web-intent"]')
+    const count = wrapper.find('[data-test="count"]')
 
     results.setValue(resultsT.success)
     await results.trigger('change')
@@ -303,15 +342,12 @@ describe('ResultsModel mount component', async () => {
     // `semua kotak centang` diaktifkan
     const allCheckboxesEnabled = wrapper.find('[data-test="all-checkboxes-enabled"]')
 
-    console.log("results:", results.element.value);
-    console.log('btnTweet.text():', btnTweet.text());
-
-    console.log('ar', arrayTrendsProp);
-    console.log('cb', checkboxTrends[0].attributes());
-
     expect(newTweetProp).toEqual('')
     expect(results.element.value).toEqual('Tags: Test Zero, Test 1, Test 2, #Test3, #Test 4')
-    expect(btnTweet.text()).toEqual('Tweet is: +232')
+    expect(btnTweetCreate.attributes().disabled).toBe(undefined)
+    expect(btnTweetWebIntent.attributes().disabled).toBe(undefined)
+    expect(btnTweetWebIntent.text()).toEqual('Tweet Web Intent')
+    expect(count.text()).toEqual('232')
 
     // test cases
     const testCases = [
@@ -323,7 +359,7 @@ describe('ResultsModel mount component', async () => {
         listBool: [true, true, false, true, true],
         results: 'Tags: Test Zero, Test 1, #Test3, #Test 4',
         isResults: undefined,
-        tweetIs: 'Tweet is: +240',
+        countIs: '240',
         // `semua kotak centang` diaktifkan
         allCheckboxesEnabled: 'diaktifkan: 4',
         btnCopy: true,
@@ -336,7 +372,7 @@ describe('ResultsModel mount component', async () => {
         listBool: [true, true, false, true, false],
         results: 'Tags: Test Zero, Test 1, #Test3',
         isResults: undefined,
-        tweetIs: 'Tweet is: +249',
+        countIs: '249',
         allCheckboxesEnabled: 'diaktifkan: 3',
         btnCopy: true,
         btnTweet: true
@@ -348,7 +384,7 @@ describe('ResultsModel mount component', async () => {
         listBool: [true, false, false, true, false],
         results: 'Tags: Test Zero, #Test3',
         isResults: undefined,
-        tweetIs: 'Tweet is: +257',
+        countIs: '257',
         allCheckboxesEnabled: 'diaktifkan: 2',
         btnCopy: true,
         btnTweet: true
@@ -360,7 +396,7 @@ describe('ResultsModel mount component', async () => {
         listBool: [true, false, false, false, false],
         results: 'Tags: Test Zero',
         isResults: undefined,
-        tweetIs: 'Tweet is: +265',
+        countIs: '265',
         allCheckboxesEnabled: 'diaktifkan: 1',
         btnCopy: true,
         btnTweet: true
@@ -372,7 +408,7 @@ describe('ResultsModel mount component', async () => {
         listBool: [false, false, false, false, false],
         results: 'Tidak ada hasil',
         isResults: '',
-        tweetIs: 'Tweet is: +280',
+        countIs: '280',
         allCheckboxesEnabled: 'diaktifkan: 0',
         btnCopy: false,
         btnTweet: false
@@ -386,7 +422,7 @@ describe('ResultsModel mount component', async () => {
         results: 'Tags: #Test3',
         isResults: undefined,
         btnCopy: true,
-        tweetIs: 'Tweet is: +268',
+        countIs: '268',
         allCheckboxesEnabled: 'diaktifkan: 1',
         btnTweet: true
       },
@@ -397,7 +433,7 @@ describe('ResultsModel mount component', async () => {
         listBool: [false, true, false, true, false],
         results: 'Tags: Test 1, #Test3',
         isResults: undefined,
-        tweetIs: 'Tweet is: +260',
+        countIs: '260',
         allCheckboxesEnabled: 'diaktifkan: 2',
         btnCopy: true,
         btnTweet: true
@@ -418,7 +454,7 @@ describe('ResultsModel mount component', async () => {
 
       expect(results.element.value).toEqual(test.results)
       expect(results.attributes().disabled).toBe(test.isResults)
-      expect(btnTweet.text()).toEqual(test.tweetIs)
+      expect(count.text()).toEqual(test.countIs)
       // `semua kotak centang` diaktifkan
       expect(allCheckboxesEnabled.text()).toEqual(test.allCheckboxesEnabled)
 
@@ -426,12 +462,6 @@ describe('ResultsModel mount component', async () => {
         expect(btnCopy.attributes().disabled).toBe(undefined)
       } else {
         expect(btnCopy.attributes().disabled).toBe('')
-      }
-
-      if (test.btnTweet) {
-        expect(btnTweet.attributes().disabled).toBe(undefined)
-      } else {
-        expect(btnTweet.attributes().disabled).toBe('')
       }
     }
   })

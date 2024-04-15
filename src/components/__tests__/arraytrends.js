@@ -37,6 +37,23 @@ const success = [
   }
 ];
 
+const failureTagsToSuccessTags = [
+  {
+    "trending_topics": "Trending in Indonesia",
+    "name": "#FailureToSuccess",
+    "url": "",
+    "tweet_volume": "15K posts",
+    "completed": true
+  },
+  {
+    "trending_topics": "Trending in Indonesia",
+    "name": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in",
+    "url": "",
+    "tweet_volume": "15.8K posts",
+    "completed": true
+  }
+];
+
 const failureTags = [
   {
     "trending_topics": "Trending in Indonesia",
