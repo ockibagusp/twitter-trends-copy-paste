@@ -1,11 +1,8 @@
 # twitter-trends
 
-## Browser aja. Copy dan Paste!
+## The [twitter-Trends](https://ockibagusp.github.io/twitter-trends) is a triple app of the Twitter (X) app on your Web Browser with PC, Laptop or Mobile to this copy and paste!
 
-Link:
-[ockibagusp.github.io/twitter-trends](https://ockibagusp.github.io/twitter-trends)
-
-### Twitter Trends, Copy dan Paste!:
+### Twitter Trends, Copy and Paste!:
 
 ![Twitter Trends 1](../images/twitter-trends1.png?raw=true)
 
@@ -19,13 +16,30 @@ Link:
 
 ![Twitter Trends 4](../images/twitter-trends4.png?raw=true)
 
+## Implemented Twitter (X) Trends
+
+:white_check_mark: : ready
+
+:heavy_exclamation_mark: : in progress
+
+:x: : not yet
+
+| id  | TO-DO                                                 | Implemented        |
+| --- | ----------------------------------------------------- | ------------------ |
+| 1   | text area of ​​new tweets, Paste [ctrl + v] and other | :white_check_mark: |
+| 2   | text area of ​​new tweets, Paste [ctrl + v] and other | :white_check_mark: |
+
 ## Vue 3 project
 
 This template should help get you started developing with Vue 3 in Vite.
 
 ## Recommended IDE Setup
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+
+## Type Support for `.vue` Imports in TS
+
+TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
 
 ## Customize configuration
 
@@ -34,19 +48,23 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
 ## Project Setup
 
 ```sh
-npm install
+bun install
+```
+
+```sh
+bun format
 ```
 
 ### Compile and Hot-Reload for Development
 
 ```sh
-npm run dev
+bun dev
 ```
 
-### Compile and Minify for Production
+### Type-Check, Compile and Minify for Production
 
 ```sh
-npm run build
+bun build
 ```
 
 ### Run Unit Tests with [Vitest](https://vitest.dev/)
@@ -54,21 +72,31 @@ npm run build
 #### Web UI
 
 ```sh
-npm run test:ui
+bun test:ui
 ```
 
 #### Terminal
 
 ```sh
-npm run test:unit
+bun test:unit
 ```
 
 ```sh
-npm run test:unit-CopyandPaste
+bun test:unit-CopyandPaste
 ```
 
 ```sh
-npm run test:unit-ResultsMode
+bun test:unit-NewTweetAndPasteModel
+```
+
+```sh
+bun test:unit-ResultsModel
+```
+
+### Lint with [ESLint](https://eslint.org/)
+
+```sh
+bun lint
 ```
 
 ### Comment bash: deploy.sh
@@ -86,8 +114,6 @@ Example:
 ```sh
 ./deploy.sh
 ```
-
----
 
 $ ➜ twitter-trends git:(master) heroku ps:scale web=1 --app xxxxx
 
