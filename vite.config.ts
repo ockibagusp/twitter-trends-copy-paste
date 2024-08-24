@@ -4,10 +4,16 @@ import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 
-import { YOUTUBE } from './src/utils/utils'
-
 // [solved] https://dev.to/boostup/uncaught-referenceerror-process-is-not-defined-12kg
-const cherryPickedKeys = ['HOST', 'REGEXTWEETS', 'TAGS']
+const cherryPickedKeys = [
+  'HOST',
+  'REGEXTWEETS',
+  'REGEXYOUTUBEVIDEO',
+  'REGEXYOUTUBEVIDEOTITLE',
+  'YOUTUBE',
+  'TAGS',
+  'JOIN'
+]
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -31,10 +37,16 @@ export default defineConfig(({ mode }) => {
     server: {
       proxy: {
         '/youtube': {
-          target: 'https://www.youtube.com',
+          target: 'https://www.youtube.com/',
           changeOrigin: true,
           secure: false,
           rewrite: (path) => path.replace(/^\/youtube/, '')
+        },
+        '/x': {
+          target: 'https://x.com/',
+          changeOrigin: true,
+          secure: false,
+          rewrite: (path) => path.replace(/^\/x/, '')
         }
       }
     }

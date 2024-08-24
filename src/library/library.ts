@@ -5,7 +5,7 @@ import axios from 'axios'
 const REDIRCETURL = '/youtube'
 
 export class RegExpYouTube {
-  newTweet!: string
+  private newTweet!: string
   private youtubeUrls!: {
     full: string
     watch: string

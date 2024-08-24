@@ -10,6 +10,10 @@ export default defineConfig((configEnv) =>
       test: {
         globals: true,
         environment: 'jsdom',
+        coverage: {
+          provider: 'v8',
+          reporter: ['text', 'json', 'html']
+        },
         exclude: [...configDefaults.exclude, 'e2e/**'],
         root: fileURLToPath(new URL('./', import.meta.url))
       }

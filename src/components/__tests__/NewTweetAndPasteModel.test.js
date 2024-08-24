@@ -1,6 +1,6 @@
-import { test, expect, describe, vi } from 'vitest'
+import { describe, test, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
-import { mount, flushPromises } from '@vue/test-utils'
+import { shallowMount, mount, flushPromises } from '@vue/test-utils'
 import { useRouter, useRoute } from 'vue-router'
 import NewTweetAndPasteModel from '../NewTweetAndPasteModel.vue'
 import { RESULTCODE } from '../../interface'
@@ -11,44 +11,46 @@ vi.mock('vue-router')
 window.alert = vi.fn()
 import axios from 'axios'
 
-describe('NewTweetAndPasteModel mount component', async () => {
+function mountModel() {
   const wrapper = mount(NewTweetAndPasteModel)
+  return wrapper
+}
 
-  const newTweet = wrapper.find('[data-test="new-tweet"]')
-  const copyAndPaste = wrapper.find('[data-test="copy-and-paste"]')
-  const other = wrapper.find('[data-test="other"]')
+describe('NewTweetAndPasteModel mount component', async () => {
+  let wrapper = null
+  beforeEach(() => {
+    wrapper = shallowMount(NewTweetAndPasteModel)
+  })
 
-  const btnReset = wrapper.find('[data-test="btn-reset"]')
+  afterEach(() => {
+    wrapper.unmount()
+  })
 
-  test('init', () => {
-    // let wrapper = null;
-    // beforeAll(async () => {
-    //   wrapper = shallowMount(ResultsModel, {
-    //     props: {
-    //       ...
-    //     }
-    //   })
-    // })
+  test('should to init', () => {
+    const wrapper = mountModel()
 
-    // afterAll(() => {
-    //   wrapper.unmount()
-    // })
-    // ???
+    const newTweet = wrapper.find('[data-test="new-tweet"]')
+    const copyAndPaste = wrapper.find('[data-test="copy-and-paste"]')
+    const other = wrapper.find('[data-test="other"]')
+    const btnReset = wrapper.find('[data-test="btn-reset"]')
+
     expect(NewTweetAndPasteModel).toBeTruthy()
-
     expect(newTweet.element.value).toEqual('')
     expect(copyAndPaste.element.value).toEqual('')
     expect(other.element.value).toEqual('')
-
     expect(btnReset.isVisible()).toBe(true)
+
+    wrapper.unmount()
   })
 
-  test('newTweet success as a default', () => {
+  test('should succeed first default if all being empty', () => {
+    const newTweet = wrapper.find('[data-test="new-tweet"]')
     expect(NewTweetAndPasteModel).toBeTruthy()
 
-    newTweet.setValue('')
+    newTweet.setValue('new')
     newTweet.trigger('change')
-    expect(newTweet.element.value).toEqual('')
+    expect(newTweet.element.value).toEqual('new')
+
     expect(wrapper.emitted('onTextareasSubmitted')).toHaveLength(2)
     expect(wrapper.emitted('onTextareasSubmitted')[0]).toEqual([
       {
@@ -70,7 +72,9 @@ describe('NewTweetAndPasteModel mount component', async () => {
     ])
   })
 
-  test('newTweet success to get a YouTube Video', async () => {
+  test('should update textarea: newTweet success to get a YouTube Video', async () => {
+    const newTweet = wrapper.find('[data-test="new-tweet"]')
+    const other = wrapper.find('[data-test="other"]')
     expect(NewTweetAndPasteModel).toBeTruthy()
 
     vi.spyOn(axios, 'get').mockResolvedValueOnce({
@@ -86,19 +90,10 @@ describe('NewTweetAndPasteModel mount component', async () => {
     expect(other.element.value).toEqual(textAreaDataT.successTitleOfYoutube.other)
 
     expect(axios.get).toHaveBeenCalledTimes(1)
-    expect(axios.get).toHaveBeenCalledWith('http://localhost:3000/youtube/watch?v=00-success')
+    expect(axios.get).toHaveBeenCalledWith('/youtube/shorts/00-success')
 
-    expect(wrapper.emitted('onTextareasSubmitted')).toHaveLength(4)
-    expect(wrapper.emitted('onTextareasSubmitted')[2]).toEqual([
-      {
-        newTweet: arrayNewT.successTitleOfYoutube.newTweet,
-        arrayTrends: [],
-        other: textAreaDataT.successTitleOfYoutube.other,
-        resultTrends: '',
-        resultCode: RESULTCODE.OK
-      }
-    ])
-    expect(wrapper.emitted('onTextareasSubmitted')[3]).toEqual([
+    expect(wrapper.emitted('onTextareasSubmitted')).toHaveLength(1)
+    expect(wrapper.emitted('onTextareasSubmitted')[0]).toEqual([
       {
         newTweet: arrayNewT.successTitleOfYoutube.newTweet,
         arrayTrends: [],
@@ -109,9 +104,11 @@ describe('NewTweetAndPasteModel mount component', async () => {
     ])
   })
 
-  test('newTweet failure to not get a YouTube Video', async () => {
+  test('should update textarea: newTweet failure if not get a YouTube Video', async () => {
+    const wrapper = mount(NewTweetAndPasteModel)
+    const newTweet = wrapper.find('[data-test="new-tweet"]')
+    const other = wrapper.find('[data-test="other"]')
     expect(NewTweetAndPasteModel).toBeTruthy()
-    other.setValue('')
 
     vi.spyOn(axios, 'get').mockResolvedValueOnce({
       data: `This video isn't available anymore`,
@@ -128,19 +125,18 @@ describe('NewTweetAndPasteModel mount component', async () => {
     expect(other.element.value).toEqual('')
 
     expect(axios.get).toHaveBeenCalledTimes(1)
-    expect(axios.get).toHaveBeenCalledWith('http://localhost:3000/youtube/watch?v=failure-01')
-
+    expect(axios.get).toHaveBeenCalledWith('/youtube/watch?v=failure-01')
 
     expect(wrapper.emitted('onTextareasSubmitted')).toHaveLength(7)
-    // expect(wrapper.emitted('onTextareasSubmitted')[5]).toEqual([
-    //   {
-    //     newTweet: failure01,
-    //     arrayTrends: [],
-    //     other: '',
-    //     resultTrends: '',
-    //     resultCode: RESULTCODE.ERROR
-    //   }
-    // ])
+    expect(wrapper.emitted('onTextareasSubmitted')[5]).toEqual([
+      {
+        newTweet: failure01,
+        arrayTrends: [],
+        other: '',
+        resultTrends: '',
+        resultCode: RESULTCODE.ERROR
+      }
+    ])
     // expect(wrapper.emitted('onTextareasSubmitted')[6]).toEqual([
     //   {
     //     newTweet: failure01,
@@ -152,15 +148,15 @@ describe('NewTweetAndPasteModel mount component', async () => {
     // ])
   })
 
-  test('NewTweetAndPasteModel success for all', () => {
+  test('should update textarea: newTweet if called without an arg', () => {
     expect(NewTweetAndPasteModel).toBeTruthy()
-    window.alert = vi.fn();
+    window.alert = vi.fn()
 
     const wrapper = mount(NewTweetAndPasteModel)
-
     const newTweet = wrapper.find('[data-test="new-tweet"]')
     const copyAndPaste = wrapper.find('[data-test="copy-and-paste"]')
 
+    // ?
     // using text area 1
     copyAndPaste.setValue(arrayNewT.success.copyAndPaste)
     copyAndPaste.trigger('change')
@@ -332,7 +328,7 @@ describe('NewTweetAndPasteModel mount component', async () => {
     await newTweet.trigger('change')
 
     expect(axios.get).toHaveBeenCalledTimes(1)
-    expect(axios.get).toHaveBeenCalledWith('http://localhost:3000/youtube/watch?v=00-success')
+    expect(axios.get).toHaveBeenCalledWith('/youtube/shorts/00-success')
 
     // Wait until the DOM updates.
     await flushPromises()
@@ -516,7 +512,9 @@ describe('NewTweetAndPasteModel mount component', async () => {
       }
     ])
   })
+})
 
+describe('NewTweetAndPasteModel success for other', () => {
   // https://stackoverflow.com/questions/74209044/vue-router-mock-with-vue-test-utils-vitest
   useRoute.mockReturnValue({
     query: {
@@ -527,7 +525,8 @@ describe('NewTweetAndPasteModel mount component', async () => {
     push: vi.fn(),
     isReady: vi.fn()
   })
-  test('NewTweetAndPasteModel success for  other "?other=test%20other"', () => {
+
+  it('NewTweetAndPasteModel success for other "?other=test%20other"', () => {
     expect(NewTweetAndPasteModel).toBeTruthy()
     const wrapper = mount(NewTweetAndPasteModel)
 
@@ -550,7 +549,7 @@ describe('NewTweetAndPasteModel mount component', async () => {
     expect(other.element.value).toEqual('test other')
   })
 
-  test('NewTweetAndPasteModel btn Reset success', async () => {
+  it('NewTweetAndPasteModel btn Reset success', async () => {
     expect(NewTweetAndPasteModel).toBeTruthy()
     const wrapper = mount(NewTweetAndPasteModel)
 
@@ -574,8 +573,7 @@ describe('NewTweetAndPasteModel mount component', async () => {
         resultTrends: '',
         resultCode: RESULTCODE.DEFAULT
       }
-    ]
-    )
+    ])
 
     expect(newTweet.element.value).toEqual('')
     expect(copyAndPaste.element.value).toEqual('')

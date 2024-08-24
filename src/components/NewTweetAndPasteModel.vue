@@ -24,32 +24,37 @@ const onSubmitNewTweet = async (): Promise<void> => {
   textAreasData.newTweet = newTweet.value
   if (isDefault()) return
 
-  const regExpCustom = new lib.RegExpCustom()
-  regExpCustom.setNewTweet(newTweet.value)
-
-  if (await regExpCustom.isYoutubeInVideoUrl()) {
+  const regExpYouTube = new lib.RegExpYouTube()
+  regExpYouTube.setNewTweet(newTweet.value)
+  if (await regExpYouTube.isYoutube()) {
     const oldNewTweet = newTweet.value
     newTweet.value = 'Loading...'
     other.value = 'Loading...'
 
-    const titleOnYouTube = await regExpCustom.getYoutubeInVideoTitle()
-    if (titleOnYouTube != null) {
+    const titleOnYouTube = await regExpYouTube.getYoutubeInVideoTitle()
+    if (titleOnYouTube instanceof Error) {
+      newTweet.value = oldNewTweet
+      other.value = ''
+      // ?
+      textAreasData.resultCode = intr.RESULTCODE.ERROR
+      emits('onTextareasSubmitted', textAreasData)
+      return
+    } else {
       newTweet.value = titleOnYouTube
-      other.value = regExpCustom.getYoutubeInVideoUrl()
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+      other.value = regExpYouTube.getYoutubeInVideoUrl()
 
       textAreasData.newTweet = newTweet.value
       textAreasData.other = other.value
       textAreasData.resultCode = intr.RESULTCODE.OK
       emits('onTextareasSubmitted', textAreasData)
       return
-    } else {
-      alert('error not found')
-      newTweet.value = oldNewTweet
-      other.value = ''
-      textAreasData.resultCode = intr.RESULTCODE.ERROR
-      emits('onTextareasSubmitted', textAreasData)
-      return
     }
+  } else {
   }
 
   if (!copyAndPaste.value && newTweet.value == '') {
