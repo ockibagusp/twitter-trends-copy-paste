@@ -115,6 +115,11 @@ export class RegExpYouTube {
       if (full == undefined || parent == undefined)
         throw new Error('objYoutubeInVideoTitle: YouTube title not found')
       return parent
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
     } catch (error: any) {
       console.error('An error occurred:', error)
       throw error
