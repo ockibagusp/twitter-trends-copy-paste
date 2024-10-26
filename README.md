@@ -48,23 +48,19 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
 ## Project Setup
 
 ```sh
-bun install
-```
-
-```sh
-bun format
+npm install
 ```
 
 ### Compile and Hot-Reload for Development
 
 ```sh
-bun dev
+npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+### Compile and Minify for Production
 
 ```sh
-bun build
+npm run build
 ```
 
 ### Run Unit Tests with [Vitest](https://vitest.dev/)
@@ -72,31 +68,31 @@ bun build
 #### Web UI
 
 ```sh
-bun test:ui
+npm run test:ui
 ```
 
 #### Terminal
 
 ```sh
-bun test:unit
+npm run test:unit
 ```
 
 ```sh
-bun test:unit-CopyandPaste
+npm run test:unit-CopyandPaste
 ```
 
 ```sh
-bun test:unit-NewTweetAndPasteModel
+npm run test:unit-NewTweetAndPasteModel
 ```
 
 ```sh
-bun test:unit-ResultsModel
+npm run test:unit-ResultsModel
 ```
 
 ### Lint with [ESLint](https://eslint.org/)
 
 ```sh
-bun lint
+npm run lint
 ```
 
 ### Comment bash: deploy.sh

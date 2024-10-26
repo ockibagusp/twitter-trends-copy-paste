@@ -34,6 +34,8 @@ watchEffect(async () => {
     count.value = 280 - result.value.length
     allCheckboxesEnabled.value = arrayTrends.length
     copyTweetBoolFunc(true)
+
+    setTimeout(btnCopy, 100)
   } else if (props.initialResultCode == RESULTCODE.ERROR) {
     console.log('props.isResultOpen undefined')
     // result.value = '...'

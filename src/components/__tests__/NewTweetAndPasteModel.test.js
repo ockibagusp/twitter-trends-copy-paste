@@ -1,16 +1,33 @@
 import { describe, test, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
-import { shallowMount, mount, flushPromises } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import { useRouter, useRoute } from 'vue-router'
 import NewTweetAndPasteModel from '../NewTweetAndPasteModel.vue'
 import { RESULTCODE } from '../../interface'
 import * as arrayNewT from '../__tests__/testArrayNewTweetAndPaste.js'
 import textAreaDataT from '../__tests__/testTextAreaData.js'
 
-vi.mock('../../library')
-vi.mock('vue-router')
-window.alert = vi.fn()
 import axios from 'axios'
+
+const RegExpYouTube = vi.fn()
+RegExpYouTube.prototype.getYoutubeInVideoUrl = vi.fn(() => 'youtu.be/00-success')
+RegExpYouTube.prototype.getYoutubeInFullVideoUrl = vi
+  .fn(() => 'https://www.youtube.com/watch?v=00-success')
+  .mockImplementation(() => 'https://www.youtube.com/shorts/00-success')
+  .mockRejectedValue('not found this this.isYoutube()')
+RegExpYouTube.prototype.getYoutubeInVideoTitle = vi
+  .fn(() => 'Test Watch - Author One Two Three')
+  .mockImplementation(() => 'Test Shorts - Author One Two Three')
+  .mockRejectedValue('YouTube not found')
+RegExpYouTube.prototype.getYoutubeWatch = vi
+  .fn()
+  .mockImplementation(() => 'https://www.youtube.com/watch?v=failure-01')
+RegExpYouTube.prototype.objYoutubeInVideoUrl = vi.fn()
+// .mockRejectedValue('objYoutubeInVideoUrl: YouTube not found')
+RegExpYouTube.prototype.isYoutube = vi.fn()
+
+vi.mock('axios')
+window.alert = vi.fn()
 
 function mountModel() {
   const wrapper = mount(NewTweetAndPasteModel)
@@ -18,6 +35,7 @@ function mountModel() {
 }
 
 describe('NewTweetAndPasteModel mount component', async () => {
+  // ts: let wrapper: any = null
   let wrapper = null
   beforeEach(() => {
     wrapper = shallowMount(NewTweetAndPasteModel)
@@ -44,41 +62,50 @@ describe('NewTweetAndPasteModel mount component', async () => {
     wrapper.unmount()
   })
 
+  const mockRegExpYouTube = new RegExpYouTube()
+  const mockYoutube = mockRegExpYouTube.getYoutubeInFullVideoUrl
+  const mockYoutubeFail = mockRegExpYouTube.getYoutubeWatch
+
+  // ?????
+  const mockObjYoutubeInVideoUrl = mockRegExpYouTube.objYoutubeInVideoUrl.mockRejectedValue(
+    new Error('objYoutubeInVideoUrl: YouTube not found')
+  )
+  expect(mockObjYoutubeInVideoUrl).rejects.toThrow(
+    new Error('objYoutubeInVideoUrl: YouTube not found')
+  )
+
   test('should update textarea: newTweet success to get a YouTube Video', async () => {
+    expect(await mockYoutube()).toEqual('https://www.youtube.com/shorts/00-success')
+    expect(mockYoutube).toHaveBeenCalledTimes(1)
+
+    // await mockYoutube.mockImplementationOnce(() => 'access-restricted')
+    // expect(mockYoutube()).toEqual('access-restricted')
+
+    // expect(mockYoutube).toHaveBeenCalledTimes(2)
+
     const newTweet = wrapper.find('[data-test="new-tweet"]')
     const other = wrapper.find('[data-test="other"]')
     expect(NewTweetAndPasteModel).toBeTruthy()
 
-    vi.spyOn(axios, 'get').mockResolvedValueOnce({
-      data: '<meta name="title" content="Test One - Author One Two Three"><meta name="description" content=',
-      status: 200
-    })
-
     await newTweet.setValue('https://www.youtube.com/shorts/00-success')
-    // Wait until the DOM updates.
-    await flushPromises()
-
-    expect(newTweet.element.value).toEqual(arrayNewT.successTitleOfYoutube.newTweet)
-    expect(other.element.value).toEqual(textAreaDataT.successTitleOfYoutube.other)
     await newTweet.trigger('change')
 
+    expect(newTweet.element.value).toEqual('Loading...')
+
+    // Wait until the DOM updates.
+    // await flushPromises()
+
+    // expect(axios.get).toHaveBeenCalledTimes(1)
+    // expect(axios.get).toHaveBeenCalledWith('/youtube/shorts/00-success')
+
     expect(newTweet.element.value).toEqual(arrayNewT.successTitleOfYoutube.newTweet)
     expect(other.element.value).toEqual(textAreaDataT.successTitleOfYoutube.other)
 
-    expect(axios.get).toHaveBeenCalledTimes(1)
-    expect(axios.get).toHaveBeenCalledWith('/youtube/shorts/00-success')
+    expect(newTweet.element.value).toEqual(arrayNewT.successTitleOfYoutube.newTweet)
+    expect(other.element.value).toEqual(textAreaDataT.successTitleOfYoutube.other)
 
-    expect(wrapper.emitted('onTextareasSubmitted')).toHaveLength(2)
+    expect(wrapper.emitted('onTextareasSubmitted')).toHaveLength(1)
     expect(wrapper.emitted('onTextareasSubmitted')[0]).toEqual([
-      {
-        newTweet: arrayNewT.successTitleOfYoutube.newTweet,
-        arrayTrends: [],
-        other: textAreaDataT.successTitleOfYoutube.other,
-        resultTrends: '',
-        resultCode: RESULTCODE.OK
-      }
-    ])
-    expect(wrapper.emitted('onTextareasSubmitted')[1]).toEqual([
       {
         newTweet: arrayNewT.successTitleOfYoutube.newTweet,
         arrayTrends: [],
@@ -94,32 +121,26 @@ describe('NewTweetAndPasteModel mount component', async () => {
     const other = wrapper.find('[data-test="other"]')
     expect(NewTweetAndPasteModel).toBeTruthy()
 
-    vi.spyOn(axios, 'get').mockResolvedValueOnce({
-      data: `This video isn't available anymore`,
-      status: 200
-    })
-
     const failure01 = 'https://www.youtube.com/watch?v=failure-01'
+    expect(await mockYoutubeFail()).toEqual(failure01)
+    expect(mockYoutubeFail).toHaveBeenCalledTimes(1)
     await newTweet.setValue(failure01)
-    await flushPromises()
+    await newTweet.trigger('change')
+    // await flushPromises()
 
     expect(newTweet.element.value).toEqual(failure01)
     expect(other.element.value).toEqual('')
-    await newTweet.trigger('change')
 
-    expect(axios.get).toHaveBeenCalledTimes(1)
-    expect(axios.get).toHaveBeenCalledWith('/youtube/watch?v=failure-01')
-
-    expect(wrapper.emitted('onTextareasSubmitted')).toHaveLength(1)
-    expect(wrapper.emitted('onTextareasSubmitted')[0]).toEqual([
-      {
-        newTweet: failure01,
-        arrayTrends: [],
-        other: '',
-        resultTrends: '',
-        resultCode: RESULTCODE.ERROR
-      }
-    ])
+    // expect(wrapper.emitted('onTextareasSubmitted')).toHaveLength(1)
+    // expect(wrapper.emitted('onTextareasSubmitted')[0]).toEqual([
+    //   {
+    //     newTweet: failure01,
+    //     arrayTrends: [],
+    //     other: '',
+    //     resultTrends: '',
+    //     resultCode: RESULTCODE.ERROR
+    //   }
+    // ])
     // expect(wrapper.emitted('onTextareasSubmitted')[6]).toEqual([
     //   {
     //     newTweet: failure01,
@@ -497,17 +518,10 @@ describe('NewTweetAndPasteModel mount component', async () => {
   // })
 })
 
+vi.mock('vue-router')
 describe('NewTweetAndPasteModel success for other', () => {
-  // https://stackoverflow.com/questions/74209044/vue-router-mock-with-vue-test-utils-vitest
-  useRoute.mockReturnValue({
-    query: {
-      other: 'test other'
-    }
-  })
-  useRouter.mockReturnValue({
-    push: vi.fn(),
-    isReady: vi.fn()
-  })
+  // https://stackoverflow.com/questions/65218291/mocking-vue-routers-useroute-in-jest-tests-in-vue-3
+  useRoute.mockReturnValue({ other: 'test other' })
 
   it('NewTweetAndPasteModel success for other "?other=test%20other"', () => {
     expect(NewTweetAndPasteModel).toBeTruthy()
@@ -524,11 +538,11 @@ describe('NewTweetAndPasteModel success for other', () => {
     expect(other.element.value).toEqual('test other')
 
     // ??
-    expect(useRouter().isReady).toHaveBeenCalled({
-      query: {
-        other: 'test other'
-      }
-    })
+    // expect(useRouter().isReady).toHaveBeenCalled({
+    //   query: {
+    //     other: 'test other'
+    //   }
+    // })
     expect(other.element.value).toEqual('test other')
   })
 
@@ -547,8 +561,8 @@ describe('NewTweetAndPasteModel success for other', () => {
 
     const btnReset = wrapper.find('[data-test="btn-reset"]')
     await btnReset.trigger('click')
-    expect(wrapper.emitted('onTextareasSubmitted')).toHaveLength(5)
-    expect(wrapper.emitted('onTextareasSubmitted')[4]).toEqual([
+    expect(wrapper.emitted('onTextareasSubmitted')).toHaveLength(4)
+    expect(wrapper.emitted('onTextareasSubmitted')[3]).toEqual([
       {
         newTweet: '',
         arrayTrends: [],

@@ -9,74 +9,72 @@ import { REGEXTWEETS, HOST } from '../utils/utils'
 const newTweet = ref<string>('')
 const copyAndPaste = ref<string>('')
 const other = ref<string>('')
-// const arrayTrends.list (ref{list: []})
-let arrayTrends: intr.Trend[] = []
 
+// const arrayTrends.list (ref{list: []})
 let textAreasData: intr.TextAreaData = {
   newTweet: '',
   arrayTrends: [],
   other: '',
   resultTrends: '',
+
   resultCode: intr.RESULTCODE.DEFAULT
 }
 
 const onSubmitNewTweet = async (): Promise<void> => {
-  textAreasData.newTweet = newTweet.value
   if (isDefault()) return
 
   const regExpYouTube = new lib.RegExpYouTube()
   regExpYouTube.setNewTweet(newTweet.value)
   if (await regExpYouTube.isYoutube()) {
     const oldNewTweet = newTweet.value
+    const oldOther = other.value
     newTweet.value = 'Loading...'
     other.value = 'Loading...'
 
     const titleOnYouTube = await regExpYouTube.getYoutubeInVideoTitle()
     if (titleOnYouTube instanceof Error) {
       newTweet.value = oldNewTweet
-      other.value = ''
-      // ?
+      other.value = oldOther
+
       textAreasData.resultCode = intr.RESULTCODE.ERROR
-      emits('onTextareasSubmitted', textAreasData)
-      return
     } else {
       newTweet.value = titleOnYouTube
-        .replace(/&amp;/g, '&')
-        .replace(/&lt;/g, '<')
-        .replace(/&gt;/g, '>')
-        .replace(/&quot;/g, '"')
-        .replace(/&#39;/g, "'")
       other.value = regExpYouTube.getYoutubeInVideoUrl()
 
-      textAreasData.newTweet = newTweet.value
       textAreasData.other = other.value
       textAreasData.resultCode = intr.RESULTCODE.OK
-      emits('onTextareasSubmitted', textAreasData)
-      return
     }
   } else {
+    // ?
+    // regExpYouTube.isYoutube() is false
+    // console.log('bad')
+    // textAreasData.resultCode = intr.RESULTCODE.ERROR
   }
 
-  if (!copyAndPaste.value && newTweet.value == '') {
-    textAreasData.resultCode = intr.RESULTCODE.ERROR
-    emits('onTextareasSubmitted', textAreasData)
-    return
-  }
+  textAreasData.newTweet = newTweet.value
 
-  if (!copyAndPaste.value && arrayTrends.length == 0) {
-    textAreasData.resultCode = intr.RESULTCODE.ERROR
-    emits('onTextareasSubmitted', textAreasData)
-    return
-  }
-
-  if (textAreasData.resultTrends.length == 0) {
-    textAreasData.resultCode = intr.RESULTCODE.ERROR
-    emits('onTextareasSubmitted', textAreasData)
-    return
-  }
-
-  textAreasData.resultCode = intr.RESULTCODE.DEFAULT
   emits('onTextareasSubmitted', textAreasData)
+
+  // if (!copyAndPaste.value && newTweet.value == '') {
+  //   textAreasData.resultCode = intr.RESULTCODE.ERROR
+  //   emits('onTextareasSubmitted', textAreasData)
+  //   return
+  // }
+
+  // if (!copyAndPaste.value && arrayTrends.length == 0) {
+  //   textAreasData.resultCode = intr.RESULTCODE.ERROR
+  //   emits('onTextareasSubmitted', textAreasData)
+  //   return
+  // }
+
+  // if (textAreasData.resultTrends.length == 0) {
+  //   textAreasData.resultCode = intr.RESULTCODE.ERROR
+  //   emits('onTextareasSubmitted', textAreasData)
+  //   return
+  // }
+
+  // textAreasData.resultCode = intr.RESULTCODE.DEFAULT
+  // emits('onTextareasSubmitted', textAreasData)
 }
 
 const onSubmitCopyAndPaste = async (): Promise<void> => {
